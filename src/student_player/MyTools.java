@@ -40,23 +40,24 @@ public class MyTools {
     	return null;
     }
     
-    //TODO
+    //TODO Anny
     /**
      * Expansion
      * 
      * @return the tree with an added node at the branch selected
      */
     
-    //TODO
+    //TODO Massy
     /**
      * Simulation
      * 
      * Utility value: 
      * 
+     * 
      * @return an utility value from the simulation of the game
      */
     
-    //TODO
+    //TODO Massy
     /**
      * Propagation
      * 
