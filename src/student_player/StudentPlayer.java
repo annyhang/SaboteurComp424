@@ -18,11 +18,9 @@ public class StudentPlayer extends SaboteurPlayer {
 	private int heightPathGoal = 7;					//check???
 	private boolean hasDestroyCard = false;
 	
-	private boolean isNuggetFound = false;
-	private int[][] whereIsNugget = {{-1}, {-1}};	//format of board???
-	
-	//TODO
-	//figure out the type of the board
+	private boolean isNuggetFound = false;			
+	private int[] whereIsNugget = {-1};				//format of board???
+		
 	private ArrayList<Integer[]> existingPaths = new ArrayList<Integer[]>();
 
     /**
@@ -40,14 +38,15 @@ public class StudentPlayer extends SaboteurPlayer {
      * make decisions.
      */
     public Move chooseMove(SaboteurBoardState boardState) {
+    	//get the update board state
+    	
+    	//MCTS to get the best move
+    	
 
     	return null;
     }
     
-    //TODO
-    /**
-     * Create our own version of SaboteurBoardState because we are not allowed
-     * to use the preimplemented one
-     */
+
+    
     
 }
