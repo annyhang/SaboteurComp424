@@ -38,7 +38,7 @@ public class StudentPlayer extends SaboteurPlayer {
      * make decisions.
      */
     public Move chooseMove(SaboteurBoardState boardState) {
-    	//get the update board state
+    	//get the updated board state
     	
     	//MCTS to get the best move
     	

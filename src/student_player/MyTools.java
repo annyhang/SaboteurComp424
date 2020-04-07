@@ -17,7 +17,7 @@ public class MyTools {
      * Create our own version of SaboteurBoardState because we are not allowed
      * to use the preimplemented one. We can implement it with the allowed methods.
      */
-    private void updateBoardState() {
+    public void updateBoardState() {
     	
     	
     }
