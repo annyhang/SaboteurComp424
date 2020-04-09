@@ -10,17 +10,6 @@ import Saboteur.SaboteurMove;
 
 public class MyTools {
 	
-	private SaboteurBoardState boardState;
-    
-    //TODO
-    /**
-     * Create our own version of SaboteurBoardState because we are not allowed
-     * to use the preimplemented one. We can implement it with the allowed methods.
-     */
-    public void updateBoardState() {
-    	
-    	
-    }
     
     //TODO
     /**
