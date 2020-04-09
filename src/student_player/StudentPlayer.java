@@ -55,7 +55,7 @@ public class StudentPlayer extends SaboteurPlayer {
     		initialiseBoard(boardState);
     		
     	} else {
-    		//updateBoard(boardState);
+    		updateBoard(boardState);
     	}
     	getFromBoard(boardState);
     	

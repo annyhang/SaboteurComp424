@@ -10,13 +10,6 @@ import Saboteur.SaboteurMove;
 
 public class MyTools {
 	
-    
-    //TODO
-    /**
-     * Deduce the opponent's move by comparing the previous boardstate
-     * with the current one.
-     */
-    
     //TODO
     /**
      * Selection method
