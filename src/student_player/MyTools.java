@@ -10,13 +10,21 @@ import Saboteur.SaboteurMove;
 
 public class MyTools {
 	
+	
     //TODO
     /**
-     * Selection method
+     * MCTS: Selection
      * 
      * @return the most promising move based on existing paths
      */
-    public Move selection(ArrayList<SaboteurMove> allMoves) {
+    public Move selection(int[][] myBoard, ArrayList<SaboteurMove> allLegalMoves) {
+    	/*
+    	 * selection depends first on the state of the board
+    	 * 		if there are two spaces to the nugget (opp can win) we need to prioritise blocking that path, destroy, malus
+    	 * 		if we dont know where the nugget is, we need to prioritise the map card unless we can deduce where it is
+    	 * 		if we are malused, we could either wait for the opp to build the path to the nugget, malus, bonus, destroy if they are winning
+    	 * 		
+    	 */
     	
     	
     	return null;
