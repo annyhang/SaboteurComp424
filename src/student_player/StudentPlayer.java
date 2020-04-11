@@ -34,7 +34,7 @@ public class StudentPlayer extends SaboteurPlayer {
 	private SaboteurMove myMove;
 	private SaboteurMove oppMove;
 	//private boolean[] objectivesFound = {false, false, false};
-	private int[] nuggetPos = {-1, -1};
+	private int[] nuggetPos = {-1, -1};			//14x14
 	
 		
 
