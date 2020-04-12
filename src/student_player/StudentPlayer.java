@@ -33,6 +33,7 @@ public class StudentPlayer extends SaboteurPlayer {
 	private int[] destroyedCard;
 	
 	//what gets updated after a move
+	private int winner;
 	private SaboteurBoardState boardState;
 	private SaboteurMove myMove;
 	private SaboteurMove oppMove;
@@ -346,8 +347,18 @@ public class StudentPlayer extends SaboteurPlayer {
 		// TODO Auto-generated method stub
 		
 	}
+
+	public Object getBoard() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public int getWinner() {
+		// TODO Auto-generated method stub
+		return winner;
+	}
 	
-	
+	public 
 	
 
 }

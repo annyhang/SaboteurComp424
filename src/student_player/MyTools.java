@@ -109,9 +109,9 @@ public class MyTools {
     }
     }
     private int simulateRandomPlayout(Node node) {
-        Node tempNode = new Node(node);
-        State tempState = tempNode.getState();
-        int boardStatus = tempState.getBoard().checkStatus();
+        Node tempNode = new Node(node.getState(), ,  );
+        StudentPlayer tempState = tempNode.getState();
+        int boardStatus = tempState.getWinner();
         if (boardStatus == opponent) {
             tempNode.getParent().getState().setWinScore(Integer.MIN_VALUE);
             return boardStatus;
@@ -314,13 +314,6 @@ class BoardState {
 
 
 
-
-public class MonteCarloTreeSearch {
-
-    
- 
-   
-}
 
 
 
