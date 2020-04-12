@@ -122,7 +122,7 @@ public class MyTools {
     }
     
     
-    public Board findNextMove(Board board, int playerNo) {
+    public StudentPlayer findNextMove(StudentPlayer board, int playerNo) {
         // define an end time which will act as a terminating condition
  
         opponent = 3 - playerNo;
@@ -305,22 +305,7 @@ class Tree {
 
 }
 
-<<<<<<< HEAD
-//class BoardState {
-//	SaboteurTile[][] tileBoard;
-//	int nodeVisit = 0;
-//	double winScore;
-//	
-//	public int getNodeVisit() {
-//		return this.nodeVisit;
-//	}
-//	public double getWinScore() {
-//		return this.winScore;
-//	}
-//}
-//
-//
-=======
+
 class BoardState {
 	SaboteurTile[][] tileBoard;
 	int nodeVisit = 0;
@@ -336,7 +321,7 @@ class BoardState {
 
 
 
->>>>>>> 03341a025aea1e7cbf78b8a7a721b426c638d094
+
 
 
 

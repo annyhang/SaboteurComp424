@@ -338,7 +338,7 @@ public class StudentPlayer extends SaboteurPlayer {
 	public void addScore(int winScore) {
 		this.winScore = winScore;
 	}
-<<<<<<< HEAD
+
 	public ArrayList<StudentPlayer> getAllPossibleStates() {
 		ArrayList<StudentPlayer> allPossibleStates = new ArrayList<StudentPlayer>();
 		ArrayList<SaboteurMove> allLegalTileMoves = getAllLegalTileMoves();
@@ -356,17 +356,8 @@ public class StudentPlayer extends SaboteurPlayer {
 		int temp = this.oppNumber;
 		this.oppNumber = this.myNumber;
 		this.myNumber = temp;
-=======
 
-	public void addScore(int winScore2) {
-		
-		winScore = winScore2;
-		
-		
-		
-		// TODO Auto-generated method stub
-		
->>>>>>> b30b3139b251903ec1936714df094a17103b661c
+
 	}
 
 	public Object getBoard() {
@@ -379,10 +370,6 @@ public class StudentPlayer extends SaboteurPlayer {
 		return winner;
 	}
 	
-<<<<<<< HEAD
-=======
-	public 
-	
->>>>>>> 03341a025aea1e7cbf78b8a7a721b426c638d094
+
 
 }
