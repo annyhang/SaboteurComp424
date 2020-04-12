@@ -306,6 +306,7 @@ class Tree {
 }
 
 
+
 class BoardState {
 	SaboteurTile[][] tileBoard;
 	int nodeVisit = 0;
@@ -320,6 +321,23 @@ class BoardState {
 }
 
 
+
+
+
+//class BoardState {
+//	SaboteurTile[][] tileBoard;
+//	int nodeVisit = 0;
+//	double winScore;
+//	
+//	public int getNodeVisit() {
+//		return this.nodeVisit;
+//	}
+//	public double getWinScore() {
+//		return this.winScore;
+//	}
+//}
+//
+//
 
 
 

@@ -357,7 +357,6 @@ public class StudentPlayer extends SaboteurPlayer {
 		this.oppNumber = this.myNumber;
 		this.myNumber = temp;
 
-
 	}
 
 	public Object getBoard() {
@@ -369,7 +368,6 @@ public class StudentPlayer extends SaboteurPlayer {
 		// TODO Auto-generated method stub
 		return winner;
 	}
-	
 
 
 }
