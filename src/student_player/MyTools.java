@@ -145,9 +145,14 @@ public class MyTools {
     	//if we don't know where the nugget is, the height of the closest path and the objectives is enough
     	for (int i=tileBoard.length-3; i<=0; i++) {
 			for (int j=0; j<tileBoard.length; j++) {
-				if (myBoard[i][j] != null) {
-					return tileBoard.length;
+				try {
+					if (myBoard[i][j] != null) {
+						return tileBoard.length;
+					}
+				} catch {
+					continue;
 				}
+				
 			}
     	}
     	
@@ -244,6 +249,19 @@ class Tree {
 	}
 	
 
+}
+
+class BoardState {
+	SaboteurTile[][] tileBoard;
+	int nodeVisit = 0;
+	double winScore;
+	
+	public int getNodeVisit() {
+		return this.nodeVisit;
+	}
+	public double getWinScore() {
+		return this.winScore;
+	}
 }
 
 
