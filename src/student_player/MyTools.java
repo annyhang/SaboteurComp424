@@ -106,9 +106,9 @@ public class MyTools {
     }
     }
     private int simulateRandomPlayout(Node node) {
-        Node tempNode = new Node(node);
-        State tempState = tempNode.getState();
-        int boardStatus = tempState.getBoard().checkStatus();
+        Node tempNode = new Node(node.getState(), ,  );
+        StudentPlayer tempState = tempNode.getState();
+        int boardStatus = tempState.getWinner();
         if (boardStatus == opponent) {
             tempNode.getParents().getState().setWinScore(Integer.MIN_VALUE);
             return boardStatus;
@@ -305,6 +305,7 @@ class Tree {
 
 }
 
+<<<<<<< HEAD
 //class BoardState {
 //	SaboteurTile[][] tileBoard;
 //	int nodeVisit = 0;
@@ -319,6 +320,23 @@ class Tree {
 //}
 //
 //
+=======
+class BoardState {
+	SaboteurTile[][] tileBoard;
+	int nodeVisit = 0;
+	double winScore;
+	
+	public int getNodeVisit() {
+		return this.nodeVisit;
+	}
+	public double getWinScore() {
+		return this.winScore;
+	}
+}
+
+
+
+>>>>>>> 03341a025aea1e7cbf78b8a7a721b426c638d094
 
 
 
