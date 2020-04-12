@@ -26,10 +26,10 @@ public class StudentPlayer extends SaboteurPlayer {
 	private int oppNumber;
 	
 	//what gets updated from SaboteurBoardState methods:
-	private ArrayList<SaboteurCard> hand;
+	private static ArrayList<SaboteurCard> hand;
 	private int nbMyMalus;
 	private int nbOppMalus;
-	private ArrayList<SaboteurMove> allLegalMoves;
+	private static ArrayList<SaboteurMove> allLegalMoves;
 	private int[] destroyedCard;
 	
 	//what gets updated after a move
@@ -50,6 +50,47 @@ public class StudentPlayer extends SaboteurPlayer {
         super("260803297");
     }
 
+    public static ArrayList<SaboteurCard> GetHand() {
+    	return hand;
+    }
+    
+    public static ArrayList<SaboteurTile> GetHandOfTiles(){
+    	String[] tiles ={"0","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15"};
+    	ArrayList<SaboteurTile> currentTiles= new ArrayList<SaboteurTile>();
+    	ArrayList<SaboteurCard> currentHand = GetHand();
+    	for(int i=0; i<=currentHand.size(); i++) {
+    		for(int j=0; j<=tiles.length; j++)
+    		{
+    			SaboteurCard currentCard = currentHand.get(i);
+    			if(currentCard.getName() == tiles[j])
+    			{
+    				currentTiles.add((SaboteurTile) currentCard);
+    			}
+    			
+    		}
+    		
+    	}
+    	return currentTiles;
+    	
+    }
+    
+    public static ArrayList<SaboteurCard> GetAllLegalMoves(ArrayList<SaboteurTile> hand) {
+    	ArrayList<SaboteurTile> currentLegal =new ArrayList<SaboteurTile>();
+    	ArrayList<SaboteurTile> currentTiles = GetHandOfTiles();
+    	for(int i=0; i<=currentTiles.size();i++) {
+    		for(int j=0; j<allLegalMoves.size(); j++) {
+    			SaboteurTile currentTile = currentTiles.get(i);
+    			
+    			if( == )
+    			{
+    				currentLegal.add(currentTile);
+    			}
+    			
+    		}
+    	}
+    	
+    	
+    }
     /**
      * This is the primary method that you need to implement. The ``boardState``
      * object contains the current state of the game, which your agent must use to
