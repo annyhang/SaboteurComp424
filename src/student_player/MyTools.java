@@ -150,25 +150,13 @@ public class MyTools {
     	}
     	//if we don't know where the nugget is, the height of the closest path and the objectives is enough
     	for (int i=tileBoard.length-3; i<=0; i++) {
-			for (int j=0; j<tileBoard.length; j++) {
-				try {
-
-					if (myBoard[i][j] != null) {
-						return tileBoard.length;
-					}
-				} catch {
-
-					if (tileBoard[i][j] != null) {
-						return tileBoard.length;
-					}
-				} catch (Exception e) {
-
-					continue;
-				}
-				
-			}
+    		for (int j=0; j<tileBoard.length; j++) {
+    			if (tileBoard[i][j] != null) {
+    				return tileBoard.length;
+    			}
+    		}
     	}
-    	
+
     	return -1;
     }
 

@@ -45,8 +45,8 @@ public class StudentPlayer extends SaboteurPlayer {
 
 	static int visitCount;
 
-	int nodeVisit;
-	int winScore;
+	private int nodeVisit;
+	private int winScore;
 
 
 
@@ -316,22 +316,12 @@ public class StudentPlayer extends SaboteurPlayer {
 	public void setWinScore(int winScore) {
 		this.winScore = winScore;
 	}
-	public void nodeVisited() {
-		this.nodeVisit++;
-	}
-	
 	public int getNodeVisit() {
 		return this.nodeVisit;
 	}
 	public double getWinScore() {
 		return this.winScore;
 	}
-	
-	public ArrayList<StudentPlayer>getAllPossibleStates() {
-		ArrayList<SaboteurTile> allLegalTileMoves = getAllLegalTileMoves(this.hand, this.boardState);
-		for ()
-	}
-
 	public int incrementVisit() {
 		// TODO Auto-generated method stub
 		return visitCount ++;
@@ -341,5 +331,11 @@ public class StudentPlayer extends SaboteurPlayer {
 		// TODO Auto-generated method stub
 		return myNumber;
 	}
+		
+	public ArrayList<StudentPlayer>getAllPossibleStates() {
+		ArrayList<SaboteurTile> allLegalTileMoves = getAllLegalTileMoves(this.hand, this.boardState);
+		for ()
+	}
+	
 
 }
