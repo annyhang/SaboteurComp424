@@ -39,10 +39,10 @@ public class MyTools {
         return ((double) nodeWinScore / (double) nodeVisit) + 1.41 * Math.sqrt(Math.log(totalVisit) / (double) nodeVisit);
     }
     private Node findBestNodeWithUCT(Node node) {
-        int parentVisit = node.getState().getVisitCount();
+        int parentVisit = node.getState().getNodeVisit();
         return Collections.max(
         		node.getChildren(),
-        		Comparator.comparing(c -> uctValue(parentVisit, c.getState().getWinScore(), c.getState().getVisitCount())));
+        		Comparator.comparing(c -> uctValue(parentVisit, c.getState().getWinScore(), c.getState().getNodeVisit())));
     }
     
     
@@ -53,7 +53,13 @@ public class MyTools {
      * @return the tree with an added node at the branch selected
      */
     public void expand(Node node) {
-
+    	ArrayList<StudentPlayer> possibleStates = node.getState().getAllPossibleStates();
+        possibleStates.forEach(state -> {
+            Node newNode = new Node(state);
+            newNode.setParent(node);
+            newNode.getState().setPlayerNo(node.getState().getOpponent());
+            node.getChildArray().add(newNode);
+        });
     }
     
     
@@ -132,8 +138,9 @@ public class MyTools {
     }
 
     
-    
 }
+
+
 
 class Node {
 	StudentPlayer boardState;
@@ -204,6 +211,8 @@ class Node {
 	}
 }
 
+
+
 class Tree {
 
 	Node root;
@@ -217,7 +226,7 @@ class Tree {
 }
 
 
-//MCTS
+
 
 public class MonteCarloTreeSearch {
 
