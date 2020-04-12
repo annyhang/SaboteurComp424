@@ -227,6 +227,9 @@ class Node {
 		this.maxNbChildren--;
 	}
 	
+	public ArrayList<Node> getParents() {
+		return this.parents;
+	}
 	public ArrayList<Node> getChildren() {
 		return this.children;
 	}
