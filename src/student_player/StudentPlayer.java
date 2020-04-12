@@ -105,6 +105,9 @@ public class StudentPlayer extends SaboteurPlayer {
     	//if we got a malus and we only have tile cards, drop a block tile card
     	else if(nbMyMalus > 0) {
     		for (SaboteurCard handCard : this.hand) {
+    			if (handCard instanceof SaboteurMap) {
+    				this.myMove = new SaboteurMove(new SaboteurDrop(), this.hand.indexOf(handCard), 0, this.myNumber);
+    			}
     			if (handCard instanceof SaboteurTile) {
     				SaboteurTile handCardTile = (SaboteurTile) handCard;
     				for (String idxBlockTiles : blockTiles) {
@@ -286,7 +289,7 @@ public class StudentPlayer extends SaboteurPlayer {
     	return currentTiles;
     }
     
-    public static ArrayList<SaboteurCard> getAllLegalMoves(ArrayList<SaboteurTile> hand, SaboteurBoardState boardState) {
+    public static ArrayList<SaboteurTile> getAllLegalMoves(ArrayList<SaboteurTile> hand, SaboteurBoardState boardState) {
     	ArrayList<SaboteurTile> currentLegal = new ArrayList<SaboteurTile>();
     	ArrayList<SaboteurTile> currentTiles = getHandOfTiles();
     	for(int i=0; i<=currentTiles.size();i++) {
@@ -300,6 +303,7 @@ public class StudentPlayer extends SaboteurPlayer {
     			
     		}
     	}
+    	return currentLegal;
     }
 
 }
