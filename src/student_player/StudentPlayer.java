@@ -53,47 +53,7 @@ public class StudentPlayer extends SaboteurPlayer {
         super("260803297");
     }
 
-    public static ArrayList<SaboteurCard> GetHand() {
-    	return hand;
-    }
-    
-    public static ArrayList<SaboteurTile> GetHandOfTiles(){
-    	String[] tiles ={"0","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15"};
-    	ArrayList<SaboteurTile> currentTiles= new ArrayList<SaboteurTile>();
-    	ArrayList<SaboteurCard> currentHand = GetHand();
-    	for(int i=0; i<=currentHand.size(); i++) {
-    		for(int j=0; j<=tiles.length; j++)
-    		{
-    			SaboteurCard currentCard = currentHand.get(i);
-    			if(currentCard.getName() == tiles[j])
-    			{
-    				currentTiles.add((SaboteurTile) currentCard);
-    			}
-    			
-    		}
-    		
-    	}
-    	return currentTiles;
-    	
-    }
-    
-    public static ArrayList<SaboteurCard> GetAllLegalMoves(ArrayList<SaboteurTile> hand) {
-    	ArrayList<SaboteurTile> currentLegal =new ArrayList<SaboteurTile>();
-    	ArrayList<SaboteurTile> currentTiles = GetHandOfTiles();
-    	for(int i=0; i<=currentTiles.size();i++) {
-    		for(int j=0; j<allLegalMoves.size(); j++) {
-    			SaboteurTile currentTile = currentTiles.get(i);
-    			
-    			if( == )
-    			{
-    				currentLegal.add(currentTile);
-    			}
-    			
-    		}
-    	}
-    	
-    	
-    }
+
     /**
      * This is the primary method that you need to implement. The ``boardState``
      * object contains the current state of the game, which your agent must use to
@@ -302,5 +262,44 @@ public class StudentPlayer extends SaboteurPlayer {
     	this.oppMove = new SaboteurMove(new SaboteurDrop(), 0, 0, this.oppNumber);
     }
     
+    
+    public static ArrayList<SaboteurCard> getHand() {
+    	return hand;
+    }
+    
+    public static ArrayList<SaboteurTile> getHandOfTiles(){
+    	//add flipped tiles too
+    	String[] tiles ={"0","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15"};
+    	ArrayList<SaboteurTile> currentTiles= new ArrayList<SaboteurTile>();
+    	ArrayList<SaboteurCard> currentHand = getHand();
+    	for(int i=0; i<=currentHand.size(); i++) {
+    		for(int j=0; j<=tiles.length; j++) {
+    			if (currentHand.get(i) instanceof SaboteurTile) {
+    				SaboteurTile currentCard = (SaboteurTile) currentHand.get(i);
+    				if(currentCard.getIdx()() == tiles[j])
+    				{
+    					currentTiles.add(currentCard);
+    				}
+    			}
+    		}
+    	}
+    	return currentTiles;
+    }
+    
+    public static ArrayList<SaboteurCard> getAllLegalMoves(ArrayList<SaboteurTile> hand, SaboteurBoardState boardState) {
+    	ArrayList<SaboteurTile> currentLegal = new ArrayList<SaboteurTile>();
+    	ArrayList<SaboteurTile> currentTiles = getHandOfTiles();
+    	for(int i=0; i<=currentTiles.size();i++) {
+    		for(int j=0; j<allLegalMoves.size(); j++) {
+    			SaboteurTile currentTile = currentTiles.get(i);
+    			ArrayList<int[]> possiblePositions = boardState.possiblePositions(currentTile);
+    			if( possiblePositions.size() > 0 )
+    			{
+    				currentLegal.add(currentTile);
+    			}
+    			
+    		}
+    	}
+    }
 
 }
