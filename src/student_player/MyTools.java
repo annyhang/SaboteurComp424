@@ -139,7 +139,7 @@ public class MyTools {
                 expand(promisingNode);
             }
             Node nodeToExplore = promisingNode;
-            if (promisingNode.getChildArray().size() > 0) {
+            if (promisingNode.getChildren().size() > 0) {
                 nodeToExplore = promisingNode.getRandomChildNode();
             }
             int playoutResult = simulateRandomPlayout(nodeToExplore);
@@ -233,6 +233,13 @@ class Node {
 		}
 		if (this.tilePath[2][1] == 1) {
 			maxNbChildren++;
+		}
+	}
+	public Node getRandomChildNode() {
+		double random = Math.random()* this.children.size();
+		for(int i=0; i<=random; i++)
+		{
+			
 		}
 	}
 	Node(Node node) {
