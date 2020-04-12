@@ -19,6 +19,7 @@ public class StudentPlayer extends SaboteurPlayer {
 	private MyTools myTools;
 	
 	private int nbRound = 0;
+	private String[] blockTiles = {"1", "2", "2_flip", "3", "3_flip", "4", "4_flip", "11", "11_flip", "12", "12_flip", "13", "14", "14_flip", "15"};
 	
 	private int[][] myBoard;
 	private int myNumber;
@@ -55,7 +56,9 @@ public class StudentPlayer extends SaboteurPlayer {
     public Move chooseMove(SaboteurBoardState boardState) {
     	this.nbRound++;
     	
-    	//Initialize the board if it is the first round, else update the board and find opponent's move
+    	/*
+    	 * Initialize the board if it is the first round, else update the board and find opponent's move
+    	 */
     	if (this.nbRound == 1) {
     		initialiseBoard(boardState);
     		
@@ -65,7 +68,54 @@ public class StudentPlayer extends SaboteurPlayer {
     	getFromBoard(boardState);
     	
 
-    	//MCTS to get the best move
+    	/*
+    	 * Before using MCTS, we check the state of the player 
+    	 */
+    	//if we don't know where the nugget is, prioritise the map card
+    	if (this.nuggetPos[0] == -1 && this.nuggetPos[1] == -1) {
+    		for (int i=0; i<allLegalMoves.size(); i++) {
+    			if (allLegalMoves.get(i).getCardPlayed() instanceof SaboteurMap) {
+    				//return allLegalMoves.get(i);
+    			}
+    		}
+    	}
+    	//if we got a malus card and we are close from the goal, prioritise a bonus card
+    	else if (this.nbMyMalus > 0 && myTools.distanceNuggetPath(myBoard, nuggetPos) < myBoard.length/2) {
+    		for (int i=0; i<allLegalMoves.size(); i++) {
+    			if (allLegalMoves.get(i).getCardPlayed() instanceof SaboteurBonus) {
+    				//return allLegalMoves.get(i);
+    			}
+    		}
+    	}
+    	//if we are close from the goal and the opponent can still play, prioritise a malus card
+    	else if (nbOppMalus == 0 && myTools.distanceNuggetPath(myBoard, nuggetPos) < myBoard.length/2) {
+    		for (int i=0; i<allLegalMoves.size(); i++) {
+    			if (allLegalMoves.get(i).getCardPlayed() instanceof SaboteurMalus) {
+    				//return allLegalMoves.get(i);
+    			}
+    		}
+    	}
+    	//if we got a malus and we only have tile cards, drop the block tile cards
+    	else if(nbMyMalus > 0) {
+    		for (int i=0; i<allLegalMoves.size(); i++) {
+    			if (allLegalMoves.get(i).getCardPlayed() instanceof SaboteurTile) {
+    				SaboteurTile tile = (SaboteurTile) allLegalMoves.get(i).getCardPlayed();
+    				String tileIdx = tile.getIdx();
+    				for (int j=0; j<this.blockTiles.length; j++) {
+	    					if (tileIdx.equals()) {
+	    						//return allLegalMoves.get(i);
+	    				}
+    				}
+    				
+    			}
+    		}
+    	}
+    	/*
+    	 * MCTS to get the best move
+    	 */
+    	else {
+    		
+    	}
 
     	
 
@@ -198,6 +248,6 @@ public class StudentPlayer extends SaboteurPlayer {
     	//if we can't find anything, the opponent must've played a map card or dropped a card. Assume they dropped a card
     	this.oppMove = new SaboteurMove(new SaboteurDrop(), 0, 0, this.oppNumber);
     }
-
+    
 
 }

@@ -20,38 +20,9 @@ public class MyTools {
      * @return the most promising move based on existing paths
      */
     public SaboteurMove selection(int[][] myBoard, int[] nuggetPos, ArrayList<SaboteurMove> allLegalMoves, int nbMyMalus, int nbOppMalus) {    	
-    	//if we don't know where the nugget is, prioritise the map card
-    	if (nuggetPos[0] == -1 && nuggetPos[1] == -1) {
-    		for (int i=0; i<allLegalMoves.size(); i++) {
-    			if (allLegalMoves.get(i).getCardPlayed() instanceof SaboteurMap) {
-    				return allLegalMoves.get(i);
-    			}
-    		}
-    	}
-    	//if we got a malus card and we are close from the goal, prioritise a bonus card
-    	else if (nbMyMalus > 0 && distanceNuggetPath(myBoard, nuggetPos) < myBoard.length/2) {
-    		for (int i=0; i<allLegalMoves.size(); i++) {
-    			if (allLegalMoves.get(i).getCardPlayed() instanceof SaboteurBonus) {
-    				return allLegalMoves.get(i);
-    			}
-    		}
-    	}
-    	//if we are close from the goal and the opponent can still play, prioritise a malus card
-    	else if (nbOppMalus == 0 && distanceNuggetPath(myBoard, nuggetPos) < myBoard.length/2) {
-    		for (int i=0; i<allLegalMoves.size(); i++) {
-    			if (allLegalMoves.get(i).getCardPlayed() instanceof SaboteurMalus) {
-    				return allLegalMoves.get(i);
-    			}
-    		}
-    	}
-    	//chose a tile with that creates a path
-    	else {
-    		for (int i=0; i<allLegalMoves.size(); i++) {
-    			if (allLegalMoves.get(i).getCardPlayed() instanceof SaboteurTile) {
-    				return allLegalMoves.get(i);
-    			}
-    		}
-    	}
+    	
+    	
+    	
     	return null;
     }
     
@@ -98,7 +69,7 @@ public class MyTools {
     /**
      * Get the distance between the nugget/objectives and the closest path
      */
-    private int distanceNuggetPath(int[][] myBoard, int[] nuggetPos) {
+    public int distanceNuggetPath(int[][] myBoard, int[] nuggetPos) {
     	int smallestDistance = myBoard.length;
     	
     	//if we know where the nugget is, the distance should be between the closest path and the nugget
