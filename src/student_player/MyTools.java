@@ -141,15 +141,15 @@ class Node {	// a node represents a board state
 	boolean gotDestroyed = false;
 	int[] tileBoardPos = {-1, -1};
 	
-	String idx;
+	SaboteurTile tile;
 	int[][] tilePath;
 	int[] tilePos;
 	int maxNbChildren = 0;
 	
-	Node(State state, String idx, int[][] tilePath, int[] tilePos) {
+	Node(State state, String idx, int[] tilePos) {
 		this.state = state;
-		this.idx = idx;
-		this.tilePath = tilePath.clone();
+		this.tile = new SaboteurTile(idx);
+		this.tilePath = this.tile.getPath();
 		this.tilePos = tilePos.clone();
 		if (this.tilePath[0][1] == 1) {
 			maxNbChildren++;
@@ -203,6 +203,12 @@ class Node {	// a node represents a board state
 }
 class Tree {
 	Node root;
+
+	Tree(SaboteurBoardState boardState) {
+		int[] entrancePos = {5, 5};
+		root = new Node(boardState, "entrance", entrancePos);
+	}
+	
 }
 class State {
     SaboteurBoardState board;
@@ -226,7 +232,7 @@ class State {
 //MCTS
 
 public class MonteCarloTreeSearch {
-    static final int WIN_SCORE = 10;
+    static final int WIN_SCORE = 0;
     int level;
     int opponent;
  

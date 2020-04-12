@@ -41,8 +41,7 @@ public class StudentPlayer extends SaboteurPlayer {
 	
 	//tree for MCTS
 	private Tree tree;
-	
-		
+
 
     /**
      * You must modify this constructor to return your student number. This is
@@ -52,7 +51,6 @@ public class StudentPlayer extends SaboteurPlayer {
     public StudentPlayer() {
         super("260803297");
     }
-
 
     /**
      * This is the primary method that you need to implement. The ``boardState``
@@ -267,7 +265,7 @@ public class StudentPlayer extends SaboteurPlayer {
     
     
     public static ArrayList<SaboteurCard> getHand() {
-    	return hand;
+    	return this.hand;
     }
     
     public static ArrayList<SaboteurTile> getHandOfTiles(){
@@ -289,7 +287,7 @@ public class StudentPlayer extends SaboteurPlayer {
     	return currentTiles;
     }
     
-    public static ArrayList<SaboteurTile> getAllLegalMoves(ArrayList<SaboteurTile> hand, SaboteurBoardState boardState) {
+    public static ArrayList<SaboteurTile> getAllLegalTileMoves(ArrayList<SaboteurTile> hand, SaboteurBoardState boardState) {
     	ArrayList<SaboteurTile> currentLegal = new ArrayList<SaboteurTile>();
     	ArrayList<SaboteurTile> currentTiles = getHandOfTiles();
     	for(int i=0; i<=currentTiles.size();i++) {
