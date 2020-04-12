@@ -21,8 +21,8 @@ public class MyTools {
      * 
      * @return the board that makes the path that is closest to the goal even closer
      */
-    public Node selection(Node rootNode) {    	
-        Node node = rootNode;
+    public Node selection(Node root) {    	
+        Node node = root;
         while (node.getChildren().size() != 0) {
             node = findBestNodeWithUCT(node);
         }
@@ -202,7 +202,8 @@ class Node {	// a node represents a board state
 	}
 }
 class Tree {
-	Node root;
+	Node root = new Node(null, "entrance", null, null);
+	 
 }
 class State {
     SaboteurBoardState board;
@@ -226,7 +227,8 @@ class State {
 //MCTS
 
 public class MonteCarloTreeSearch {
-    static final int WIN_SCORE = 10;
+	//we want 
+    static final int WIN_SCORE = 0;
     int level;
     int opponent;
  
@@ -258,6 +260,8 @@ public class MonteCarloTreeSearch {
         return winnerNode.getState().getBoard();
     }
 }
+
+
 
 
  
