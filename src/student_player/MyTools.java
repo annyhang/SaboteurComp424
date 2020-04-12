@@ -20,40 +20,9 @@ public class MyTools {
      * @return the most promising move based on existing paths
      */
     public SaboteurMove selection(int[][] myBoard, int[] nuggetPos, ArrayList<SaboteurMove> allLegalMoves, int nbMyMalus, int nbOppMalus) {    	
-    	//if we don't know where the nugget is, prioritise the map card
-    	if (nuggetPos[0] == -1 && nuggetPos[1] == -1) {
-    		for (int i=0; i<allLegalMoves.size(); i++) {
-    			if (allLegalMoves.get(i).getCardPlayed() instanceof SaboteurMap) {
-    				return allLegalMoves.get(i);
-    			}
-    		}
-    	}
-    	//if we got a malus card and we are close from the goal, prioritise a bonus card
-    	else if (nbMyMalus > 0 && distanceNuggetPath(myBoard, nuggetPos) < myBoard.length/2) {
-    		for (int i=0; i<allLegalMoves.size(); i++) {
-    			if (allLegalMoves.get(i).getCardPlayed() instanceof SaboteurBonus) {
-    				return allLegalMoves.get(i);
-    			}
-    		}
-    	}
-    	//if we are close from the goal and the opponent can still play, prioritise a malus card
-    	else if (nbOppMalus == 0 && distanceNuggetPath(myBoard, nuggetPos) < myBoard.length/2) {
-    		for (int i=0; i<allLegalMoves.size(); i++) {
-    			if (allLegalMoves.get(i).getCardPlayed() instanceof SaboteurMalus) {
-    				return allLegalMoves.get(i);
-    			}
-    		}
-    	}
-    	//chose a tile with that creates a path
-    	else {
-    		for (int i=0; i<allLegalMoves.size(); i++) {
-    			if (allLegalMoves.get(i).getCardPlayed() instanceof SaboteurTile) {
-    				return allLegalMoves.get(i);
-    			}
-    		}
-    	}
     	return null;
     }
+    
     
     //TODO Anny
     /**
@@ -61,6 +30,7 @@ public class MyTools {
      * 
      * @return the tree with an added node at the branch selected
      */
+    
     
     //TODO Massy
     /**
@@ -71,10 +41,31 @@ public class MyTools {
      * 
      * @return an utility value from the simulation of the game
      */
+
     public BinarySearchTree createTree (SaboteurCard) ) {
     BinarySearchTree b = new BinarySearchTree();
 	
+
+    public BinarySearchTree createTree (Node root) {
+    	BinarySearchTree b = new BinarySearchTree();
+    	b.insert(3);b.insert(8);
+    	b.insert(1);b.insert(4);b.insert(6);b.insert(2);b.insert(10);b.insert(9);
+    	b.insert(20);b.insert(25);b.insert(15);b.insert(16);
+    	System.out.println("Original Tree : ");
+    	b.display(b.root);		
+    	System.out.println("");
+    	System.out.println("Check whether Node with value 4 exists : " + b.find(4));
+    	System.out.println("Delete Node with no children (2) : " + b.delete(2));		
+    	b.display(root);
+    	System.out.println("\n Delete Node with one child (4) : " + b.delete(4));		
+    	b.display(root);
+    	System.out.println("\n Delete Node with Two children (10) : " + b.delete(10));		
+    	b.display(root);
+    	return b;
+
     }
+    
+    
     //TODO Massy
     /**
      * Propagation
@@ -82,10 +73,11 @@ public class MyTools {
      * @return the updated tree
      */
     
+    
     /**
      * Get the distance between the nugget/objectives and the closest path
      */
-    private int distanceNuggetPath(int[][] myBoard, int[] nuggetPos) {
+    public int distanceNuggetPath(int[][] myBoard, int[] nuggetPos) {
     	int smallestDistance = myBoard.length;
     	
     	//if we know where the nugget is, the distance should be between the closest path and the nugget
@@ -118,6 +110,22 @@ public class MyTools {
     		}
     	}
     	return -1;
+    }
+    
+    
+    /**
+     * Calculate the upper bound of given action and state (UCT)
+     */
+    private int upperConfidence() {
+    	
+    }
+    
+    /**
+     * Default policy: 
+     * make a random move from a selected optimal set of cards
+     */
+    private SaboteurMove defaultPolicy() {
+    	
     }
     
     
