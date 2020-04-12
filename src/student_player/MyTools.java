@@ -225,6 +225,39 @@ class State {
 
 //MCTS
 
+public class MonteCarloTreeSearch {
+    static final int WIN_SCORE = 10;
+    int level;
+    int opponent;
+ 
+    public Board findNextMove(Board board, int playerNo) {
+        // define an end time which will act as a terminating condition
+ 
+        opponent = 3 - playerNo;
+        Tree tree = new Tree();
+        Node rootNode = tree.getRoot();
+        rootNode.getState().setBoard(board);
+        rootNode.getState().setPlayerNo(opponent);
+ 
+        while (System.currentTimeMillis() < end) {
+            Node promisingNode = selectPromisingNode(rootNode);
+            if (promisingNode.getState().getBoard().checkStatus() 
+              == Board.IN_PROGRESS) {
+                expandNode(promisingNode);
+            }
+            Node nodeToExplore = promisingNode;
+            if (promisingNode.getChildArray().size() > 0) {
+                nodeToExplore = promisingNode.getRandomChildNode();
+            }
+            int playoutResult = simulateRandomPlayout(nodeToExplore);
+            backPropogation(nodeToExplore, playoutResult);
+        }
+ 
+        Node winnerNode = rootNode.getChildWithMaxScore();
+        tree.setRoot(winnerNode);
+        return winnerNode.getState().getBoard();
+    }
+}
 
 
  
