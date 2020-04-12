@@ -90,13 +90,23 @@ public class MyTools {
     
     private void backPropogation(Node nodeToExplore, int playerNo) {
         Node tempNode = nodeToExplore;
-        while (tempNode != null) {
-            tempNode.getState().incrementVisit();
-            if (tempNode.getState().getPlayerNo() == playerNo) {
-                tempNode.getState().addScore(WIN_SCORE);
-            }
-            tempNode = tempNode.getParent();
+        ArrayList<Node> parents = tempNode.getParents();
+        
+        	 while (tempNode != null) {
+        		 
+        		 for(int i=0; i<=parents.size(); i++)
+        	        {
+                 tempNode.getState().incrementVisit();
+                 if (tempNode.getState().getPlayerNo() == playerNo) {
+                     tempNode.getState().addScore(WIN_SCORE);
+                 
         }
+                 tempNode = parents.get(i);
+            
+            
+        }
+        		 parents = tempNode.getParents();
+    }
     }
     private int simulateRandomPlayout(Node node) {
         Node tempNode = new Node(node);

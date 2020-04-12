@@ -339,7 +339,8 @@ public class StudentPlayer extends SaboteurPlayer {
 
 	public void addScore(int winScore2) {
 		
-		winScore ++;
+		winScore = winScore2;
+		
 		
 		
 		// TODO Auto-generated method stub
