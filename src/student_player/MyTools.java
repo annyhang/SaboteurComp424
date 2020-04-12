@@ -12,6 +12,8 @@ import Saboteur.cardClasses.*;
 
 
 
+
+
 public class MyTools {
 	
 	
@@ -82,6 +84,32 @@ public class MyTools {
      * @return the updated tree
      */
     
+    private void backPropogation(Node nodeToExplore, int playerNo) {
+        Node tempNode = nodeToExplore;
+        while (tempNode != null) {
+            tempNode.getState().incrementVisit();
+            if (tempNode.getState().getPlayerNo() == playerNo) {
+                tempNode.getState().addScore(WIN_SCORE);
+            }
+            tempNode = tempNode.getParent();
+        }
+    }
+    private int simulateRandomPlayout(Node node) {
+        Node tempNode = new Node(node);
+        State tempState = tempNode.getState();
+        int boardStatus = tempState.getBoard().checkStatus();
+        if (boardStatus == opponent) {
+            tempNode.getParent().getState().setWinScore(Integer.MIN_VALUE);
+            return boardStatus;
+        }
+        while (boardStatus == Board.IN_PROGRESS) {
+            tempState.togglePlayer();
+            tempState.randomPlay();
+            boardStatus = tempState.getBoard().checkStatus();
+        }
+        return boardStatus;
+    }
+    
     
     /**
      * Get the distance between the nugget/objectives and the closest path.
@@ -124,10 +152,17 @@ public class MyTools {
     	for (int i=tileBoard.length-3; i<=0; i++) {
 			for (int j=0; j<tileBoard.length; j++) {
 				try {
+
+					if (myBoard[i][j] != null) {
+						return tileBoard.length;
+					}
+				} catch {
+
 					if (tileBoard[i][j] != null) {
 						return tileBoard.length;
 					}
 				} catch (Exception e) {
+
 					continue;
 				}
 				
@@ -181,6 +216,7 @@ class Node {
 			parent.addChild(this);
 		}
 	}
+	
 	public void addChild(Node child) {
 		if (maxNbChildren > 0) {
 			this.children.add(child);
@@ -209,6 +245,10 @@ class Node {
 	public StudentPlayer getState() {
 		return this.boardState;
 	}
+	
+	
+	
+	
 }
 
 
@@ -223,6 +263,19 @@ class Tree {
 	}
 	
 
+}
+
+class BoardState {
+	SaboteurTile[][] tileBoard;
+	int nodeVisit = 0;
+	double winScore;
+	
+	public int getNodeVisit() {
+		return this.nodeVisit;
+	}
+	public double getWinScore() {
+		return this.winScore;
+	}
 }
 
 

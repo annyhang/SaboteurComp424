@@ -42,8 +42,12 @@ public class StudentPlayer extends SaboteurPlayer {
 	
 	//tree for MCTS
 	private Tree tree;
+
+	static int visitCount;
+
 	int nodeVisit;
 	int winScore;
+
 
 
     /**
@@ -326,6 +330,16 @@ public class StudentPlayer extends SaboteurPlayer {
 	public ArrayList<StudentPlayer>getAllPossibleStates() {
 		ArrayList<SaboteurTile> allLegalTileMoves = getAllLegalTileMoves(this.hand, this.boardState);
 		for ()
+	}
+
+	public int incrementVisit() {
+		// TODO Auto-generated method stub
+		return visitCount ++;
+	}
+
+	public int getPlayerNo() {
+		// TODO Auto-generated method stub
+		return myNumber;
 	}
 
 }
