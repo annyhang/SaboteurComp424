@@ -1,6 +1,8 @@
 package student_player;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import boardgame.Move;
 import Saboteur.SaboteurBoardState;
@@ -17,11 +19,29 @@ public class MyTools {
     /**
      * MCTS: Selection
      * 
-     * @return the move that makes the path that is closest to the goal even closer
+     * @return the board that makes the path that is closest to the goal even closer
      */
-    public SaboteurMove selection(int[][] myBoard, int[] nuggetPos, ArrayList<SaboteurMove> allLegalMoves, int nbMyMalus, int nbOppMalus) {    	
+    public SaboteurTile[][] selection(int[][] myBoard, ArrayList<SaboteurMove> allLegalMoves, Node rootNode, SaboteurBoardState boardState) {    	
+    	
+    	
     	
     	return null;
+    }
+    
+    /**
+     * UCT to get the best node to expand the tree
+     */
+    private double uctValue(int totalVisit, double nodeWinScore, int nodeVisit) {
+    	if (nodeVisit == 0) {
+            return Integer.MAX_VALUE;
+        }
+        return ((double) nodeWinScore / (double) nodeVisit) + 1.41 * Math.sqrt(Math.log(totalVisit) / (double) nodeVisit);
+    }
+    private Node findBestNodeWithUCT(Node node) {
+        int parentVisit = node.getState().getVisitCount();
+        return Collections.max(
+        		node.getChildren(),
+        		Comparator.comparing(c -> uctValue(parentVisit, c.getState().getWinScore(), c.getState().getVisitCount())));
     }
     
     
@@ -31,6 +51,15 @@ public class MyTools {
      * 
      * @return the tree with an added node at the branch selected
      */
+    public void expand(Node node) {
+    	ArrayList<State> possibleStates = node.getState().getAllPossibleStates();
+        possibleStates.forEach(state -> {
+            Node newNode = new Node(state);
+            newNode.setParents(node);
+            newNode.getState().setPlayerNo(node.getState().getOpponent());
+            node.getChildArray().add(newNode);
+        });
+    }
     
     
     //TODO Massy
@@ -110,8 +139,8 @@ public class MyTools {
 
 class Node {	// a node represents a board state
 	State state;
-	ArrayList<Node> parents;	//all used paths from that tile
-	ArrayList<Node> childArray;	//all open paths from that tile
+	ArrayList<Node> parents = new ArrayList<Node>();	//all used paths from that tile
+	ArrayList<Node> children = new ArrayList<Node>();	//all open paths from that tile
 	
 	boolean isBlockTile = false;
 	boolean gotDestroyed = false;
@@ -120,21 +149,60 @@ class Node {	// a node represents a board state
 	String idx;
 	int[][] tilePath;
 	int[] tilePos;
+	int maxNbChildren = 0;
 	
 	Node(String idx, int[][] tilePath, int[] tilePos) {
 		this.idx = idx;
 		this.tilePath = tilePath.clone();
+		this.tilePos = tilePos.clone();
+		if (this.tilePath[0][1] == 1) {
+			maxNbChildren++;
+		}
+		if (this.tilePath[1][0] == 1) {
+			maxNbChildren++;
+		}
+		if (this.tilePath[1][2] == 1) {
+			maxNbChildren++;
+		}
+		if (this.tilePath[2][1] == 1) {
+			maxNbChildren++;
+		}
 	}
 	
-	// the parents are the tiles that already existed before this tile and that are connected to this tile
-	public void setParents() {
-		
+	public void setParents(ArrayList<Node> parents) {
+		this.parents = parents;
+		maxNbChildren -= parents.size();
+		for (Node parent : this.parents) {
+			parent.addChild(this);
+		}
 	}
-	//the children of a node/tile is all the open paths from that tile
-	public void setChildren(SaboteurBoardState boardState) {
-		//the number of children depends on the number of open paths the tile has.
-		
-		
+	public void addChild(Node child) {
+		if (maxNbChildren > 0) {
+			this.children.add(child);
+		}
+	}
+	
+	/*
+	 * if the tile got destroyed, we want to keep it in the tree in case putting it back creates a path to the nugget.
+	 * we need to remove the child in order to free the open path for another tile.
+	 * However, since we still keep it, keep the node connected to the tree
+	 */
+	public void setDestroyed() {
+		this.gotDestroyed = true;
+		//since the tile no longer exist, the parents can add another tile/child at that position
+		for (Node parent : this.parents) {
+			parent.removeChild(this);
+		}
+	}
+	public void removeChild(Node child) {
+		this.maxNbChildren--;
+	}
+	
+	public ArrayList<Node> getChildren() {
+		return this.children;
+	}
+	public State getState() {
+		return this.state;
 	}
 }
 class Tree {

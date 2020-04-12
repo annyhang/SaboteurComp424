@@ -39,6 +39,9 @@ public class StudentPlayer extends SaboteurPlayer {
 	private int[][] objectivesPos = { {12, 3}, {12, 5}, {12, 7} };		//the board is fixed for the game
 	private int[] nuggetPos = {-1, -1};									//14x14
 	
+	//tree for MCTS
+	private Tree tree;
+	
 		
 
     /**
