@@ -34,8 +34,9 @@ public class StudentPlayer extends SaboteurPlayer {
 	//what gets updated after a move
 	private SaboteurMove myMove;
 	private SaboteurMove oppMove;
-	//private boolean[] objectivesFound = {false, false, false};
-	private int[] nuggetPos = {-1, -1};			//14x14
+	private int objectivesFound = 0;	//this value indicates which objective to uncover next and not the total number of times we used the map card
+	private int[][] objectivesPos = { {12, 3}, {12, 5}, {12, 7} }		//the board is fixed for the game
+	private int[] nuggetPos = {-1, -1};									//14x14
 	
 		
 
@@ -73,45 +74,44 @@ public class StudentPlayer extends SaboteurPlayer {
     	 */
     	//if we don't know where the nugget is, prioritise the map card
     	if (this.nuggetPos[0] == -1 && this.nuggetPos[1] == -1) {
-    		for (int i=0; i<allLegalMoves.size(); i++) {
-    			if (allLegalMoves.get(i).getCardPlayed() instanceof SaboteurMap) {
-    				//return allLegalMoves.get(i);
+    		for (SaboteurMove move : this.allLegalMoves) {
+    			if (move.getCardPlayed() instanceof SaboteurMap) {
+    				this.myMove = new SaboteurMove(new SaboteurMap(), objectivesPos[objectivesFound][0], objectivesPos[objectivesFound][1], this.myNumber);
+    				objectivesFound++;
     			}
     		}
     	}
     	//if we got a malus card and we are close from the goal, prioritise a bonus card
     	else if (this.nbMyMalus > 0 && myTools.distanceNuggetPath(myBoard, nuggetPos) < myBoard.length/2) {
-    		for (int i=0; i<allLegalMoves.size(); i++) {
-    			if (allLegalMoves.get(i).getCardPlayed() instanceof SaboteurBonus) {
-    				//return allLegalMoves.get(i);
+    		for (SaboteurMove move : this.allLegalMoves) {
+    			if (move.getCardPlayed() instanceof SaboteurBonus) {
+    				this.myMove = move;
     			}
     		}
     	}
     	//if we are close from the goal and the opponent can still play, prioritise a malus card
     	else if (nbOppMalus == 0 && myTools.distanceNuggetPath(myBoard, nuggetPos) < myBoard.length/2) {
-    		for (int i=0; i<allLegalMoves.size(); i++) {
-    			if (allLegalMoves.get(i).getCardPlayed() instanceof SaboteurMalus) {
-    				//return allLegalMoves.get(i);
+    		for (SaboteurMove move : this.allLegalMoves) {
+    			if (move.getCardPlayed() instanceof SaboteurMalus) {
+    				this.myMove = move;
     			}
     		}
     	}
     	//if we got a malus and we only have tile cards, drop the block tile cards
     	else if(nbMyMalus > 0) {
-    		for (int i=0; i<allLegalMoves.size(); i++) {
-    			if (allLegalMoves.get(i).getCardPlayed() instanceof SaboteurTile) {
-    				SaboteurTile tile = (SaboteurTile) allLegalMoves.get(i).getCardPlayed();
-    				String tileIdx = tile.getIdx();
-    				for (int j=0; j<this.blockTiles.length; j++) {
-	    					if (tileIdx.equals(blockTiles[j])) {
-	    						//return allLegalMoves.get(i);
-	    				}
+    		for (SaboteurCard handCard : this.hand) {
+    			if (handCard instanceof SaboteurTile) {
+    				SaboteurTile handCardTile = (SaboteurTile) handCard;
+    				for (String idxBlockTiles : blockTiles) {
+    					if (handCardTile.getIdx().equals(idxBlockTiles)) {
+    						this.myMove = new SaboteurMove(new SaboteurDrop(), this.hand.indexOf(handCard), 0, this.myNumber);
+    					}
     				}
-    				
     			}
     		}
     	}
     	/*
-    	 * MCTS to get the best move
+    	 * MCTS to get the best move for a tile card
     	 */
     	else {
     		
@@ -200,6 +200,14 @@ public class StudentPlayer extends SaboteurPlayer {
     			}
     		}
     	}
+    	
+//we still need to find the nugget to win
+//    	//check if we can deduce the nugget. Note: the order of using a map card on the objectives is always the same.
+//    	if (nuggetPos[0] == -1 && nuggetPos[1] == -1 && objectivesFound == 1) {
+//    		objectivesFound++;
+//    		nuggetPos[0] == objectivesPos[objectivesFounds][0];
+//    		nuggetPos[1] == objectivesPos[objectivesFounds][1];
+//    	}
     	
     	//check if a malus was used on us
     	if (this.nbMyMalus != boardState.getNbMalus(this.myNumber)) {
