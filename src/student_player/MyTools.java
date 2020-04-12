@@ -126,16 +126,16 @@ public class MyTools {
         // define an end time which will act as a terminating condition
  
         opponent = 3 - playerNo;
-        Tree tree = new Tree();
+        Tree tree = new Tree(board);
         Node rootNode = tree.getRoot();
         rootNode.getState().setBoard(board);
-        rootNode.getState().setPlayerNo(opponent);
+        rootNode.getState().switchPlayers();
  
-        while (System.currentTimeMillis() < end) {
-            Node promisingNode = selectPromisingNode(rootNode);
+        while (System.currentTimeMillis() <2000) {
+            Node promisingNode = selection(rootNode);
             if (promisingNode.getState().getBoard().checkStatus() 
               == Board.IN_PROGRESS) {
-                expandNode(promisingNode);
+                expand(promisingNode);
             }
             Node nodeToExplore = promisingNode;
             if (promisingNode.getChildArray().size() > 0) {
@@ -300,6 +300,17 @@ class Tree {
 	Tree(StudentPlayer boardState) {
 		int[] entrancePos = {5, 5};
 		root = new Node(boardState, "entrance", entrancePos);
+	}
+
+	public void setRoot(Node winnerNode) {
+		this.root = winnerNode;
+		// TODO Auto-generated method stub
+		
+	}
+
+	public Node getRoot() {
+		// TODO Auto-generated method stub
+		return root;
 	}
 	
 

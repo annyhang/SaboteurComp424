@@ -369,5 +369,11 @@ public class StudentPlayer extends SaboteurPlayer {
 		return winner;
 	}
 
+	public void setBoard(StudentPlayer board) {
+		this. = board;
+		// TODO Auto-generated method stub
+		
+	}
+
 
 }
