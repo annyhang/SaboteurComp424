@@ -42,7 +42,7 @@ public class StudentPlayer extends SaboteurPlayer {
 	//tree for MCTS
 	private Tree tree;
 
-	static int visitCount;
+    int visitCount;
 
 	int nodeVisit;
 	int winScore;
@@ -326,7 +326,7 @@ public class StudentPlayer extends SaboteurPlayer {
 
 	public int incrementVisit() {
 		// TODO Auto-generated method stub
-		return visitCount ++;
+		return nodeVisit ++;
 	}
 
 	public int getPlayerNo() {
