@@ -21,11 +21,12 @@ public class MyTools {
      * 
      * @return the board that makes the path that is closest to the goal even closer
      */
-    public SaboteurTile[][] selection(int[][] myBoard, ArrayList<SaboteurMove> allLegalMoves, Node rootNode, SaboteurBoardState boardState) {    	
-    	
-    	
-    	
-    	return null;
+    public Node selection(Node rootNode) {    	
+        Node node = rootNode;
+        while (node.getChildren().size() != 0) {
+            node = findBestNodeWithUCT(node);
+        }
+        return node;
     }
     
     /**
@@ -52,13 +53,7 @@ public class MyTools {
      * @return the tree with an added node at the branch selected
      */
     public void expand(Node node) {
-    	ArrayList<State> possibleStates = node.getState().getAllPossibleStates();
-        possibleStates.forEach(state -> {
-            Node newNode = new Node(state);
-            newNode.setParents(node);
-            newNode.getState().setPlayerNo(node.getState().getOpponent());
-            node.getChildArray().add(newNode);
-        });
+
     }
     
     
@@ -151,7 +146,8 @@ class Node {	// a node represents a board state
 	int[] tilePos;
 	int maxNbChildren = 0;
 	
-	Node(String idx, int[][] tilePath, int[] tilePos) {
+	Node(State state, String idx, int[][] tilePath, int[] tilePos) {
+		this.state = state;
 		this.idx = idx;
 		this.tilePath = tilePath.clone();
 		this.tilePos = tilePos.clone();
