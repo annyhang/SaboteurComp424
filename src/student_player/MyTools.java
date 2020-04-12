@@ -133,7 +133,7 @@ public class MyTools {
 }
 
 class Node {	// a node represents a board state
-	State state;
+	StudentPlayer boardState;
 	ArrayList<Node> parents = new ArrayList<Node>();	//all used paths from that tile
 	ArrayList<Node> children = new ArrayList<Node>();	//all open paths from that tile
 	
@@ -146,8 +146,8 @@ class Node {	// a node represents a board state
 	int[] tilePos;
 	int maxNbChildren = 0;
 	
-	Node(State state, String idx, int[] tilePos) {
-		this.state = state;
+	Node(StudentPlayer boardState, String idx, int[] tilePos) {
+		this.boardState = boardState;
 		this.tile = new SaboteurTile(idx);
 		this.tilePath = this.tile.getPath();
 		this.tilePos = tilePos.clone();
@@ -197,37 +197,20 @@ class Node {	// a node represents a board state
 	public ArrayList<Node> getChildren() {
 		return this.children;
 	}
-	public State getState() {
-		return this.state;
+	public StudentPlayer getState() {
+		return this.boardState;
 	}
 }
 class Tree {
 	Node root;
 
-	Tree(SaboteurBoardState boardState) {
+	Tree(StudentPlayer boardState) {
 		int[] entrancePos = {5, 5};
 		root = new Node(boardState, "entrance", entrancePos);
 	}
 	
 }
-class State {
-    SaboteurBoardState board;
-    int playerNo;
-    int visitCount;
-    double winScore;
- 
-    // copy constructor, getters, and setters
- 
-    public ArrayList<State> getAllPossibleStates() {
-    	
-    	
-        // constructs a list of all possible states from current state
-    }
-    public void randomPlay() {
-        /* get a list of all possible positions on the board and 
-           play a random move */
-    }
-}
+
 
 //MCTS
 

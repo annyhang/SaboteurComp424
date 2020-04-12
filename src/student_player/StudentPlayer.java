@@ -41,6 +41,7 @@ public class StudentPlayer extends SaboteurPlayer {
 	
 	//tree for MCTS
 	private Tree tree;
+	int visitCount;
 
 
     /**
