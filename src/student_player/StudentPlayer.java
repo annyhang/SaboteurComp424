@@ -19,7 +19,7 @@ public class StudentPlayer extends SaboteurPlayer {
 	private MyTools myTools;
 	
 	private int nbRound = 0;
-	private String[] blockTiles = {"1", "2", "2_flip", "3", "3_flip", "4", "4_flip", "11", "11_flip", "12", "12_flip", "13", "14", "14_flip", "15"};
+	public String[] blockTiles = {"1", "2", "2_flip", "3", "3_flip", "4", "4_flip", "11", "11_flip", "12", "12_flip", "13", "14", "14_flip", "15"};
 	
 	private int[][] myBoard;
 	private int myNumber;
@@ -30,12 +30,13 @@ public class StudentPlayer extends SaboteurPlayer {
 	private int nbMyMalus;
 	private int nbOppMalus;
 	private ArrayList<SaboteurMove> allLegalMoves;
+	private int[] destroyedCard;
 	
 	//what gets updated after a move
 	private SaboteurMove myMove;
 	private SaboteurMove oppMove;
 	private int objectivesFound = 0;	//this value indicates which objective to uncover next and not the total number of times we used the map card
-	private int[][] objectivesPos = { {12, 3}, {12, 5}, {12, 7} }		//the board is fixed for the game
+	private int[][] objectivesPos = { {12, 3}, {12, 5}, {12, 7} };		//the board is fixed for the game
 	private int[] nuggetPos = {-1, -1};									//14x14
 	
 		
@@ -97,7 +98,7 @@ public class StudentPlayer extends SaboteurPlayer {
     			}
     		}
     	}
-    	//if we got a malus and we only have tile cards, drop the block tile cards
+    	//if we got a malus and we only have tile cards, drop a block tile card
     	else if(nbMyMalus > 0) {
     		for (SaboteurCard handCard : this.hand) {
     			if (handCard instanceof SaboteurTile) {
@@ -111,7 +112,7 @@ public class StudentPlayer extends SaboteurPlayer {
     		}
     	}
     	/*
-    	 * MCTS to get the best move for a tile card
+    	 * MCTS to get the best move between the tile cards or destroy cards
     	 */
     	else {
     		
