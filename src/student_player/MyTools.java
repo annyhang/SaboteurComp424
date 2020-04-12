@@ -42,6 +42,11 @@ public class MyTools {
      * 
      * @return an utility value from the simulation of the game
      */
+
+   /** public BinarySearchTree createTree (SaboteurCard) ) {
+    BinarySearchTree b = new BinarySearchTree();
+	
+
     public BinarySearchTree createTree (Node root) {
     	BinarySearchTree b = new BinarySearchTree();
     	b.insert(3);b.insert(8);
@@ -58,7 +63,8 @@ public class MyTools {
     	System.out.println("\n Delete Node with Two children (10) : " + b.delete(10));		
     	b.display(root);
     	return b;
-    }
+
+    }**/
     
     
     //TODO Massy
@@ -130,19 +136,18 @@ public class MyTools {
      * Default policy: 
      * make a random move from a selected optimal set of cards
      */
-    private SaboteurMove defaultPolicy() {
-    	
-    }
+    
     
     
 }
+ 
 
-class Node{
-	int data;
+/**class Node{
+	SaboteurTile data;
 	Node left;
 	Node right;	
-	public Node(int data){
-		this.data = data;
+	public Node(SaboteurTile data){
+		this.d ata = data;
 		left = null;
 		right = null;
 	}
@@ -154,7 +159,7 @@ class BinarySearchTree {
 		this.root = null;
 	}
 	
-	public boolean find(int id){
+	public boolean find(SaboteurTile id){
 		Node current = root;
 		while(current!=null){
 			if(current.data==id){
@@ -280,8 +285,6 @@ class BinarySearchTree {
 			display(root.right);
 		}
 	}
-	public static void main(String arg[]){
-		
-	}
-}
+	
+}**/
 
