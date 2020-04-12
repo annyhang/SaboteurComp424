@@ -276,7 +276,7 @@ public class StudentPlayer extends SaboteurPlayer {
     		for(int j=0; j<=tiles.length; j++) {
     			if (currentHand.get(i) instanceof SaboteurTile) {
     				SaboteurTile currentCard = (SaboteurTile) currentHand.get(i);
-    				if(currentCard.getIdx()() == tiles[j])
+    				if(currentCard.getIdx() == tiles[j])
     				{
     					currentTiles.add(currentCard);
     				}
