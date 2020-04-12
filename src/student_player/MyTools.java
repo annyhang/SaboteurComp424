@@ -10,10 +10,6 @@ import Saboteur.SaboteurMove;
 import Saboteur.cardClasses.*;
 
 
-
-
-
-
 public class MyTools {
 	
 	static final int WIN_SCORE = 0;
@@ -60,12 +56,13 @@ public class MyTools {
      */
     public void expand(Node node) {
     	ArrayList<StudentPlayer> possibleStates = node.getState().getAllPossibleStates();
-        possibleStates.forEach(state -> {
-            Node newNode = new Node(state);
-            newNode.setParent(node);
-            newNode.getState().setPlayerNo(node.getState().getOpponent());
-            node.getChildArray().add(newNode);
-        });
+    	for (StudentPlayer state : possibleStates) {
+    		SaboteurTile tile = (SaboteurTile) state.getMyMove().getCardPlayed();
+    		Node newNode = new Node(state, tile.getIdx(), state.getMyMove().getPosPlayed());
+    		newNode.setParent(node);
+    		newNode.getState().switchPlayers();
+    		node.addChild(newNode);
+    	}
     }
     
     
@@ -90,20 +87,30 @@ public class MyTools {
     
     private void backPropogation(Node nodeToExplore, int playerNo) {
         Node tempNode = nodeToExplore;
-        while (tempNode != null) {
-            tempNode.getState().incrementVisit();
-            if (tempNode.getState().getPlayerNo() == playerNo) {
-                tempNode.getState().addScore(WIN_SCORE);
-            }
-            tempNode = tempNode.getParent();
+        ArrayList<Node> parents = tempNode.getParents();
+        
+        	 while (tempNode != null) {
+        		 
+        		 for(int i=0; i<=parents.size(); i++)
+        	        {
+                 tempNode.getState().incrementVisit();
+                 if (tempNode.getState().getPlayerNo() == playerNo) {
+                     tempNode.getState().addScore(WIN_SCORE);
+                 
         }
+                 tempNode = parents.get(i);
+            
+            
+        }
+        		 parents = tempNode.getParents();
+    }
     }
     private int simulateRandomPlayout(Node node) {
         Node tempNode = new Node(node);
         State tempState = tempNode.getState();
         int boardStatus = tempState.getBoard().checkStatus();
         if (boardStatus == opponent) {
-            tempNode.getParent().getState().setWinScore(Integer.MIN_VALUE);
+            tempNode.getParents().getState().setWinScore(Integer.MIN_VALUE);
             return boardStatus;
         }
         while (boardStatus == Board.IN_PROGRESS) {
@@ -227,15 +234,18 @@ class Node {
 			maxNbChildren++;
 		}
 	}
+	Node(Node node) {
+		this.boardState = node.getState();
+		this.tile = node.getTile();
+		this.tilePath = this.tile.getPath();
+		this.tilePos = node.getTilePos();
+	}
 	
 	
 
-	public void setParents(ArrayList<Node> parents) {
-		this.parents = parents;
+	public void setParent(Node parent) {
+		this.parents.add(parent);
 		maxNbChildren -= parents.size();
-		for (Node parent : this.parents) {
-			parent.addChild(this);
-		}
 	}
 	
 	public void addChild(Node child) {
@@ -269,6 +279,12 @@ class Node {
 	public StudentPlayer getState() {
 		return this.boardState;
 	}
+	public SaboteurTile getTile() {
+		return this.tile;
+	}
+	public int[] getTilePos() {
+		return this.tilePos;
+	}
 	
 	
 	
@@ -289,28 +305,20 @@ class Tree {
 
 }
 
-class BoardState {
-	SaboteurTile[][] tileBoard;
-	int nodeVisit = 0;
-	double winScore;
-	
-	public int getNodeVisit() {
-		return this.nodeVisit;
-	}
-	public double getWinScore() {
-		return this.winScore;
-	}
-}
-
-
-
-
-public class MonteCarloTreeSearch {
-
-    
- 
-   
-}
+//class BoardState {
+//	SaboteurTile[][] tileBoard;
+//	int nodeVisit = 0;
+//	double winScore;
+//	
+//	public int getNodeVisit() {
+//		return this.nodeVisit;
+//	}
+//	public double getWinScore() {
+//		return this.winScore;
+//	}
+//}
+//
+//
 
 
 

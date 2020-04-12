@@ -26,10 +26,10 @@ public class StudentPlayer extends SaboteurPlayer {
 	private int oppNumber;
 	
 	//what gets updated from SaboteurBoardState methods:
-	private static ArrayList<SaboteurCard> hand;
+	private ArrayList<SaboteurCard> hand;
 	private int nbMyMalus;
 	private int nbOppMalus;
-	private static ArrayList<SaboteurMove> allLegalMoves;
+	private ArrayList<SaboteurMove> allLegalMoves;
 	private int[] destroyedCard;
 	
 	//what gets updated after a move
@@ -133,6 +133,10 @@ public class StudentPlayer extends SaboteurPlayer {
 
     	
 
+    	return this.myMove;
+    }
+    public Move chooseMove(SaboteurMove move) {
+    	this.myMove = move;
     	return this.myMove;
     }
     
@@ -275,19 +279,13 @@ public class StudentPlayer extends SaboteurPlayer {
      * These methods are for the implementation of the MCTS
      * 
      */
-    public static ArrayList<SaboteurCard> getHand() {
-    	return this.hand;
-    }
-    
-    public static ArrayList<SaboteurTile> getHandOfTiles(){
-    	//add flipped tiles too
+    public ArrayList<SaboteurTile> getHandOfTiles(){
     	String[] tiles ={"0","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15"};
     	ArrayList<SaboteurTile> currentTiles= new ArrayList<SaboteurTile>();
-    	ArrayList<SaboteurCard> currentHand = getHand();
-    	for(int i=0; i<=currentHand.size(); i++) {
+    	for(int i=0; i<=this.hand.size(); i++) {
     		for(int j=0; j<=tiles.length; j++) {
-    			if (currentHand.get(i) instanceof SaboteurTile) {
-    				SaboteurTile currentCard = (SaboteurTile) currentHand.get(i);
+    			if (this.hand.get(i) instanceof SaboteurTile) {
+    				SaboteurTile currentCard = (SaboteurTile) this.hand.get(i);
     				if(currentCard.getIdx() == tiles[j]) {
     					currentTiles.add(currentCard);
     				}
@@ -297,20 +295,27 @@ public class StudentPlayer extends SaboteurPlayer {
     	return currentTiles;
     }
     
-    public ArrayList<SaboteurTile> getAllLegalTileMoves(ArrayList<SaboteurTile> hand, SaboteurBoardState boardState) {
-    	ArrayList<SaboteurTile> currentLegal = new ArrayList<SaboteurTile>();
-    	ArrayList<SaboteurTile> currentTiles = getHandOfTiles();
-    	for(int i=0; i<=currentTiles.size();i++) {
-    		for(int j=0; j<allLegalMoves.size(); j++) {
-    			SaboteurTile currentTile = currentTiles.get(i);
-    			ArrayList<int[]> possiblePositions = boardState.possiblePositions(currentTile);
-    			if( possiblePositions.size() > 0 ) {
-    				currentLegal.add(currentTile);
-    			}
-    			
+//    public ArrayList<SaboteurTile> getAllLegalTileMoves(ArrayList<SaboteurTile> handOfTiles) {
+//    	ArrayList<SaboteurTile> currentLegal = new ArrayList<SaboteurTile>();
+//    	for(int i=0; i<=handOfTiles.size();i++) {
+//    		for(int j=0; j<allLegalMoves.size(); j++) {
+//    			SaboteurTile currentTile = handOfTiles.get(i);
+//    			ArrayList<int[]> possiblePositions = this.boardState.possiblePositions(currentTile);
+//    			if( possiblePositions.size() > 0 ) {
+//    				currentLegal.add(currentTile);
+//    			}
+//    		}
+//    	}
+//    	return currentLegal;
+//    }
+    public ArrayList<SaboteurMove> getAllLegalTileMoves() {
+    	ArrayList<SaboteurMove> allLegalTileMoves = new ArrayList<SaboteurMove>();
+    	for (SaboteurMove move : this.allLegalMoves) {
+    		if (move.getCardPlayed() instanceof SaboteurTile) {
+    			allLegalTileMoves.add(move);
     		}
     	}
-    	return currentLegal;
+    	return allLegalTileMoves;
     }
     
 	public void setWinScore(int winScore) {
@@ -323,30 +328,45 @@ public class StudentPlayer extends SaboteurPlayer {
 		return this.winScore;
 	}
 	public int incrementVisit() {
-		// TODO Auto-generated method stub
 		return nodeVisit ++;
 	}
 
 	public int getPlayerNo() {
-		// TODO Auto-generated method stub
 		return myNumber;
 	}
-		
-	public ArrayList<StudentPlayer>getAllPossibleStates() {
-		ArrayList<SaboteurTile> allLegalTileMoves = getAllLegalTileMoves(this.hand, this.boardState);
-		for ()
+	public void addScore(int winScore) {
+		this.winScore = winScore;
 	}
+<<<<<<< HEAD
+	public ArrayList<StudentPlayer> getAllPossibleStates() {
+		ArrayList<StudentPlayer> allPossibleStates = new ArrayList<StudentPlayer>();
+		ArrayList<SaboteurMove> allLegalTileMoves = getAllLegalTileMoves();
+		for (SaboteurMove move : allLegalTileMoves) {
+			StudentPlayer student = new StudentPlayer();
+			student.chooseMove(move);
+			allPossibleStates.add(student);
+		}
+		return allPossibleStates;
+	}
+	public SaboteurMove getMyMove() {
+		return this.myMove;
+	}
+	public void switchPlayers() {
+		int temp = this.oppNumber;
+		this.oppNumber = this.myNumber;
+		this.myNumber = temp;
+=======
 
 	public void addScore(int winScore2) {
 		
-		winScore ++;
+		winScore = winScore2;
+		
 		
 		
 		// TODO Auto-generated method stub
 		
+>>>>>>> b30b3139b251903ec1936714df094a17103b661c
 	}
-	
-	
 	
 
 }
