@@ -125,22 +125,50 @@ public class MyTools {
     }
     
     
-    /**
-     * Calculate the upper bound of given action and state (UCT)
-     */
-    private int upperConfidence() {
-    	
-    }
-    
-    /**
-     * Default policy: 
-     * make a random move from a selected optimal set of cards
-     */
-    
     
     
 }
+
+class Node {	// a node represents a board state
+	State state;
+	ArrayList<Node> parents;	//all used paths from that tile
+	ArrayList<Node> childArray;	//all open paths from that tile
+	boolean isBlockTile = false;
+	boolean gotDestroyed = false;
+	int[] tileBoardPos = {-1, -1};
+	
+	// the parents are the tiles that already existed before this tile and that are connected to this tile
+	public void setParents()
+	//the children of a node/tile is all the open paths from that tile
+	public void setChildren(SaboteurBoardState boardState, int[][] tilePath) {
+		//the number of children depends on the number of open paths the tile has.
+		
+		
+	}
+}
+class Tree {
+	Node root;
+}
+class State {
+    SaboteurBoardState board;
+    int playerNo;
+    int visitCount;
+    double winScore;
  
+    // copy constructor, getters, and setters
+ 
+    public ArrayList<State> getAllPossibleStates() {
+        // constructs a list of all possible states from current state
+    }
+    public void randomPlay() {
+        /* get a list of all possible positions on the board and 
+           play a random move */
+    }
+}
+ 
+
+
+
 
 /**class Node{
 	SaboteurTile data;
