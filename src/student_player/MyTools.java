@@ -12,6 +12,8 @@ import Saboteur.cardClasses.*;
 
 
 
+
+
 public class MyTools {
 	
 	
@@ -75,6 +77,32 @@ public class MyTools {
      * 
      * @return the updated tree
      */
+    
+    private void backPropogation(Node nodeToExplore, int playerNo) {
+        Node tempNode = nodeToExplore;
+        while (tempNode != null) {
+            tempNode.getState().incrementVisit();
+            if (tempNode.getState().getPlayerNo() == playerNo) {
+                tempNode.getState().addScore(WIN_SCORE);
+            }
+            tempNode = tempNode.getParent();
+        }
+    }
+    private int simulateRandomPlayout(Node node) {
+        Node tempNode = new Node(node);
+        State tempState = tempNode.getState();
+        int boardStatus = tempState.getBoard().checkStatus();
+        if (boardStatus == opponent) {
+            tempNode.getParent().getState().setWinScore(Integer.MIN_VALUE);
+            return boardStatus;
+        }
+        while (boardStatus == Board.IN_PROGRESS) {
+            tempState.togglePlayer();
+            tempState.randomPlay();
+            boardStatus = tempState.getBoard().checkStatus();
+        }
+        return boardStatus;
+    }
     
     
     /**
@@ -172,6 +200,7 @@ class Node {	// a node represents a board state
 			parent.addChild(this);
 		}
 	}
+	
 	public void addChild(Node child) {
 		if (maxNbChildren > 0) {
 			this.children.add(child);
@@ -200,6 +229,10 @@ class Node {	// a node represents a board state
 	public StudentPlayer getState() {
 		return this.boardState;
 	}
+	
+	
+	
+	
 }
 class Tree {
 

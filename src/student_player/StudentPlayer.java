@@ -41,7 +41,7 @@ public class StudentPlayer extends SaboteurPlayer {
 	
 	//tree for MCTS
 	private Tree tree;
-	int visitCount;
+	static int visitCount;
 
 
     /**
@@ -304,5 +304,15 @@ public class StudentPlayer extends SaboteurPlayer {
     	}
     	return currentLegal;
     }
+
+	public int incrementVisit() {
+		// TODO Auto-generated method stub
+		return visitCount ++;
+	}
+
+	public int getPlayerNo() {
+		// TODO Auto-generated method stub
+		return myNumber;
+	}
 
 }
