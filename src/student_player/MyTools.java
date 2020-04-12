@@ -107,7 +107,7 @@ public class MyTools {
     private int simulateRandomPlayout(Node node) {
     	Node tempNode = new Node(node);
     	StudentPlayer tempState = tempNode.getState();
-    	int boardStatus = tempState.getWinner();
+    	int boardStatus = tempState.checkStatus();
     	if (boardStatus == opponent) {
     		for (Node parent : tempNode.getParents()) {
     			parent.getState().setWinScore(Integer.MIN_VALUE);
@@ -117,7 +117,7 @@ public class MyTools {
     	while (boardStatus == -1) {
     		tempState.switchPlayers();
     		tempState.getRandomMove();
-    		boardStatus = tempState.getBoard().checkStatus();
+    		boardStatus = tempState.checkStatus();
     	}
     	return boardStatus;
     }
