@@ -48,6 +48,8 @@ public class StudentPlayer extends SaboteurPlayer {
 
 	private int nodeVisit;
 	private int winScore;
+	
+	private int boardStatus = -1; // no_winner = -1, player_0_wins = 0, player_1_wins = 1
 
 
 
@@ -261,6 +263,7 @@ public class StudentPlayer extends SaboteurPlayer {
     					//destroyed tile
     					if (this.myBoard[i][j] > newIntBoard[i][j]) {
     						this.oppMove = new SaboteurMove(new SaboteurDestroy(), i/3, j/3, this.oppNumber);
+    						//TODO update tree/node
     					} 
     					//added tile
     					else {
@@ -356,7 +359,6 @@ public class StudentPlayer extends SaboteurPlayer {
 		int temp = this.oppNumber;
 		this.oppNumber = this.myNumber;
 		this.myNumber = temp;
-
 	}
 
 	public Object getBoard() {
@@ -367,6 +369,12 @@ public class StudentPlayer extends SaboteurPlayer {
 	public int getWinner() {
 		// TODO Auto-generated method stub
 		return winner;
+	}
+	public SaboteurMove getRandomMove() {
+		return this.boardState.getRandomMove();
+	}
+	public int checkStatus() {
+		return this.boardStatus;
 	}
 
 

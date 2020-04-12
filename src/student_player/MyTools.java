@@ -84,43 +84,44 @@ public class MyTools {
      * 
      * @return the updated tree
      */
-    
+
     private void backPropogation(Node nodeToExplore, int playerNo) {
-        Node tempNode = nodeToExplore;
-        ArrayList<Node> parents = tempNode.getParents();
-        
-        	 while (tempNode != null) {
-        		 
-        		 for(int i=0; i<=parents.size(); i++)
-        	        {
-                 tempNode.getState().incrementVisit();
-                 if (tempNode.getState().getPlayerNo() == playerNo) {
-                     tempNode.getState().addScore(WIN_SCORE);
-                 
-        }
-                 tempNode = parents.get(i);
-            
-            
-        }
-        		 parents = tempNode.getParents();
+    	Node tempNode = nodeToExplore;
+    	ArrayList<Node> parents = tempNode.getParents();
+
+    	while (tempNode != null) {
+    		for(int i=0; i<=parents.size(); i++) {
+    			tempNode.getState().incrementVisit();
+    			if (tempNode.getState().getPlayerNo() == playerNo) {
+    				tempNode.getState().addScore(WIN_SCORE);
+    			}
+    			tempNode = parents.get(i);
+    		}
+    		parents = tempNode.getParents();
+    	}
     }
-    }
+    /*
+     * pick a random node and simulate a random play out from it. 
+     * Also, we will have an update function to propagate score and visit count starting from leaf to root:
+     */
     private int simulateRandomPlayout(Node node) {
-        Node tempNode = new Node(node.getState(), ,  );
-        StudentPlayer tempState = tempNode.getState();
-        int boardStatus = tempState.getWinner();
-        if (boardStatus == opponent) {
-            tempNode.getParents().getState().setWinScore(Integer.MIN_VALUE);
-            return boardStatus;
-        }
-        while (boardStatus == Board.IN_PROGRESS) {
-            tempState.togglePlayer();
-            tempState.randomPlay();
-            boardStatus = tempState.getBoard().checkStatus();
-        }
-        return boardStatus;
+    	Node tempNode = new Node(node);
+    	StudentPlayer tempState = tempNode.getState();
+    	int boardStatus = tempState.getWinner();
+    	if (boardStatus == opponent) {
+    		for (Node parent : tempNode.getParents()) {
+    			parent.getState().setWinScore(Integer.MIN_VALUE);
+    		}
+    		return boardStatus;
+    	}
+    	while (boardStatus == -1) {
+    		tempState.switchPlayers();
+    		tempState.getRandomMove();
+    		boardStatus = tempState.getBoard().checkStatus();
+    	}
+    	return boardStatus;
     }
-    
+
     
     public StudentPlayer findNextMove(StudentPlayer board, int playerNo) {
         // define an end time which will act as a terminating condition
@@ -301,7 +302,6 @@ class Tree {
 		int[] entrancePos = {5, 5};
 		root = new Node(boardState, "entrance", entrancePos);
 	}
-	
 
 }
 
@@ -336,8 +336,7 @@ class BoardState {
 //		return this.winScore;
 //	}
 //}
-//
-//
+
 
 
 
