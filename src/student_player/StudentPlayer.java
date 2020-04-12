@@ -41,7 +41,8 @@ public class StudentPlayer extends SaboteurPlayer {
 	
 	//tree for MCTS
 	private Tree tree;
-	int visitCount;
+	int nodeVisit;
+	int winScore;
 
 
     /**
@@ -304,5 +305,19 @@ public class StudentPlayer extends SaboteurPlayer {
     	}
     	return currentLegal;
     }
+    
+	public void setWinScore(int winScore) {
+		this.winScore = winScore;
+	}
+	public void nodeVisited() {
+		this.nodeVisit++;
+	}
+	
+	public int getNodeVisit() {
+		return this.nodeVisit;
+	}
+	public double getWinScore() {
+		return this.winScore;
+	}
 
 }

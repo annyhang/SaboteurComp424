@@ -118,10 +118,10 @@ public class MyTools {
     	for (int i=tileBoard.length-3; i<=0; i++) {
 			for (int j=0; j<tileBoard.length; j++) {
 				try {
-					if (myBoard[i][j] != null) {
+					if (tileBoard[i][j] != null) {
 						return tileBoard.length;
 					}
-				} catch {
+				} catch (Exception e) {
 					continue;
 				}
 				
@@ -130,21 +130,18 @@ public class MyTools {
     	
     	return -1;
     }
-    
-    
-    
+
     
     
 }
 
-class Node {	// a node represents a board state
+class Node {
 	StudentPlayer boardState;
 	ArrayList<Node> parents = new ArrayList<Node>();	//all used paths from that tile
 	ArrayList<Node> children = new ArrayList<Node>();	//all open paths from that tile
 	
 	boolean isBlockTile = false;
 	boolean gotDestroyed = false;
-	int[] tileBoardPos = {-1, -1};
 	
 	SaboteurTile tile;
 	int[][] tilePath;
@@ -206,6 +203,7 @@ class Node {	// a node represents a board state
 		return this.boardState;
 	}
 }
+
 class Tree {
 
 	Node root;
@@ -216,19 +214,6 @@ class Tree {
 	}
 	
 
-}
-
-class BoardState {
-	SaboteurTile[][] tileBoard;
-	int nodeVisit = 0;
-	double winScore;
-	
-	public int getNodeVisit() {
-		return this.nodeVisit;
-	}
-	public double getWinScore() {
-		return this.winScore;
-	}
 }
 
 
