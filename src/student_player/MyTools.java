@@ -16,6 +16,10 @@ import Saboteur.cardClasses.*;
 
 public class MyTools {
 	
+	static final int WIN_SCORE = 0;
+    int level;
+    int opponent;
+	
 	
     //TODO
     /**
@@ -111,6 +115,33 @@ public class MyTools {
     }
     
     
+    public Board findNextMove(Board board, int playerNo) {
+        // define an end time which will act as a terminating condition
+ 
+        opponent = 3 - playerNo;
+        Tree tree = new Tree();
+        Node rootNode = tree.getRoot();
+        rootNode.getState().setBoard(board);
+        rootNode.getState().setPlayerNo(opponent);
+ 
+        while (System.currentTimeMillis() < end) {
+            Node promisingNode = selectPromisingNode(rootNode);
+            if (promisingNode.getState().getBoard().checkStatus() 
+              == Board.IN_PROGRESS) {
+                expandNode(promisingNode);
+            }
+            Node nodeToExplore = promisingNode;
+            if (promisingNode.getChildArray().size() > 0) {
+                nodeToExplore = promisingNode.getRandomChildNode();
+            }
+            int playoutResult = simulateRandomPlayout(nodeToExplore);
+            backPropogation(nodeToExplore, playoutResult);
+        }
+ 
+        Node winnerNode = rootNode.getChildWithMaxScore();
+        tree.setRoot(winnerNode);
+        return winnerNode.getState().getBoard();
+    }
     /**
      * Get the distance between the nugget/objectives and the closest path.
      * Here, the closest path is assumed to be a feasible path.
@@ -197,6 +228,8 @@ class Node {
 		}
 	}
 	
+	
+
 	public void setParents(ArrayList<Node> parents) {
 		this.parents = parents;
 		maxNbChildren -= parents.size();
@@ -271,37 +304,9 @@ class BoardState {
 
 public class MonteCarloTreeSearch {
 
-    static final int WIN_SCORE = 0;
-    int level;
-    int opponent;
+    
  
-    public Board findNextMove(Board board, int playerNo) {
-        // define an end time which will act as a terminating condition
- 
-        opponent = 3 - playerNo;
-        Tree tree = new Tree();
-        Node rootNode = tree.getRoot();
-        rootNode.getState().setBoard(board);
-        rootNode.getState().setPlayerNo(opponent);
- 
-        while (System.currentTimeMillis() < end) {
-            Node promisingNode = selectPromisingNode(rootNode);
-            if (promisingNode.getState().getBoard().checkStatus() 
-              == Board.IN_PROGRESS) {
-                expandNode(promisingNode);
-            }
-            Node nodeToExplore = promisingNode;
-            if (promisingNode.getChildArray().size() > 0) {
-                nodeToExplore = promisingNode.getRandomChildNode();
-            }
-            int playoutResult = simulateRandomPlayout(nodeToExplore);
-            backPropogation(nodeToExplore, playoutResult);
-        }
- 
-        Node winnerNode = rootNode.getChildWithMaxScore();
-        tree.setRoot(winnerNode);
-        return winnerNode.getState().getBoard();
-    }
+   
 }
 
 

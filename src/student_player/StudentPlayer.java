@@ -336,6 +336,17 @@ public class StudentPlayer extends SaboteurPlayer {
 		ArrayList<SaboteurTile> allLegalTileMoves = getAllLegalTileMoves(this.hand, this.boardState);
 		for ()
 	}
+
+	public void addScore(int winScore2) {
+		
+		winScore ++;
+		
+		
+		// TODO Auto-generated method stub
+		
+	}
+	
+	
 	
 
 }
