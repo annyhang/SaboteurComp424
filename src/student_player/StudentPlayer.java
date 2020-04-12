@@ -33,6 +33,7 @@ public class StudentPlayer extends SaboteurPlayer {
 	private int[] destroyedCard;
 	
 	//what gets updated after a move
+	private SaboteurBoardState boardState;
 	private SaboteurMove myMove;
 	private SaboteurMove oppMove;
 	private int objectivesFound = 0;	//this value indicates which objective to uncover next and not the total number of times we used the map card
@@ -44,8 +45,8 @@ public class StudentPlayer extends SaboteurPlayer {
 
     int visitCount;
 
-	int nodeVisit;
-	int winScore;
+	private int nodeVisit;
+	private int winScore;
 
 
 
@@ -64,6 +65,7 @@ public class StudentPlayer extends SaboteurPlayer {
      * make decisions.
      */
     public Move chooseMove(SaboteurBoardState boardState) {
+    	this.boardState = boardState;
     	this.nbRound++;
     	
     	/*
@@ -269,7 +271,10 @@ public class StudentPlayer extends SaboteurPlayer {
     	this.oppMove = new SaboteurMove(new SaboteurDrop(), 0, 0, this.oppNumber);
     }
     
-    
+    /**
+     * These methods are for the implementation of the MCTS
+     * 
+     */
     public static ArrayList<SaboteurCard> getHand() {
     	return this.hand;
     }
@@ -283,8 +288,7 @@ public class StudentPlayer extends SaboteurPlayer {
     		for(int j=0; j<=tiles.length; j++) {
     			if (currentHand.get(i) instanceof SaboteurTile) {
     				SaboteurTile currentCard = (SaboteurTile) currentHand.get(i);
-    				if(currentCard.getIdx() == tiles[j])
-    				{
+    				if(currentCard.getIdx() == tiles[j]) {
     					currentTiles.add(currentCard);
     				}
     			}
@@ -293,15 +297,14 @@ public class StudentPlayer extends SaboteurPlayer {
     	return currentTiles;
     }
     
-    public static ArrayList<SaboteurTile> getAllLegalTileMoves(ArrayList<SaboteurTile> hand, SaboteurBoardState boardState) {
+    public ArrayList<SaboteurTile> getAllLegalTileMoves(ArrayList<SaboteurTile> hand, SaboteurBoardState boardState) {
     	ArrayList<SaboteurTile> currentLegal = new ArrayList<SaboteurTile>();
     	ArrayList<SaboteurTile> currentTiles = getHandOfTiles();
     	for(int i=0; i<=currentTiles.size();i++) {
     		for(int j=0; j<allLegalMoves.size(); j++) {
     			SaboteurTile currentTile = currentTiles.get(i);
     			ArrayList<int[]> possiblePositions = boardState.possiblePositions(currentTile);
-    			if( possiblePositions.size() > 0 )
-    			{
+    			if( possiblePositions.size() > 0 ) {
     				currentLegal.add(currentTile);
     			}
     			
@@ -313,17 +316,12 @@ public class StudentPlayer extends SaboteurPlayer {
 	public void setWinScore(int winScore) {
 		this.winScore = winScore;
 	}
-	public void nodeVisited() {
-		this.nodeVisit++;
-	}
-	
 	public int getNodeVisit() {
 		return this.nodeVisit;
 	}
 	public double getWinScore() {
 		return this.winScore;
 	}
-
 	public int incrementVisit() {
 		// TODO Auto-generated method stub
 		return nodeVisit ++;
@@ -333,5 +331,11 @@ public class StudentPlayer extends SaboteurPlayer {
 		// TODO Auto-generated method stub
 		return myNumber;
 	}
+		
+	public ArrayList<StudentPlayer>getAllPossibleStates() {
+		ArrayList<SaboteurTile> allLegalTileMoves = getAllLegalTileMoves(this.hand, this.boardState);
+		for ()
+	}
+	
 
 }
