@@ -112,14 +112,26 @@ class Node {	// a node represents a board state
 	State state;
 	ArrayList<Node> parents;	//all used paths from that tile
 	ArrayList<Node> childArray;	//all open paths from that tile
+	
 	boolean isBlockTile = false;
 	boolean gotDestroyed = false;
 	int[] tileBoardPos = {-1, -1};
 	
+	String idx;
+	int[][] tilePath;
+	int[] tilePos;
+	
+	Node(String idx, int[][] tilePath, int[] tilePos) {
+		this.idx = idx;
+		this.tilePath = tilePath.clone();
+	}
+	
 	// the parents are the tiles that already existed before this tile and that are connected to this tile
-	public void setParents()
+	public void setParents() {
+		
+	}
 	//the children of a node/tile is all the open paths from that tile
-	public void setChildren(SaboteurBoardState boardState, int[][] tilePath) {
+	public void setChildren(SaboteurBoardState boardState) {
 		//the number of children depends on the number of open paths the tile has.
 		
 		

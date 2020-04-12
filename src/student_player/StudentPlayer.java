@@ -124,7 +124,7 @@ public class StudentPlayer extends SaboteurPlayer {
     		}
     	}
     	//if we got a malus card and we are close from the goal, prioritise a bonus card
-    	else if (this.nbMyMalus > 0 && myTools.distanceNuggetPath(myBoard, nuggetPos) < myBoard.length/2) {
+    	else if (this.nbMyMalus > 0 && myTools.distanceNuggetPath(objectivesPos, nuggetPos, objectivesFound, myBoard, boardState) < myBoard.length/2) {
     		for (SaboteurMove move : this.allLegalMoves) {
     			if (move.getCardPlayed() instanceof SaboteurBonus) {
     				this.myMove = move;
@@ -132,7 +132,7 @@ public class StudentPlayer extends SaboteurPlayer {
     		}
     	}
     	//if we are close from the goal and the opponent can still play, prioritise a malus card
-    	else if (nbOppMalus == 0 && myTools.distanceNuggetPath(myBoard, nuggetPos) < myBoard.length/2) {
+    	else if (nbOppMalus == 0 && myTools.distanceNuggetPath(objectivesPos, nuggetPos, objectivesFound, myBoard, boardState) < myBoard.length/2) {
     		for (SaboteurMove move : this.allLegalMoves) {
     			if (move.getCardPlayed() instanceof SaboteurMalus) {
     				this.myMove = move;
