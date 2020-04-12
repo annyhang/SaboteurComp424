@@ -42,7 +42,7 @@ public class MyTools {
      * @return an utility value from the simulation of the game
      */
 
-    public BinarySearchTree createTree (SaboteurCard) ) {
+   /** public BinarySearchTree createTree (SaboteurCard) ) {
     BinarySearchTree b = new BinarySearchTree();
 	
 
@@ -63,7 +63,7 @@ public class MyTools {
     	b.display(root);
     	return b;
 
-    }
+    }**/
     
     
     //TODO Massy
@@ -124,19 +124,18 @@ public class MyTools {
      * Default policy: 
      * make a random move from a selected optimal set of cards
      */
-    private SaboteurMove defaultPolicy() {
-    	
-    }
+    
     
     
 }
+ 
 
-class Node{
+/**class Node{
 	SaboteurTile data;
 	Node left;
 	Node right;	
 	public Node(SaboteurTile data){
-		this.data = data;
+		this.d ata = data;
 		left = null;
 		right = null;
 	}
@@ -275,5 +274,5 @@ class BinarySearchTree {
 		}
 	}
 	
-}
+}**/
 
