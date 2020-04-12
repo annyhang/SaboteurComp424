@@ -12,6 +12,7 @@ import Saboteur.cardClasses.*;
 
 public class MyTools {
 	
+	private String[] blockTiles = {"1", "2", "2_flip", "3", "3_flip", "4", "4_flip", "11", "11_flip", "12", "12_flip", "13", "14", "14_flip", "15"};
 	
     //TODO
     /**
@@ -43,6 +44,22 @@ public class MyTools {
     				return allLegalMoves.get(i);
     			}
     		}
+    	}
+    	//if we got a malus and we only have tile cards, drop the block tile cards
+    	else if(nbMyMalus > 0) {
+    		for (int i=0; i<allLegalMoves.size(); i++) {
+    			if (allLegalMoves.get(i).getCardPlayed() instanceof SaboteurTile) {
+    				SaboteurTile tile = (SaboteurTile) allLegalMoves.get(i).getCardPlayed();
+    				String tileIdx = tile.getIdx();
+    				for (int j=0; j<this.blockTiles.length; j++) {
+	    					if (tileIdx.equals()) {
+	    						return allLegalMoves.get(i);
+	    				}
+    				}
+    				
+    			}
+    		}
+    		
     	}
     	//chose a tile with that creates a path
     	else {
