@@ -102,7 +102,7 @@ public class StudentPlayer extends SaboteurPlayer {
     				SaboteurTile tile = (SaboteurTile) allLegalMoves.get(i).getCardPlayed();
     				String tileIdx = tile.getIdx();
     				for (int j=0; j<this.blockTiles.length; j++) {
-	    					if (tileIdx.equals()) {
+	    					if (tileIdx.equals(blockTiles[j])) {
 	    						//return allLegalMoves.get(i);
 	    				}
     				}
