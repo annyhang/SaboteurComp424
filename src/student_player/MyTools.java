@@ -157,6 +157,7 @@ public class MyTools {
         Node winnerNode = rootNode.getChildWithMaxScore();
         tree.setRoot(winnerNode);
         return winnerNode.getState();
+        }
     }
     /**
      * Get the distance between the nugget/objectives and the closest path.
