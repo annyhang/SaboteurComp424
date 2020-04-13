@@ -1,10 +1,8 @@
 package student_player;
 
 public class Tree {
-<<<<<<< Updated upstream
 
-=======
->>>>>>> Stashed changes
+
 	Node root;
 
 	Tree(StudentPlayer boardState) {
@@ -20,8 +18,6 @@ public class Tree {
 	public Node getRoot() {
 		return root;
 	}
-<<<<<<< Updated upstream
 	
-=======
->>>>>>> Stashed changes
+	
 }
