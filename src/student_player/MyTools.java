@@ -123,7 +123,7 @@ public class MyTools {
     }
 
     
-    public StudentPlayer findNextMove(StudentPlayer board, int playerNo) {
+    public SaboteurMove findNextMove(StudentPlayer board, int playerNo) {
         // define an end time which will act as a terminating condition
  
     	opponent = 3 - playerNo;
@@ -133,6 +133,33 @@ public class MyTools {
     	rootNode.getState();//.setBoard(board);
 
     	rootNode.getState().getRandomMove(); //change
+
+
+        rootNode.getState().switchPlayers();
+ 
+        while (System.currentTimeMillis() <2000) {
+            Node promisingNode = selection(rootNode);
+
+            if (((StudentPlayer) promisingNode.getState().getBoard()).checkStatus() 
+              == -1) {
+
+            if (promisingNode.getState().checkStatus() == -1) {
+
+                expand(promisingNode);
+            }
+            Node nodeToExplore = promisingNode;
+            if (promisingNode.getChildren().size() > 0) {
+                nodeToExplore = promisingNode.getRandomChildNode();
+            }
+            int playoutResult = simulateRandomPlayout(nodeToExplore);
+            backPropogation(nodeToExplore, playoutResult);
+        }
+ 
+        Node winnerNode = rootNode.getChildWithMaxScore();
+        tree.setRoot(winnerNode);
+        return rootNode.getState().getRandomMove();
+         
+        }
 
     	rootNode.getState().switchPlayers();
 
@@ -152,9 +179,11 @@ public class MyTools {
 
     		Node winnerNode = rootNode.getChildWithMaxScore();
     		tree.setRoot(winnerNode);
-    		return winnerNode.getState();
+    		;
     	}
-    	return null;
+    	 return rootNode.getState().getRandomMove();
+    	 
+
     }
     /**
      * Get the distance between the nugget/objectives and the closest path.
