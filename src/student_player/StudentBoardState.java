@@ -209,6 +209,15 @@ public class StudentBoardState {
 	}
 
 
+	public SaboteurTile[][] getTileBoard() {
+		return this.tileBoard;
+	}
+	public int[][] getIntBoard() {
+		return this.intBoard;
+	}
+	public int getPlayerNumber() {
+		return this.playerNumber;
+	}
 	public int getNodeVisit() {
 		return this.nodeVisit;
 	}
