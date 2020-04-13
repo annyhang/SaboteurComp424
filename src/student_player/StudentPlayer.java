@@ -19,9 +19,9 @@ public class StudentPlayer extends SaboteurPlayer {
 	private MyTools myTools;
 	
 	private int nbRound = 0;
+	public String[] blockTiles = {"1", "2", "2_flip", "3", "3_flip", "4", "4_flip", "11", "11_flip", "12", "12_flip", "13", "14", "14_flip", "15"};
 	
 	private int[][] myBoard;
-	private SaboteurTile[][] tileBoard;
 	private int myNumber;
 	private int oppNumber;
 	
@@ -30,14 +30,28 @@ public class StudentPlayer extends SaboteurPlayer {
 	private int nbMyMalus;
 	private int nbOppMalus;
 	private ArrayList<SaboteurMove> allLegalMoves;
+	private int[] destroyedCard;
 	
 	//what gets updated after a move
+	private int winner;
+	private SaboteurBoardState boardState;
 	private SaboteurMove myMove;
 	private SaboteurMove oppMove;
-	//private boolean[] objectivesFound = {false, false, false};
-	private int[] nuggetPos = {-1, -1};			//14x14
+	private int objectivesFound = 0;	//this value indicates which objective to uncover next and not the total number of times we used the map card
+	private int[][] objectivesPos = { {12, 3}, {12, 5}, {12, 7} };		//the board is fixed for the game
+	private int[] nuggetPos = {-1, -1};									//14x14
 	
-		
+	//tree for MCTS
+	private Tree tree;
+
+    int visitCount;
+
+	private int nodeVisit;
+	private int winScore;
+	
+	private int boardStatus = -1; // no_winner = -1, player_0_wins = 0, player_1_wins = 1
+
+
 
     /**
      * You must modify this constructor to return your student number. This is
@@ -54,9 +68,12 @@ public class StudentPlayer extends SaboteurPlayer {
      * make decisions.
      */
     public Move chooseMove(SaboteurBoardState boardState) {
+    	this.boardState = boardState;
     	this.nbRound++;
     	
-    	//Initialize the board if it is the first round, else update the board and find opponent's move
+    	/*
+    	 * Initialize the board if it is the first round, else update the board and find opponent's move
+    	 */
     	if (this.nbRound == 1) {
     		initialiseBoard(boardState);
     		
@@ -66,10 +83,66 @@ public class StudentPlayer extends SaboteurPlayer {
     	getFromBoard(boardState);
     	
 
-    	//MCTS to get the best move
+    	/*
+    	 * Before using MCTS, we check the state of the player 
+    	 */
+    	//if we don't know where the nugget is, prioritise the map card
+    	if (this.nuggetPos[0] == -1 && this.nuggetPos[1] == -1) {
+    		for (SaboteurMove move : this.allLegalMoves) {
+    			if (move.getCardPlayed() instanceof SaboteurMap) {
+    				this.myMove = new SaboteurMove(new SaboteurMap(), objectivesPos[objectivesFound][0], objectivesPos[objectivesFound][1], this.myNumber);
+    				objectivesFound++;
+    			}
+    		}
+    	}
+    	//if we got a malus card and we are close from the goal, prioritise a bonus card
+    	else if (this.nbMyMalus > 0 && myTools.distanceNuggetPath(objectivesPos, nuggetPos, objectivesFound, myBoard, boardState) < myBoard.length/2) {
+    		for (SaboteurMove move : this.allLegalMoves) {
+    			if (move.getCardPlayed() instanceof SaboteurBonus) {
+    				this.myMove = move;
+    			}
+    		}
+    	}
+    	//if we are close from the goal and the opponent can still play, prioritise a malus card
+    	else if (nbOppMalus == 0 && myTools.distanceNuggetPath(objectivesPos, nuggetPos, objectivesFound, myBoard, boardState) < myBoard.length/2) {
+    		for (SaboteurMove move : this.allLegalMoves) {
+    			if (move.getCardPlayed() instanceof SaboteurMalus) {
+    				this.myMove = move;
+    			}
+    		}
+    	}
+    	//if we got a malus and we only have tile cards, drop a block tile card
+    	else if(nbMyMalus > 0) {
+    		for (SaboteurCard handCard : this.hand) {
+    			if (handCard instanceof SaboteurMap) {
+    				this.myMove = new SaboteurMove(new SaboteurDrop(), this.hand.indexOf(handCard), 0, this.myNumber);
+    			}
+    			if (handCard instanceof SaboteurTile) {
+    				SaboteurTile handCardTile = (SaboteurTile) handCard;
+    				for (String idxBlockTiles : blockTiles) {
+    					if (handCardTile.getIdx().equals(idxBlockTiles)) {
+    						this.myMove = new SaboteurMove(new SaboteurDrop(), this.hand.indexOf(handCard), 0, this.myNumber);
+    					}
+    				}
+    			}
+    		}
+    	}
+    	/*
+    	 * MCTS to get the best move between the tile cards or destroy cards
+    	 */
+    	else {
+    		
+    		this.myMove = myTools.findNextMove(this,this.myNumber);
+    		
+    		
+    	}
 
     	
 
+    	return this.myMove;
+    }
+    public Move chooseMove(SaboteurMove move) {
+    	this.myMove = move;
     	return this.myMove;
     }
     
@@ -152,6 +225,14 @@ public class StudentPlayer extends SaboteurPlayer {
     		}
     	}
     	
+//we still need to find the nugget to win
+//    	//check if we can deduce the nugget. Note: the order of using a map card on the objectives is always the same.
+//    	if (nuggetPos[0] == -1 && nuggetPos[1] == -1 && objectivesFound == 1) {
+//    		objectivesFound++;
+//    		nuggetPos[0] == objectivesPos[objectivesFounds][0];
+//    		nuggetPos[1] == objectivesPos[objectivesFounds][1];
+//    	}
+    	
     	//check if a malus was used on us
     	if (this.nbMyMalus != boardState.getNbMalus(this.myNumber)) {
     		this.oppMove = new SaboteurMove(new SaboteurMalus(), 0, 0, this.oppNumber);
@@ -185,6 +266,7 @@ public class StudentPlayer extends SaboteurPlayer {
     					//destroyed tile
     					if (this.myBoard[i][j] > newIntBoard[i][j]) {
     						this.oppMove = new SaboteurMove(new SaboteurDestroy(), i/3, j/3, this.oppNumber);
+    						//TODO update tree/node
     					} 
     					//added tile
     					else {
@@ -199,6 +281,110 @@ public class StudentPlayer extends SaboteurPlayer {
     	//if we can't find anything, the opponent must've played a map card or dropped a card. Assume they dropped a card
     	this.oppMove = new SaboteurMove(new SaboteurDrop(), 0, 0, this.oppNumber);
     }
+    
+    /**
+     * These methods are for the implementation of the MCTS
+     * 
+     */
+    public ArrayList<SaboteurTile> getHandOfTiles(){
+    	String[] tiles ={"0","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15"};
+    	ArrayList<SaboteurTile> currentTiles= new ArrayList<SaboteurTile>();
+    	for(int i=0; i<=this.hand.size(); i++) {
+    		for(int j=0; j<=tiles.length; j++) {
+    			if (this.hand.get(i) instanceof SaboteurTile) {
+    				SaboteurTile currentCard = (SaboteurTile) this.hand.get(i);
+    				if(currentCard.getIdx() == tiles[j]) {
+    					currentTiles.add(currentCard);
+    				}
+    			}
+    		}
+    	}
+    	return currentTiles;
+    }
+    
+//    public ArrayList<SaboteurTile> getAllLegalTileMoves(ArrayList<SaboteurTile> handOfTiles) {
+//    	ArrayList<SaboteurTile> currentLegal = new ArrayList<SaboteurTile>();
+//    	for(int i=0; i<=handOfTiles.size();i++) {
+//    		for(int j=0; j<allLegalMoves.size(); j++) {
+//    			SaboteurTile currentTile = handOfTiles.get(i);
+//    			ArrayList<int[]> possiblePositions = this.boardState.possiblePositions(currentTile);
+//    			if( possiblePositions.size() > 0 ) {
+//    				currentLegal.add(currentTile);
+//    			}
+//    		}
+//    	}
+//    	return currentLegal;
+//    }
+    public ArrayList<SaboteurMove> getAllLegalTileMoves() {
+    	ArrayList<SaboteurMove> allLegalTileMoves = new ArrayList<SaboteurMove>();
+    	for (SaboteurMove move : this.allLegalMoves) {
+    		if (move.getCardPlayed() instanceof SaboteurTile) {
+    			allLegalTileMoves.add(move);
+    		}
+    	}
+    	return allLegalTileMoves;
+    }
+    
+	public void setWinScore(int winScore) {
+		this.winScore = winScore;
+	}
+	public int getNodeVisit() {
+		return this.nodeVisit;
+	}
+	public double getWinScore() {
+		return this.winScore;
+	}
+	public int incrementVisit() {
+		return nodeVisit ++;
+	}
+
+	public int getPlayerNo() {
+		return myNumber;
+	}
+	public void addScore(int winScore) {
+		this.winScore = winScore;
+	}
+
+	public ArrayList<StudentPlayer> getAllPossibleStates() {
+		ArrayList<StudentPlayer> allPossibleStates = new ArrayList<StudentPlayer>();
+		ArrayList<SaboteurMove> allLegalTileMoves = getAllLegalTileMoves();
+		for (SaboteurMove move : allLegalTileMoves) {
+			StudentPlayer student = new StudentPlayer();
+			student.chooseMove(move);
+			allPossibleStates.add(student);
+		}
+		return allPossibleStates;
+	}
+	public SaboteurMove getMyMove() {
+		return this.myMove;
+	}
+	public void switchPlayers() {
+		int temp = this.oppNumber;
+		this.oppNumber = this.myNumber;
+		this.myNumber = temp;
+	}
+
+	public Object getBoard() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public int getWinner() {
+		// TODO Auto-generated method stub
+		return winner;
+	}
+	public SaboteurMove getRandomMove() {
+		return this.boardState.getRandomMove();
+	}
+	public int checkStatus() {
+		return this.boardStatus;
+	}
+
+	/*public void setBoard(StudentPlayer board) {
+		this.board = board;
+		// TODO Auto-generated method stub
+		
+	}*/
 
 
 }
