@@ -117,7 +117,7 @@ public class MyTools {
     	while (boardStatus == -1) {
     		tempState.switchPlayers();
     		tempState.getRandomMove();
-    		boardStatus = tempState.getBoard().checkStatus();
+    		boardStatus = tempState.checkStatus();
     	}
     	return boardStatus;
     }
@@ -126,13 +126,14 @@ public class MyTools {
     public StudentPlayer findNextMove(StudentPlayer board, int playerNo) {
         // define an end time which will act as a terminating condition
  
-        opponent = 3 - playerNo;
-        Tree tree = new Tree(board);
-        Node rootNode = tree.getRoot();
+    	opponent = 3 - playerNo;
+    	Tree tree = new Tree(board);
+    	Node rootNode = tree.getRoot();
 
-        rootNode.getState().setBoard(board);
+    	rootNode.getState();//.setBoard(board);
 
-        rootNode.getState().getRandomMove(); //change
+    	rootNode.getState().getRandomMove(); //change
+
 
         rootNode.getState().switchPlayers();
  
@@ -158,6 +159,29 @@ public class MyTools {
         tree.setRoot(winnerNode);
         return winnerNode.getState();
         }
+
+    	rootNode.getState().switchPlayers();
+
+    	while (System.currentTimeMillis() <2000) {
+    		Node promisingNode = selection(rootNode);
+    		if (((StudentPlayer) promisingNode.getState().getBoard()).checkStatus() == -1) {
+    			if (promisingNode.getState().checkStatus() == -1) {
+    				expand(promisingNode);
+    			}
+    			Node nodeToExplore = promisingNode;
+    			if (promisingNode.getChildren().size() > 0) {
+    				nodeToExplore = promisingNode.getRandomChildNode();
+    			}
+    			int playoutResult = simulateRandomPlayout(nodeToExplore);
+    			backPropogation(nodeToExplore, playoutResult);
+    		}
+
+    		Node winnerNode = rootNode.getChildWithMaxScore();
+    		tree.setRoot(winnerNode);
+    		return winnerNode.getState();
+    	}
+    	return null;
+
     }
     /**
      * Get the distance between the nugget/objectives and the closest path.
