@@ -1,6 +1,8 @@
 package student_player;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import boardgame.Move;
 import Saboteur.SaboteurBoardState;
@@ -8,69 +10,43 @@ import Saboteur.SaboteurMove;
 import Saboteur.cardClasses.*;
 
 
-
-
 public class MyTools {
 	
-	private String[] blockTiles = {"1", "2", "2_flip", "3", "3_flip", "4", "4_flip", "11", "11_flip", "12", "12_flip", "13", "14", "14_flip", "15"};
+	static final int WIN_SCORE = 0;
+    int level;
+    int opponent;
+	
 	
     //TODO
     /**
      * MCTS: Selection
      * 
-     * @return the most promising move based on existing paths
+     * @return the board that makes the path that is closest to the goal even closer
      */
-    public SaboteurMove selection(int[][] myBoard, int[] nuggetPos, ArrayList<SaboteurMove> allLegalMoves, int nbMyMalus, int nbOppMalus) {    	
-    	//if we don't know where the nugget is, prioritise the map card
-    	if (nuggetPos[0] == -1 && nuggetPos[1] == -1) {
-    		for (int i=0; i<allLegalMoves.size(); i++) {
-    			if (allLegalMoves.get(i).getCardPlayed() instanceof SaboteurMap) {
-    				return allLegalMoves.get(i);
-    			}
-    		}
-    	}
-    	//if we got a malus card and we are close from the goal, prioritise a bonus card
-    	else if (nbMyMalus > 0 && distanceNuggetPath(myBoard, nuggetPos) < myBoard.length/2) {
-    		for (int i=0; i<allLegalMoves.size(); i++) {
-    			if (allLegalMoves.get(i).getCardPlayed() instanceof SaboteurBonus) {
-    				return allLegalMoves.get(i);
-    			}
-    		}
-    	}
-    	//if we are close from the goal and the opponent can still play, prioritise a malus card
-    	else if (nbOppMalus == 0 && distanceNuggetPath(myBoard, nuggetPos) < myBoard.length/2) {
-    		for (int i=0; i<allLegalMoves.size(); i++) {
-    			if (allLegalMoves.get(i).getCardPlayed() instanceof SaboteurMalus) {
-    				return allLegalMoves.get(i);
-    			}
-    		}
-    	}
-    	//if we got a malus and we only have tile cards, drop the block tile cards
-    	else if(nbMyMalus > 0) {
-    		for (int i=0; i<allLegalMoves.size(); i++) {
-    			if (allLegalMoves.get(i).getCardPlayed() instanceof SaboteurTile) {
-    				SaboteurTile tile = (SaboteurTile) allLegalMoves.get(i).getCardPlayed();
-    				String tileIdx = tile.getIdx();
-    				for (int j=0; j<this.blockTiles.length; j++) {
-	    					if (tileIdx.equals()) {
-	    						return allLegalMoves.get(i);
-	    				}
-    				}
-    				
-    			}
-    		}
-    		
-    	}
-    	//chose a tile with that creates a path
-    	else {
-    		for (int i=0; i<allLegalMoves.size(); i++) {
-    			if (allLegalMoves.get(i).getCardPlayed() instanceof SaboteurTile) {
-    				return allLegalMoves.get(i);
-    			}
-    		}
-    	}
-    	return null;
+    public Node selection(Node root) {    	
+        Node node = root;
+        while (node.getChildren().size() != 0) {
+            node = findBestNodeWithUCT(node);
+        }
+        return node;
     }
+    
+    /**
+     * UCT to get the best node to expand the tree
+     */
+    private double uctValue(int totalVisit, double nodeWinScore, int nodeVisit) {
+    	if (nodeVisit == 0) {
+            return Integer.MAX_VALUE;
+        }
+        return ((double) nodeWinScore / (double) nodeVisit) + 1.41 * Math.sqrt(Math.log(totalVisit) / (double) nodeVisit);
+    }
+    private Node findBestNodeWithUCT(Node node) {
+        int parentVisit = node.getState().getNodeVisit();
+        return Collections.max(
+        		node.getChildren(),
+        		Comparator.comparing(c -> uctValue(parentVisit, c.getState().getWinScore(), c.getState().getNodeVisit())));
+    }
+    
     
     //TODO Anny
     /**
@@ -78,6 +54,17 @@ public class MyTools {
      * 
      * @return the tree with an added node at the branch selected
      */
+    public void expand(Node node) {
+    	ArrayList<StudentPlayer> possibleStates = node.getState().getAllPossibleStates();
+    	for (StudentPlayer state : possibleStates) {
+    		SaboteurTile tile = (SaboteurTile) state.getMyMove().getCardPlayed();
+    		Node newNode = new Node(state, tile.getIdx(), state.getMyMove().getPosPlayed());
+    		newNode.setParent(node);
+    		newNode.getState().switchPlayers();
+    		node.addChild(newNode);
+    	}
+    }
+    
     
     //TODO Massy
     /**
@@ -88,6 +75,8 @@ public class MyTools {
      * 
      * @return an utility value from the simulation of the game
      */
+
+   
     
     //TODO Massy
     /**
@@ -95,53 +84,155 @@ public class MyTools {
      * 
      * @return the updated tree
      */
-    
-    /**
-     * Get the distance between the nugget/objectives and the closest path
+
+    private void backPropogation(Node nodeToExplore, int playerNo) {
+    	Node tempNode = nodeToExplore;
+    	ArrayList<Node> parents = tempNode.getParents();
+
+    	while (tempNode != null) {
+    		for(int i=0; i<=parents.size(); i++) {
+    			tempNode.getState().incrementVisit();
+    			if (tempNode.getState().getPlayerNo() == playerNo) {
+    				tempNode.getState().addScore(WIN_SCORE);
+    			}
+    			tempNode = parents.get(i);
+    		}
+    		parents = tempNode.getParents();
+    	}
+    }
+    /*
+     * pick a random node and simulate a random play out from it. 
+     * Also, we will have an update function to propagate score and visit count starting from leaf to root:
      */
-    private int distanceNuggetPath(int[][] myBoard, int[] nuggetPos) {
-    	int smallestDistance = myBoard.length;
+    private int simulateRandomPlayout(Node node) {
+    	Node tempNode = new Node(node);
+    	StudentPlayer tempState = tempNode.getState();
+    	int boardStatus = tempState.getWinner();
+    	if (boardStatus == opponent) {
+    		for (Node parent : tempNode.getParents()) {
+    			parent.getState().setWinScore(Integer.MIN_VALUE);
+    		}
+    		return boardStatus;
+    	}
+    	while (boardStatus == -1) {
+    		tempState.switchPlayers();
+    		tempState.getRandomMove();
+    		boardStatus = tempState.checkStatus();
+    	}
+    	return boardStatus;
+    }
+
+    
+    public SaboteurMove findNextMove(StudentPlayer board, int playerNo) {
+        // define an end time which will act as a terminating condition
+ 
+    	opponent = 3 - playerNo;
+    	Tree tree = new Tree(board);
+    	Node rootNode = tree.getRoot();
+
+    	rootNode.getState();//.setBoard(board);
+
+    	rootNode.getState().getRandomMove(); //change
+
+
+        rootNode.getState().switchPlayers();
+ 
+        while (System.currentTimeMillis() <2000) {
+            Node promisingNode = selection(rootNode);
+
+            if (((StudentPlayer) promisingNode.getState().getBoard()).checkStatus() 
+              == -1) {
+
+            if (promisingNode.getState().checkStatus() == -1) {
+
+                expand(promisingNode);
+            }
+            Node nodeToExplore = promisingNode;
+            if (promisingNode.getChildren().size() > 0) {
+                nodeToExplore = promisingNode.getRandomChildNode();
+            }
+            int playoutResult = simulateRandomPlayout(nodeToExplore);
+            backPropogation(nodeToExplore, playoutResult);
+        }
+ 
+        Node winnerNode = rootNode.getChildWithMaxScore();
+        tree.setRoot(winnerNode);
+        return rootNode.getState().getRandomMove();
+         
+        }
+
+    	rootNode.getState().switchPlayers();
+
+    	while (System.currentTimeMillis() <2000) {
+    		Node promisingNode = selection(rootNode);
+    		if (((StudentPlayer) promisingNode.getState()).checkStatus() == -1) {
+    			if (promisingNode.getState().checkStatus() == -1) {
+    				expand(promisingNode);
+    			}
+    			Node nodeToExplore = promisingNode;
+    			if (promisingNode.getChildren().size() > 0) {
+    				nodeToExplore = promisingNode.getRandomChildNode();
+    			}
+    			int playoutResult = simulateRandomPlayout(nodeToExplore);
+    			backPropogation(nodeToExplore, playoutResult);
+    		}
+
+    		Node winnerNode = rootNode.getChildWithMaxScore();
+    		tree.setRoot(winnerNode);
+    		;
+    	}
+    	 return rootNode.getState().getRandomMove();
+    	 
+
+    }
+    /**
+     * Get the distance between the nugget/objectives and the closest path.
+     * Here, the closest path is assumed to be a feasible path.
+     */
+    public int distanceNuggetPath(int[][] objectivesPos, int[] nuggetPos, int objectivesFound, int[][] myBoard, SaboteurBoardState boardState) {
+    	SaboteurTile[][] tileBoard = boardState.getHiddenBoard();
+    	int shortestDistance = tileBoard.length;
     	
-    	//if we know where the nugget is, the distance should be between the closest path and the nugget
-    	if (nuggetPos[0] != -1 && nuggetPos[1] != -1) {
-    		for (int i=myBoard.length; i>0; i--) {
-    			for (int j=0; j<myBoard.length; i++) {
-    				//we want a 1 (open path) and that tile to have a 1 in the middle (mostly open path)
-    				if (myBoard[i][j] == 1 && myBoard[(i/3)*3+1][(j/3)*3+1] == 1) {
-    					int height = myBoard.length - i;
-    					int length = nuggetPos[1] - j;
-    					int distanceNuggPath = (int) Math.pow(Math.pow(height - (nuggetPos[0]*3), 2) + Math.pow(length - (nuggetPos[1]*3), 2), 0.5);
-    					if (distanceNuggPath < smallestDistance) {
-    						smallestDistance = distanceNuggPath;
+    	int nuggPosy = nuggetPos[0];
+    	int nuggPosx = nuggetPos[1];
+    	//if we know where the nugget is (or can deduce it), the distance should be between the closest path and the nugget
+    	if ((nuggPosx != -1 && nuggPosy != -1) || objectivesFound == 1) {
+    		if (objectivesFound == 1) {
+    			nuggPosy = objectivesPos[2][0];
+    			nuggPosx = objectivesPos[2][1];
+    		}
+    		for (int i=tileBoard.length-1; i<=0; i++) {
+    			for (int j=0; j<tileBoard.length; j++) {
+    				if (tileBoard[i][j] != null) {
+    					//if we encouter an objective, we need to check if can add a tile from that objective first
+    					if (myBoard[i*3][j*3] > 2) {
+    						int[][] path12 = {{0,0,0},{0,1,1},{0,0,0}};
+    						int[] posDown = {i+1, j};
+    						if (boardState.verifyLegit(path12, posDown)) {
+    							int height = tileBoard.length - i;
+    							int length = nuggPosx - j;
+    							int distanceNuggPath = (int) Math.pow(Math.pow(height, 2) + Math.pow(length, 2), 0.5);
+    							if (distanceNuggPath < shortestDistance) {
+    	    						shortestDistance = distanceNuggPath;
+    	    					}
+    						}
     					}
-    				}
-    				if (smallestDistance > myBoard.length-i || smallestDistance > j) {
-    			    	return smallestDistance;
     				}
     			}
     		}
-    	} 
-    	//if we don't know where the nugget is, the height should be between any of the objectives and its closest path
-    	else {
-    		for (int i=myBoard.length-6; i>0; i--) {
-    			for (int j=0; j<myBoard.length; i++) {
-    				if (myBoard[i][j] == 1) {
-    					return myBoard.length - i;
-    				}
+    		return shortestDistance;
+    	}
+    	//if we don't know where the nugget is, the height of the closest path and the objectives is enough
+    	for (int i=tileBoard.length-3; i<=0; i++) {
+    		for (int j=0; j<tileBoard.length; j++) {
+    			if (tileBoard[i][j] != null) {
+    				return tileBoard.length;
     			}
     		}
     	}
+
     	return -1;
     }
-    
-<<<<<<< Updated upstream
+
     
 }
-<<<<<<< Updated upstream
-=======
-}
-
->>>>>>> Stashed changes
-=======
-
->>>>>>> Stashed changes
