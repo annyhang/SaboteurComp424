@@ -1,14 +1,21 @@
 package student_player;
 
 import java.util.ArrayList;
+<<<<<<< Updated upstream
 import java.util.Collections;
 import java.util.Comparator;
+=======
+>>>>>>> Stashed changes
 
 import Saboteur.cardClasses.SaboteurTile;
 
 public class Node {
 	
+<<<<<<< Updated upstream
 
+=======
+	
+>>>>>>> Stashed changes
 	StudentPlayer boardState;
 	ArrayList<Node> parents = new ArrayList<Node>();	//all used paths from that tile
 	ArrayList<Node> children = new ArrayList<Node>();	//all open paths from that tile
@@ -22,7 +29,11 @@ public class Node {
 	int maxNbChildren = 0;
 	
 
+<<<<<<< Updated upstream
 	Node(StudentBardState boardState, String idx, int[] tilePos) {
+=======
+	Node(StudentBoardState boardState, String idx, int[] tilePos) {
+>>>>>>> Stashed changes
 		this.boardState = boardState;
 		this.tile = new SaboteurTile(idx);
 		this.tilePath = this.tile.getPath();
@@ -105,6 +116,11 @@ public class Node {
 	public int[] getTilePos() {
 		return this.tilePos;
 	}
+<<<<<<< Updated upstream
 
 
+=======
+	
+	
+>>>>>>> Stashed changes
 }

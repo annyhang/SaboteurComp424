@@ -137,7 +137,11 @@ public class MyTools {
 <<<<<<< Updated upstream
     
 }
+<<<<<<< Updated upstream
 =======
 }
+
+>>>>>>> Stashed changes
+=======
 
 >>>>>>> Stashed changes
