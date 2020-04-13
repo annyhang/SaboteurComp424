@@ -129,7 +129,7 @@ public class MyTools {
         opponent = 3 - playerNo;
         Tree tree = new Tree(board);
         Node rootNode = tree.getRoot();
-        rootNode.getState().setBoard(board);
+        rootNode.getState().chooseMove();
         rootNode.getState().switchPlayers();
  
         while (System.currentTimeMillis() <2000) {
@@ -235,12 +235,15 @@ class Node {
 			maxNbChildren++;
 		}
 	}
+	public Node getChildWithMaxScore() {
+		return Collections.max(this.children, Comparator.comparing(c -> {
+            return c.getState().getVisitCount();
+        }));
+	}
 	public Node getRandomChildNode() {
-		double random = Math.random()* this.children.size();
-		for(int i=0; i<=random; i++)
-		{
-			
-		}
+		int noOfPossibleMoves = this.children.size();
+        int selectRandom = (int) (Math.random() * noOfPossibleMoves);
+        return this.children.get(selectRandom);
 	}
 	Node(Node node) {
 		this.boardState = node.getState();
