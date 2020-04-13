@@ -129,13 +129,12 @@ public class MyTools {
         opponent = 3 - playerNo;
         Tree tree = new Tree(board);
         Node rootNode = tree.getRoot();
-        rootNode.getState().chooseMove();
+        rootNode.getState().getRandomMove(); //change
         rootNode.getState().switchPlayers();
  
         while (System.currentTimeMillis() <2000) {
             Node promisingNode = selection(rootNode);
-            if (promisingNode.getState().getBoard().checkStatus() 
-              == Board.IN_PROGRESS) {
+            if (promisingNode.getState().checkStatus() == -1) {
                 expand(promisingNode);
             }
             Node nodeToExplore = promisingNode;
@@ -148,7 +147,7 @@ public class MyTools {
  
         Node winnerNode = rootNode.getChildWithMaxScore();
         tree.setRoot(winnerNode);
-        return winnerNode.getState().getBoard();
+        return winnerNode.getState();
     }
     /**
      * Get the distance between the nugget/objectives and the closest path.
@@ -237,7 +236,7 @@ class Node {
 	}
 	public Node getChildWithMaxScore() {
 		return Collections.max(this.children, Comparator.comparing(c -> {
-            return c.getState().getVisitCount();
+            return c.getState().getNodeVisit();
         }));
 	}
 	public Node getRandomChildNode() {
