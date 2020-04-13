@@ -3,3 +3,9 @@
 3,RandomPlayer,Human,GAMEOVER USER CANCEL UNDECIDED,NOBODY,53,game00003.log,USER CANCEL
 4,RandomPlayer,Human,GAMEOVER USER CANCEL UNDECIDED,NOBODY,3,game00004.log,USER CANCEL
 19,RandomPlayer,Human,GAMEOVER DRAW,NOBODY,56,game00019.log,
+<<<<<<< Updated upstream
+=======
+21,RandomPlayer,Human,1,Human,32,game00021.log,
+24,RandomPlayer,Human,GAMEOVER USER CANCEL UNDECIDED,NOBODY,15,game00024.log,USER CANCEL
+25,RandomPlayer,Human,GAMEOVER SERVER ERROR UNDECIDED,NOBODY,0,game00025.log,SERVER ERROR
+>>>>>>> Stashed changes

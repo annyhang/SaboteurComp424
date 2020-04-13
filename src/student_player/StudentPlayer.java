@@ -21,6 +21,7 @@ public class StudentPlayer extends SaboteurPlayer {
 	private int nbRound = 0;
 	
 	private int[][] myBoard;
+	private SaboteurTile[][] tileBoard;
 	private int myNumber;
 	private int oppNumber;
 	

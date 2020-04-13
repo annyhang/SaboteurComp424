@@ -134,5 +134,10 @@ public class MyTools {
     	return -1;
     }
     
+<<<<<<< Updated upstream
     
 }
+=======
+}
+
+>>>>>>> Stashed changes
