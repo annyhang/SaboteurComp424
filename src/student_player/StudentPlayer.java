@@ -377,11 +377,11 @@ public class StudentPlayer extends SaboteurPlayer {
 		return this.boardStatus;
 	}
 
-	public void setBoard(StudentPlayer board) {
+	/*public void setBoard(StudentPlayer board) {
 		this. = board;
 		// TODO Auto-generated method stub
 		
-	}
+	}*/
 
 
 }
