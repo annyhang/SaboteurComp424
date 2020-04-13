@@ -123,7 +123,7 @@ public class MyTools {
     }
 
     
-    public StudentPlayer findNextMove(StudentPlayer board, int playerNo) {
+    public SaboteurMove findNextMove(StudentPlayer board, int playerNo) {
         // define an end time which will act as a terminating condition
  
     	opponent = 3 - playerNo;
@@ -157,7 +157,8 @@ public class MyTools {
  
         Node winnerNode = rootNode.getChildWithMaxScore();
         tree.setRoot(winnerNode);
-        return winnerNode.getState();
+        return rootNode.getState().getRandomMove();
+         
         }
 
     	rootNode.getState().switchPlayers();
@@ -178,9 +179,10 @@ public class MyTools {
 
     		Node winnerNode = rootNode.getChildWithMaxScore();
     		tree.setRoot(winnerNode);
-    		return winnerNode.getState();
+    		;
     	}
-    	return null;
+    	 return rootNode.getState().getRandomMove();
+    	 
 
     }
     /**

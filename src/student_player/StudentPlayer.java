@@ -132,6 +132,9 @@ public class StudentPlayer extends SaboteurPlayer {
     	 */
     	else {
     		
+    		this.myMove = myTools.findNextMove(this,this.myNumber);
+    		
+    		
     	}
 
     	
@@ -377,11 +380,11 @@ public class StudentPlayer extends SaboteurPlayer {
 		return this.boardStatus;
 	}
 
-	public void setBoard(StudentPlayer board) {
+	/*public void setBoard(StudentPlayer board) {
 		this.board = board;
 		// TODO Auto-generated method stub
 		
-	}
+	}*/
 
 
 }
