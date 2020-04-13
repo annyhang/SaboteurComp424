@@ -138,7 +138,7 @@ public class MyTools {
 
     	while (System.currentTimeMillis() <2000) {
     		Node promisingNode = selection(rootNode);
-    		if (((StudentPlayer) promisingNode.getState().getBoard()).checkStatus() == -1) {
+    		if (((StudentPlayer) promisingNode.getState()).checkStatus() == -1) {
     			if (promisingNode.getState().checkStatus() == -1) {
     				expand(promisingNode);
     			}

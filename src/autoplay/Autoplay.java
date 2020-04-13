@@ -35,7 +35,7 @@ public class Autoplay {
         }
 
         try {
-            ProcessBuilder server_pb = new ProcessBuilder("java", "-cp", "bin", "boardgame.Server","-ng", "-k");
+            ProcessBuilder server_pb = new ProcessBuilder("java", "-cp", "bin", "student_player.StudentPlayer","-ng", "-k");
             server_pb.redirectOutput(ProcessBuilder.Redirect.INHERIT);
 
             Process server = server_pb.start();
