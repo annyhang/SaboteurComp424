@@ -20,8 +20,11 @@ public class StudentPlayer extends SaboteurPlayer {
 	
 	private int nbRound = 0;
 	public String[] blockTiles = {"1", "2", "2_flip", "3", "3_flip", "4", "4_flip", "11", "11_flip", "12", "12_flip", "13", "14", "14_flip", "15"};
+	private int[][] objectivesPos = { {12, 3}, {12, 5}, {12, 7} };		//the board is fixed for the game
 	
 	private int[][] myBoard;
+	private int[][] initIntBoard;
+	private SaboteurTile[][] initTileBoard;
 	private int myNumber;
 	private int oppNumber;
 	
@@ -33,26 +36,13 @@ public class StudentPlayer extends SaboteurPlayer {
 	private int[] destroyedCard;
 	
 	//what gets updated after a move
-	private int winner;
 	private SaboteurBoardState boardState;
 	private SaboteurMove myMove;
 	private SaboteurMove oppMove;
 	private int objectivesFound = 0;	//this value indicates which objective to uncover next and not the total number of times we used the map card
-	private int[][] objectivesPos = { {12, 3}, {12, 5}, {12, 7} };		//the board is fixed for the game
 	private int[] nuggetPos = {-1, -1};									//14x14
+
 	
-	//tree for MCTS
-	private Tree tree;
-
-    int visitCount;
-
-	private int nodeVisit;
-	private int winScore;
-	
-	private int boardStatus = -1; // no_winner = -1, player_0_wins = 0, player_1_wins = 1
-
-
-
     /**
      * You must modify this constructor to return your student number. This is
      * important, because this is what the code that runs the competition uses to
@@ -62,6 +52,7 @@ public class StudentPlayer extends SaboteurPlayer {
         super("260803297");
     }
 
+    
     /**
      * This is the primary method that you need to implement. The ``boardState``
      * object contains the current state of the game, which your agent must use to
@@ -161,7 +152,9 @@ public class StudentPlayer extends SaboteurPlayer {
      */
     private void initialiseBoard(SaboteurBoardState boardState) {
     	SaboteurTile[][] hiddenBoard = boardState.getHiddenBoard();
+    	this.initTileBoard = boardState.getHiddenBoard();
     	this.myBoard = boardState.getHiddenIntBoard().clone();
+    	this.initIntBoard = boardState.getHiddenIntBoard().clone();
     	int objectiveNb = 2;
     	
     	//replace empty positions to objectives value
@@ -179,7 +172,7 @@ public class StudentPlayer extends SaboteurPlayer {
     			}
     		}
     	}
-    	
+    	    	
     	//get players' number
     	this.myNumber = boardState.getTurnPlayer();
     	if (this.myNumber == 0) {
@@ -282,10 +275,6 @@ public class StudentPlayer extends SaboteurPlayer {
     	this.oppMove = new SaboteurMove(new SaboteurDrop(), 0, 0, this.oppNumber);
     }
     
-    /**
-     * These methods are for the implementation of the MCTS
-     * 
-     */
     public ArrayList<SaboteurTile> getHandOfTiles(){
     	String[] tiles ={"0","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15"};
     	ArrayList<SaboteurTile> currentTiles= new ArrayList<SaboteurTile>();
@@ -302,19 +291,6 @@ public class StudentPlayer extends SaboteurPlayer {
     	return currentTiles;
     }
     
-//    public ArrayList<SaboteurTile> getAllLegalTileMoves(ArrayList<SaboteurTile> handOfTiles) {
-//    	ArrayList<SaboteurTile> currentLegal = new ArrayList<SaboteurTile>();
-//    	for(int i=0; i<=handOfTiles.size();i++) {
-//    		for(int j=0; j<allLegalMoves.size(); j++) {
-//    			SaboteurTile currentTile = handOfTiles.get(i);
-//    			ArrayList<int[]> possiblePositions = this.boardState.possiblePositions(currentTile);
-//    			if( possiblePositions.size() > 0 ) {
-//    				currentLegal.add(currentTile);
-//    			}
-//    		}
-//    	}
-//    	return currentLegal;
-//    }
     public ArrayList<SaboteurMove> getAllLegalTileMoves() {
     	ArrayList<SaboteurMove> allLegalTileMoves = new ArrayList<SaboteurMove>();
     	for (SaboteurMove move : this.allLegalMoves) {
@@ -324,26 +300,6 @@ public class StudentPlayer extends SaboteurPlayer {
     	}
     	return allLegalTileMoves;
     }
-    
-	public void setWinScore(int winScore) {
-		this.winScore = winScore;
-	}
-	public int getNodeVisit() {
-		return this.nodeVisit;
-	}
-	public double getWinScore() {
-		return this.winScore;
-	}
-	public int incrementVisit() {
-		return nodeVisit ++;
-	}
-
-	public int getPlayerNo() {
-		return myNumber;
-	}
-	public void addScore(int winScore) {
-		this.winScore = winScore;
-	}
 
 	public ArrayList<StudentPlayer> getAllPossibleStates() {
 		ArrayList<StudentPlayer> allPossibleStates = new ArrayList<StudentPlayer>();
@@ -355,36 +311,29 @@ public class StudentPlayer extends SaboteurPlayer {
 		}
 		return allPossibleStates;
 	}
-	public SaboteurMove getMyMove() {
-		return this.myMove;
-	}
+
 	public void switchPlayers() {
 		int temp = this.oppNumber;
 		this.oppNumber = this.myNumber;
 		this.myNumber = temp;
 	}
 
-	public Object getBoard() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public int getPlayerNumber() {
 
-	public int getWinner() {
-		// TODO Auto-generated method stub
-		return winner;
+		return myNumber;
 	}
+	
 	public SaboteurMove getRandomMove() {
 		return this.boardState.getRandomMove();
 	}
-	public int checkStatus() {
-		return this.boardStatus;
+	
+	public int[][] getInitIntBoard() {
+		return this.initIntBoard;
 	}
-
-	/*public void setBoard(StudentPlayer board) {
-		this.board = board;
-		// TODO Auto-generated method stub
-		
-	}*/
+	
+	public SaboteurTile[][] getInitTileBoard(){
+		return this.initTileBoard;
+	}
 
 
 }
