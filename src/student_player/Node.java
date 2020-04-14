@@ -37,10 +37,10 @@ public class Node {
 	}
 	
 	//this is only for the root node since the root is always the initial board
-	Node(StudentPlayer studentPlayer) {
-		int[][] initIntBoard = studentPlayer.getInitIntBoard();
-		SaboteurTile[][] initTileBoard = studentPlayer.getInitTileBoard();
-		int playerNumber = studentPlayer.getPlayerNumber();
+	Node(StudentBoardState studentBS) {
+		int[][] initIntBoard = studentBS.getInitIntBoard();
+		SaboteurTile[][] initTileBoard = studentBS.getInitTileBoard();
+		int playerNumber = studentBS.getPlayerNumber();
 		this.boardState = new StudentBoardState(initIntBoard, initTileBoard, playerNumber);
 	}
 	

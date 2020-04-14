@@ -4,8 +4,8 @@ public class Tree {
 
     Node root;	//  The root is the entrance
 
-    public Tree(StudentPlayer studentPlayer) {
-        this.root = new Node(studentPlayer);
+    public Tree(StudentBoardState studentBS) {
+        this.root = new Node(studentBS);
     }
 
     public Node getRoot() {
