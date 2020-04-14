@@ -245,4 +245,11 @@ public class StudentBoardState {
 	public double getWinScore() {
 		return this.winScore;
 	}
+
+	public ArrayList<StudentBoardState> getAllPossibleStates() {
+		
+		
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

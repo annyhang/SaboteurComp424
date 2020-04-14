@@ -27,20 +27,31 @@ public class MCTS {
         return node;
     }
     
+    
+    
     /**
      * UCT to get the best node to expand the tree
+     * iin our case for this particular game
+     * wi/ni + c sqrt(ln t)/ni
+     * in this case, wi, is the number of wins after the ith move
+     * ni is the number of simulations after the ith move
+     * c is the exploration parameter (sqrt2)why 
+     * t is the total; number of simulations for the parent node
      */
+    
+    //has been checked and is good, all variables make sense
     private double uctValue(int totalVisit, double nodeWinScore, int nodeVisit) {
     	if (nodeVisit == 0) {
             return Integer.MAX_VALUE;
         }
         return ((double) nodeWinScore / (double) nodeVisit) + 1.41 * Math.sqrt(Math.log(totalVisit) / (double) nodeVisit);
     }
+    //need to ch
     private Node findBestNodeWithUCT(Node node) {
-        int parentVisit = node.getState().getNodeVisit();
+        int parentVisit = node.getBoardState().getNodeVisit();
         return Collections.max(
         		node.getChildren(),
-        		Comparator.comparing(c -> uctValue(parentVisit, c.getState().getWinScore(), c.getState().getNodeVisit())));
+        		Comparator.comparing(c -> uctValue(parentVisit, c.getBoardState().getWinScore(), c.getBoardState().getNodeVisit())));
     }
     
     /**
@@ -49,7 +60,7 @@ public class MCTS {
      * @return the tree with an added node at the branch selected
      */
     public void expand(Node node) {
-    	ArrayList<StudentPlayer> possibleStates = node.getState().getAllPossibleStates();
+    	ArrayList<StudentPlayer> possibleStates = node.getBoardState().getAllPossibleStates();
     	for (StudentPlayer state : possibleStates) {
     		SaboteurTile tile = (SaboteurTile) state.getMyMove().getCardPlayed();
     		Node newNode = new Node(state, tile.getIdx(), state.getMyMove().getPosPlayed());
