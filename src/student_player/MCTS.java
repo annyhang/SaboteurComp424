@@ -16,84 +16,7 @@ public class MCTS {
     int level;
     int opponent;
     
-    /**
-     * MCTS: Selection
-     */
-    public Node selection(Node root) {    	
-        Node node = root;
-        while (node.getChildren().size() != 0) {
-            node = findBestNodeWithUCT(node);
-        }
-        return node;
-    }
     
-    
-    
-    /**
-     * UCT to get the best node to expand the tree
-     * iin our case for this particular game
-     * wi/ni + c sqrt(ln t)/ni
-     * in this case, wi, is the number of wins after the ith move
-     * ni is the number of simulations after the ith move
-     * c is the exploration parameter (sqrt2)why 
-     * t is the total; number of simulations for the parent node
-     */
-    
-    //has been checked and is good, all variables make sense
-    private double uctValue(int totalVisit, double nodeWinScore, int nodeVisit) {
-    	if (nodeVisit == 0) {
-            return Integer.MAX_VALUE;
-        }
-        return ((double) nodeWinScore / (double) nodeVisit) + 1.41 * Math.sqrt(Math.log(totalVisit) / (double) nodeVisit);
-    }
-    //need to ch
-    private Node findBestNodeWithUCT(Node node) {
-        int parentVisit = node.getBoardState().getNodeVisit();
-        return Collections.max(
-        		node.getChildren(),
-        		Comparator.comparing(c -> uctValue(parentVisit, c.getBoardState().getWinScore(), c.getBoardState().getNodeVisit())));
-    }
-    
-    /**
-     * Expansion
-     * 
-     * @return the tree with an added node at the branch selected
-     */
-    public void expand(Node node) {
-    	ArrayList<StudentPlayer> possibleStates = node.getBoardState().getAllPossibleStates();
-    	for (StudentPlayer state : possibleStates) {
-    		SaboteurTile tile = (SaboteurTile) state.getMyMove().getCardPlayed();
-    		Node newNode = new Node(state, tile.getIdx(), state.getMyMove().getPosPlayed());
-    		newNode.setParent(node);
-    		newNode.getState().switchPlayers();
-    		node.addChild(newNode);
-    	}
-    }
-    
-    
-    /**
-     * Simulation
-     * 
-     * pick a random node and simulate a random play out from it. 
-     * Also, we will have an update function to propagate score and visit count starting from leaf to root:
-     */
-    private int simulateRandomPlayout(Node node) {
-    	Node tempNode = new Node(node);
-    	StudentPlayer tempState = tempNode.getState();
-    	int boardStatus = tempState.getWinner();
-    	if (boardStatus == opponent) {
-    		for (Node parent : tempNode.getParents()) {
-    			parent.getState().setWinScore(Integer.MIN_VALUE);
-    		}
-    		return boardStatus;
-    	}
-    	while (boardStatus == -1) {
-    		tempState.switchPlayers();
-    		tempState.getRandomMove();
-    		boardStatus = tempState.checkStatus();
-    	}
-    	return boardStatus;
-    }
 
     
     public SaboteurMove findNextMove(StudentPlayer board, int playerNo) {
@@ -103,20 +26,20 @@ public class MCTS {
     	Tree tree = new Tree(board);
     	Node rootNode = tree.getRoot();
 
-    	rootNode.getState();//.setBoard(board);
+    	rootNode.getBoardState();//.setBoard(board);
 
-    	rootNode.getState().getRandomMove(); //change
+    	rootNode.getBoardState().getRandomMove(); //change
 
 
-        rootNode.getState().switchPlayers();
+        rootNode.getBoardState().switchPlayers();
  
         while (System.currentTimeMillis() <2000) {
             Node promisingNode = selection(rootNode);
 
-            if (((StudentPlayer) promisingNode.getState().getBoard()).checkStatus() 
+            if (((StudentPlayer) promisingNode.getBoardState().getBoard()).checkStatus() 
               == -1) {
 
-            if (promisingNode.getState().checkStatus() == -1) {
+            if (promisingNode.getBoardState().checkStatus() == -1) {
 
                 expand(promisingNode);
             }
@@ -130,16 +53,16 @@ public class MCTS {
  
         Node winnerNode = rootNode.getChildWithMaxScore();
         tree.setRoot(winnerNode);
-        return rootNode.getState().getRandomMove();
+        return rootNode.getBoardState().getRandomMove();
          
         }
 
-    	rootNode.getState().switchPlayers();
+    	rootNode.getBoardState().switchPlayers();
 
     	while (System.currentTimeMillis() <2000) {
     		Node promisingNode = selection(rootNode);
-    		if (((StudentPlayer) promisingNode.getState()).checkStatus() == -1) {
-    			if (promisingNode.getState().checkStatus() == -1) {
+    		if (((StudentPlayer) promisingNode.getBoardState()).checkStatus() == -1) {
+    			if (promisingNode.getBoardState().checkStatus() == -1) {
     				expand(promisingNode);
     			}
     			Node nodeToExplore = promisingNode;
@@ -154,8 +77,69 @@ public class MCTS {
     		tree.setRoot(winnerNode);
     		;
     	}
-    	 return rootNode.getState().getRandomMove();
+    	 return rootNode.getBoardState().getRandomMove();
     }
+    
+    /**
+     * Select promising node
+     * 
+     */
+    
+    
+    public Node selection(Node root) {    	
+        Node node = root;
+        while (node.getChildren().size() != 0) {
+            node = UCT.findBestNodeWithUCT(node);
+        }
+        return node;
+    }
+    
+    /**
+     * Expansion
+     * @return the tree with an added node at the branch selected
+     * 
+     */
+    
+    public void expand(Node node) {
+    	ArrayList<StudentBoardState> possibleStates = node.getBoardState().getAllPossibleStates();
+    	for (StudentBoardState state : possibleStates) {
+    		//getting the move value of the given node from the possible states
+    		SaboteurMove move =  state.getMyMove();
+    		//create a new node with the correct tile 
+    		//TODO : verify if this returns the correct move
+    		Node newNode = new Node(state, move);
+    		newNode.setParent(node);
+    		//TODO: I'm not sure why we're changing the player 
+    		newNode.getBoardState().switchPlayers();
+    		node.addChild(newNode);
+    	}
+    }
+    /**
+     * Simulation
+     * pick a random node and simulate a random play out from it. 
+     * Also, we will have an update function to propagate score and visit count starting from leaf to root:
+     * 
+     */
+    
+    private int simulateRandomPlayout(Node node) {
+    	//make a temp node with the current node
+    	Node tempNode = new Node(node);
+    	StudentBoardState tempState = tempNode.getBoardState();
+    	int boardStatus = tempState.getWinner();
+    	if (boardStatus == opponent) {
+    		for (Node parent : tempNode.getParents()) {
+    			parent.getBoardState().setWinScore(Integer.MIN_VALUE);
+    		}
+    		return boardStatus;
+    	}
+    	while (boardStatus == -1) {
+    		tempState.switchPlayers();
+    		tempState.getRandomMove();
+    		boardStatus = tempState.checkStatus();
+    	}
+    	return boardStatus;
+    }
+
     
     /**
      * Propagation
@@ -168,9 +152,9 @@ public class MCTS {
 
     	while (tempNode != null) {
     		for(int i=0; i<=parents.size(); i++) {
-    			tempNode.getState().incrementVisit();
-    			if (tempNode.getState().getPlayerNo() == playerNo) {
-    				tempNode.getState().addScore(WIN_SCORE);
+    			tempNode.getBoardState().incrementVisit();
+    			if (tempNode.getBoardState().getPlayerNo() == playerNo) {
+    				tempNode.getBoardState().addScore(WIN_SCORE);
     			}
     			tempNode = parents.get(i);
     		}
