@@ -480,6 +480,7 @@ public class StudentBoardState {
 	public double getWinScore() {
 		return this.winScore;
 	}
+
 	public ArrayList<StudentBoardState> getAllPossibleStates() {
 		ArrayList<StudentBoardState> allPossibleStates = new ArrayList<StudentBoardState>();
 		ArrayList<SaboteurMove> allLegalTileMoves = getAllLegalTileMoves();
@@ -525,5 +526,6 @@ public class StudentBoardState {
         	initTileBoard[objPos[i][0]][objPos[i][1]] = new SaboteurTile("8");
         }
         return initTileBoard;
+
 	}
 }
