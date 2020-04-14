@@ -5,18 +5,26 @@ import java.util.ArrayList;
 import Saboteur.SaboteurMove;
 import Saboteur.cardClasses.SaboteurTile;
 
+/*
+ * This class contains any board state information that is useful for MCTS
+ */
 public class StudentBoardState {
+	
+	
 	//SaboteurBoardState boardState;
 	SaboteurTile[][] tileBoard;
 	int[][] intBoard;
 	int playerNumber;
+	
+	SaboteurMove movePlayed;
 
 	int nodeVisit = 0;
 	double winScore;
 
 
-	StudentBoardState(int[][] intBoard, SaboteurTile[][] tileBoard, SaboteurMove move, int playerNumber) {
-		this.playerNumber = playerNumber;
+	StudentBoardState(int[][] intBoard, SaboteurTile[][] tileBoard, SaboteurMove move) {
+		this.movePlayed = move;
+		this.playerNumber = move.getPlayerID();
 		this.intBoard = intBoard.clone();
 		SaboteurTile tileAdded = (SaboteurTile) move.getCardPlayed();
 		int[] tilePos = move.getPosPlayed();
