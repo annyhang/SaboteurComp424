@@ -16,6 +16,10 @@ import Saboteur.cardClasses.*;
 public class StudentPlayer extends SaboteurPlayer {
 	
 	int roundNumber = 1;
+	
+	int[][] intBoard;
+	SaboteurTile[][] tileBoard;
+	StudentBoardState previousBS;
 
     /**
      * You must modify this constructor to return your student number. This is
@@ -33,11 +37,21 @@ public class StudentPlayer extends SaboteurPlayer {
      * make decisions.
      */
     public Move chooseMove(SaboteurBoardState boardState) {
-    	if (roundNumber == 1) {
-    		
+    	StudentBoardState studentBS = new StudentBoardState(boardState);
+
+    	//initialise the empty boards if we are player 2
+    	if (studentBS.getPlayerNumber() == 2 && roundNumber == 1) {
+    		this.intBoard = studentBS.getInitIntBoard();
+    		this.tileBoard = studentBS.getInitTileBoard();
     	}
-    	MyTools myTools = new MyTools(BoardState);
-    	SaboteurMove myMove = myTools.getMyMove();
+    	
+    	//save the board to get the opponent's move
+    	this.intBoard = studentBS.getIntBoard();
+    	this.tileBoard = studentBS.getTileBoard();
+    	
+    	//update attributes
+    	roundNumber++;
+    	this.previousBS = studentBS;
     	return myMove;
     }
 	
