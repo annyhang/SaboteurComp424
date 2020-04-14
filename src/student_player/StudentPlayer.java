@@ -17,14 +17,16 @@ public class StudentPlayer extends SaboteurPlayer {
 	
 		
 	private MyTools myTools;
+	private Tree tree = new Tree(this);
+	private MCTS mcts;
 	
 	private int nbRound = 0;
 	public String[] blockTiles = {"1", "2", "2_flip", "3", "3_flip", "4", "4_flip", "11", "11_flip", "12", "12_flip", "13", "14", "14_flip", "15"};
 	private int[][] objectivesPos = { {12, 3}, {12, 5}, {12, 7} };		//the board is fixed for the game
 	
-	private int[][] myBoard;
 	private int[][] initIntBoard;
 	private SaboteurTile[][] initTileBoard;
+	private int[][] myBoard;
 	private int myNumber;
 	private int oppNumber;
 	
@@ -33,13 +35,12 @@ public class StudentPlayer extends SaboteurPlayer {
 	private int nbMyMalus;
 	private int nbOppMalus;
 	private ArrayList<SaboteurMove> allLegalMoves;
-	private int[] destroyedCard;
 	
 	//what gets updated after a move
 	private SaboteurBoardState boardState;
 	private SaboteurMove myMove;
 	private SaboteurMove oppMove;
-	private int objectivesFound = 0;	//this value indicates which objective to uncover next and not the total number of times we used the map card
+	private int objectivesFound = 0;
 	private int[] nuggetPos = {-1, -1};									//14x14
 
 	
@@ -73,7 +74,6 @@ public class StudentPlayer extends SaboteurPlayer {
     	}
     	getFromBoard(boardState);
     	
-
     	/*
     	 * Before using MCTS, we check the state of the player 
     	 */
@@ -118,25 +118,20 @@ public class StudentPlayer extends SaboteurPlayer {
     			}
     		}
     	}
+    	
     	/*
     	 * MCTS to get the best move between the tile cards or destroy cards
     	 */
     	else {
-    		
-    		this.myMove = myTools.findNextMove(this,this.myNumber);
-    		
-    		
+    		this.myMove = mcts.findNextMove(this,this.myNumber);
     	}
-
-    	
-
     	return this.myMove;
     }
+    
     public Move chooseMove(SaboteurMove move) {
     	this.myMove = move;
     	return this.myMove;
     }
-    
     
     private void getFromBoard(SaboteurBoardState boardState) {
     	this.hand = boardState.getCurrentPlayerCards();
@@ -158,7 +153,7 @@ public class StudentPlayer extends SaboteurPlayer {
     	int objectiveNb = 2;
     	
     	//replace empty positions to objectives value
-    	for (int i=0; i<hiddenBoard.length; i++) {
+    	for (int i=hiddenBoard.length/2; i>=0; i--) {
     		for (int j=0; j<hiddenBoard.length; j++) {
     			if (hiddenBoard[i][j]!=null) {
 	    			if (hiddenBoard[i][j].getIdx().equals("8")) {

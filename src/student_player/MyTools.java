@@ -12,6 +12,14 @@ import Saboteur.cardClasses.*;
 
 public class MyTools {
 	
+	SaboteurBoardState boardState;
+	
+	
+	MyTools(SaboteurBoardState boardState) {
+		this.boardState = boardState;
+	}
+
+	
     /**
      * Get the distance between the nugget/objectives and the closest path.
      * Here, the closest path is assumed to be a feasible path.
