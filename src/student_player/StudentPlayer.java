@@ -49,6 +49,10 @@ public class StudentPlayer extends SaboteurPlayer {
     	this.intBoard = studentBS.getIntBoard();
     	this.tileBoard = studentBS.getTileBoard();
     	
+    	//choose a move
+    	
+    	SaboteurMove myMove = studentBS.chooseMove();
+    	
     	//update attributes
     	roundNumber++;
     	this.previousBS = studentBS;
