@@ -11,6 +11,12 @@ public class Tree {
     public Node getRoot() {
         return this.root;
     }
+    
+    public Node setRoot (Node node) {
+    	return this.root = node;
+    	
+    	
+    }
 
     public void addChild(Node parent, Node child) {
         parent.getChildren().add(child);

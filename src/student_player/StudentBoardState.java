@@ -462,6 +462,10 @@ public class StudentBoardState {
 	public int getPlayerNumber() {
 		return this.playerNumber;
 	}
+	
+	public void setPlayerNumber(int playerNo) {
+		this.playerNumber = playerNo;
+	}
 	public int getOpponentNumber() {
 		int oppNumber = Math.abs(this.playerNumber - 1);
 		return oppNumber;
@@ -534,4 +538,21 @@ public class StudentBoardState {
         return initTileBoard;
 
 	}
+
+	public void incrementVisit() {
+		
+		this.nodeVisit++;
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void addScore(int winScore2) {
+		
+		if(this.winScore != Integer.MIN_VALUE)
+			this.winScore += winScore2;
+		// TODO Auto-generated method stub
+		
+	}
+
+	
 }

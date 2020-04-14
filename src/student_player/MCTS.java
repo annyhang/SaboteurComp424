@@ -19,7 +19,7 @@ public class MCTS {
     
 
     
-    public SaboteurMove findNextMove(StudentPlayer board, int playerNo) {
+    public SaboteurMove findNextMove(StudentBoardState board, int playerNo) {
         // define an end time which will act as a terminating condition
  
     	opponent = 3 - playerNo;
@@ -27,19 +27,18 @@ public class MCTS {
     	Node rootNode = tree.getRoot();
 
     	rootNode.getBoardState();//.setBoard(board);
+    	
+    	
 
-    	rootNode.getBoardState().getRandomMove(); //change
 
-
-        rootNode.getBoardState().switchPlayers();
+        rootNode.getBoardState().setPlayerNumber(opponent);
  
         while (System.currentTimeMillis() <2000) {
             Node promisingNode = selection(rootNode);
 
-            if (((StudentPlayer) promisingNode.getBoardState().getBoard()).checkStatus() 
-              == -1) {
+           
 
-            if (promisingNode.getBoardState().checkStatus() == -1) {
+            if (promisingNode.getBoardState().getBoardStatus() == -1) {
 
                 expand(promisingNode);
             }
@@ -55,29 +54,8 @@ public class MCTS {
         tree.setRoot(winnerNode);
         return rootNode.getBoardState().getRandomMove();
          
-        }
+        
 
-    	rootNode.getBoardState().switchPlayers();
-
-    	while (System.currentTimeMillis() <2000) {
-    		Node promisingNode = selection(rootNode);
-    		if (((StudentPlayer) promisingNode.getBoardState()).checkStatus() == -1) {
-    			if (promisingNode.getBoardState().checkStatus() == -1) {
-    				expand(promisingNode);
-    			}
-    			Node nodeToExplore = promisingNode;
-    			if (promisingNode.getChildren().size() > 0) {
-    				nodeToExplore = promisingNode.getRandomChildNode();
-    			}
-    			int playoutResult = simulateRandomPlayout(nodeToExplore);
-    			backPropogation(nodeToExplore, playoutResult);
-    		}
-
-    		Node winnerNode = rootNode.getChildWithMaxScore();
-    		tree.setRoot(winnerNode);
-    		;
-    	}
-    	 return rootNode.getBoardState().getRandomMove();
     }
     
     /**
@@ -125,17 +103,15 @@ public class MCTS {
     	//make a temp node with the current node
     	Node tempNode = new Node(node);
     	StudentBoardState tempState = tempNode.getBoardState();
-    	int boardStatus = tempState.getWinner();
+    	int boardStatus = tempState.getBoardStatus();
     	if (boardStatus == opponent) {
-    		for (Node parent : tempNode.getParents()) {
-    			parent.getBoardState().setWinScore(Integer.MIN_VALUE);
-    		}
+    			tempNode.getParent().getBoardState().setWinScore(Integer.MIN_VALUE);
     		return boardStatus;
     	}
     	while (boardStatus == -1) {
     		tempState.switchPlayers();
     		tempState.getRandomMove();
-    		boardStatus = tempState.checkStatus();
+    		boardStatus = tempState.getBoardStatus();
     	}
     	return boardStatus;
     }
@@ -148,18 +124,18 @@ public class MCTS {
 
     private void backPropogation(Node nodeToExplore, int playerNo) {
     	Node tempNode = nodeToExplore;
-    	ArrayList<Node> parents = tempNode.getParents();
+    	
 
     	while (tempNode != null) {
-    		for(int i=0; i<=parents.size(); i++) {
+    		
     			tempNode.getBoardState().incrementVisit();
-    			if (tempNode.getBoardState().getPlayerNo() == playerNo) {
+    			if (tempNode.getBoardState().getPlayerNumber() == playerNo) {
     				tempNode.getBoardState().addScore(WIN_SCORE);
     			}
-    			tempNode = parents.get(i);
+    			tempNode = tempNode.getParent();
     		}
-    		parents = tempNode.getParents();
+    		
     	}
     }
 
-}
+
