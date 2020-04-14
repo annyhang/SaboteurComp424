@@ -6,6 +6,7 @@ import java.util.Comparator;
 
 import Saboteur.SaboteurMove;
 import Saboteur.cardClasses.SaboteurTile;
+import Saboteur.SaboteurBoardState;
 
 /*
  * A node represents a board state given a tile move. 
@@ -16,7 +17,6 @@ import Saboteur.cardClasses.SaboteurTile;
  * 
  */
 public class Node {
-	
 	
 	StudentBoardState boardState;
 	Node parent;
@@ -34,6 +34,14 @@ public class Node {
 	
 	Node(Node node) {
 		this.boardState = node.getBoardState();
+	}
+	
+	//this is only for the root node since the root is always the initial board
+	Node(StudentPlayer studentPlayer) {
+		int[][] initIntBoard = studentPlayer.getInitIntBoard();
+		SaboteurTile[][] initTileBoard = studentPlayer.getInitTileBoard();
+		int playerNumber = studentPlayer.getPlayerNumber();
+		this.boardState = new StudentBoardState(initIntBoard, initTileBoard, playerNumber);
 	}
 	
 	

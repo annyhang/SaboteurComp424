@@ -26,6 +26,7 @@ public class StudentBoardState {
 		this.movePlayed = move;
 		this.playerNumber = move.getPlayerID();
 		this.intBoard = intBoard.clone();
+		this.tileBoard = tileBoard.clone();
 		SaboteurTile tileAdded = (SaboteurTile) move.getCardPlayed();
 		int[] tilePos = move.getPosPlayed();
 		int[][] tilePath = tileAdded.getPath();
@@ -38,8 +39,14 @@ public class StudentBoardState {
 		}
 
 		//add the move to the tile board
-		this.tileBoard = tileBoard.clone();
 		this.tileBoard[tilePos[0]][tilePos[1]] = tileAdded;		
+	}
+	
+	//for entrance only
+	StudentBoardState(int[][] intBoard, SaboteurTile[][] tileBoard, int playerNumber) {
+		this.intBoard = intBoard.clone();
+		this.tileBoard = tileBoard.clone();
+		this.playerNumber = playerNumber;
 	}
 
 
@@ -215,7 +222,13 @@ public class StudentBoardState {
 		}
 		return nuggetPos;
 	}
-
+	
+	public void addVisit() {
+		this.nodeVisit++;
+	}
+	public void setWinScore(int winScore) {
+		this.winScore = winScore;
+	}
 
 	public SaboteurTile[][] getTileBoard() {
 		return this.tileBoard;

@@ -2,22 +2,19 @@ package student_player;
 
 public class Tree {
 
+    Node root;	//  The root is the entrance
 
-	Node root;
+    public Tree(StudentPlayer studentPlayer) {
+        this.root = new Node(studentPlayer);
+    }
 
-	Tree(StudentPlayer boardState) {
-		int[] entrancePos = {5, 5};
-		root = new Node(boardState, "entrance", entrancePos);
-	}
+    public Node getRoot() {
+        return this.root;
+    }
 
-
-	public void setRoot(Node winnerNode) {
-		this.root = winnerNode;
-	}
-
-	public Node getRoot() {
-		return root;
-	}
+    public void addChild(Node parent, Node child) {
+        parent.getChildren().add(child);
+    }
 	
 	
 }
