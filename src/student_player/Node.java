@@ -1,56 +1,45 @@
 package student_player;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 
+import Saboteur.SaboteurMove;
 import Saboteur.cardClasses.SaboteurTile;
 
+/*
+ * A node represents a board state given a tile move. 
+ * 
+ * If the tile got destroyed, we want to keep it in the tree in case putting it back creates a path to the nugget.
+ * Destroyed tiles are marked destroyed (gotDestroyed).
+ * If it is from path from entrance to nugget, or it is the most optimal path to get there, we need to be able to put it back.
+ * 
+ */
 public class Node {
 	
 	
-	StudentPlayer boardState;
-	ArrayList<Node> parents = new ArrayList<Node>();	//all used paths from that tile
+	StudentBoardState boardState;
+	Node parent;
 	ArrayList<Node> children = new ArrayList<Node>();	//all open paths from that tile
 
 	boolean isBlockTile = false;
 	boolean gotDestroyed = false;
-
-	SaboteurTile tile;
-	int[][] tilePath;
-	int[] tilePos;
-	int maxNbChildren = 0;
 	
 
-	Node(StudentBoardState boardState, String idx, int[] tilePos) {
-		this.boardState = boardState;
-		this.tile = new SaboteurTile(idx);
-		this.tilePath = this.tile.getPath();
-		this.tilePos = tilePos.clone();
-		if (this.tilePath[0][1] == 1) {
-			maxNbChildren++;
-		}
-		if (this.tilePath[1][0] == 1) {
-			maxNbChildren++;
-		}
-		if (this.tilePath[1][2] == 1) {
-			maxNbChildren++;
-		}
-		if (this.tilePath[2][1] == 1) {
-			maxNbChildren++;
-		}
+	Node(StudentBoardState boardState, SaboteurMove move) {
+		int[][] intBoard = boardState.getIntBoard().clone();
+		SaboteurTile[][] tileBoard = boardState.getTileBoard().clone();
+		this.boardState = new StudentBoardState(intBoard, tileBoard, move);
 	}
 	
 	Node(Node node) {
-		this.boardState = node.getState();
-		this.tile = node.getTile();
-		this.tilePath = this.tile.getPath();
-		this.tilePos = node.getTilePos();
+		this.boardState = node.getBoardState();
 	}
 	
 	
 	public Node getChildWithMaxScore() {
 		return Collections.max(this.children, Comparator.comparing(c -> {
-			return c.getState().getNodeVisit();
+			return c.getBoardState().getNodeVisit();
 		}));
 	}
 	public Node getRandomChildNode() {
@@ -59,50 +48,31 @@ public class Node {
 		return this.children.get(selectRandom);
 	}
 
-
-
-
+	
 	public void setParent(Node parent) {
-		this.parents.add(parent);
-		maxNbChildren -= parents.size();
+		this.parent = parent;
 	}
 
 	public void addChild(Node child) {
-		if (maxNbChildren > 0) {
 			this.children.add(child);
-		}
 	}
-
-	/*
-	 * if the tile got destroyed, we want to keep it in the tree in case putting it back creates a path to the nugget.
-	 * we need to remove the child in order to free the open path for another tile.
-	 * However, since we still keep it, keep the node connected to the tree
-	 */
 	public void setDestroyed() {
 		this.gotDestroyed = true;
-		//since the tile no longer exist, the parents can add another tile/child at that position
-		for (Node parent : this.parents) {
-			parent.removeChild(this);
-		}
-	}
-	public void removeChild(Node child) {
-		this.maxNbChildren--;
 	}
 
-	public ArrayList<Node> getParents() {
-		return this.parents;
+	
+	public Node getParent() {
+		return this.parent;
 	}
 	public ArrayList<Node> getChildren() {
 		return this.children;
 	}
-	public StudentPlayer getState() {
+	public StudentBoardState getBoardState() {
 		return this.boardState;
 	}
-	public SaboteurTile getTile() {
-		return this.tile;
+	public boolean getDestroyed() {
+		return this.gotDestroyed;
 	}
-	public int[] getTilePos() {
-		return this.tilePos;
-	}
+
 
 }
