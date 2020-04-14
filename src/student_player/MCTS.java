@@ -13,11 +13,8 @@ public class MCTS {
     int level;
     int opponent;
     
-    //TODO
     /**
      * MCTS: Selection
-     * 
-     * @return the board that makes the path that is closest to the goal even closer
      */
     public Node selection(Node root) {    	
         Node node = root;
@@ -43,8 +40,6 @@ public class MCTS {
         		Comparator.comparing(c -> uctValue(parentVisit, c.getState().getWinScore(), c.getState().getNodeVisit())));
     }
     
-    
-    //TODO Anny
     /**
      * Expansion
      * 
@@ -62,41 +57,9 @@ public class MCTS {
     }
     
     
-    //TODO Massy
     /**
      * Simulation
      * 
-     * Utility value: 
-     * 
-     * 
-     * @return an utility value from the simulation of the game
-     */
-
-   
-    
-    //TODO Massy
-    /**
-     * Propagation
-     * 
-     * @return the updated tree
-     */
-
-    private void backPropogation(Node nodeToExplore, int playerNo) {
-    	Node tempNode = nodeToExplore;
-    	ArrayList<Node> parents = tempNode.getParents();
-
-    	while (tempNode != null) {
-    		for(int i=0; i<=parents.size(); i++) {
-    			tempNode.getState().incrementVisit();
-    			if (tempNode.getState().getPlayerNo() == playerNo) {
-    				tempNode.getState().addScore(WIN_SCORE);
-    			}
-    			tempNode = parents.get(i);
-    		}
-    		parents = tempNode.getParents();
-    	}
-    }
-    /*
      * pick a random node and simulate a random play out from it. 
      * Also, we will have an update function to propagate score and visit count starting from leaf to root:
      */
@@ -178,8 +141,27 @@ public class MCTS {
     		;
     	}
     	 return rootNode.getState().getRandomMove();
-    	 
+    }
+    
+    /**
+     * Propagation
+     * 
+     */
 
+    private void backPropogation(Node nodeToExplore, int playerNo) {
+    	Node tempNode = nodeToExplore;
+    	ArrayList<Node> parents = tempNode.getParents();
+
+    	while (tempNode != null) {
+    		for(int i=0; i<=parents.size(); i++) {
+    			tempNode.getState().incrementVisit();
+    			if (tempNode.getState().getPlayerNo() == playerNo) {
+    				tempNode.getState().addScore(WIN_SCORE);
+    			}
+    			tempNode = parents.get(i);
+    		}
+    		parents = tempNode.getParents();
+    	}
     }
 
 }
