@@ -41,7 +41,8 @@ public class Node {
 		int[][] initIntBoard = studentBS.getInitIntBoard();
 		SaboteurTile[][] initTileBoard = studentBS.getInitTileBoard();
 		int playerNumber = studentBS.getPlayerNumber();
-		this.boardState = new StudentBoardState(initIntBoard, initTileBoard, playerNumber);
+		//this.boardState = new StudentBoardState(initIntBoard, initTileBoard, playerNumber);
+		this.boardState = studentBS;
 	}
 	
 	
