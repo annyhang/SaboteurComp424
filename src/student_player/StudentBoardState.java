@@ -254,45 +254,20 @@ public class StudentBoardState {
 	 * @return 2 if there is a path to the entrance
 	 */
 	public boolean pathStartToEntrance(int[] startPos, ArrayList<int[]> prevPos) {
-		
-
-
-		System.out.println(intBoard[ startPos[0] ][ startPos[1] ]);
-		
-		System.out.println("what the first int" + tileBoard[ startPos[0]/3 ][ startPos[1]/3 ].getIdx());
-
-		if (tileBoard[ startPos[0]/3 ][ startPos[1]/3 ].getIdx().equals("entrance")) {
-			System.out.println("we have an entrance");
-			
-			return 2;
-		}
-
-		
-//		if (tileBoard[ startPos[0]/3 ][ startPos[1]/3-1 ] != null) {
-//			return 2;
-//		}
-//		if (tileBoard[ startPos[0]/3 ][ startPos[1]/3+1 ] != null) {
-//			return 2;
-//		}
-//		if (tileBoard[ startPos[0]/3-1 ][ startPos[1]/3 ] != null) {
-//			return 2;
-//		}
-//		if (tileBoard[ startPos[0]/3+1 ][ startPos[1]/3 ] != null) {
-//			return 2;
-//		}
-//		return 0;
 		if (tileBoard[ startPos[0] ][ startPos[1]-1 ] != null) {
 			return true;
 		}
 		if (tileBoard[ startPos[0] ][ startPos[1]+1 ] != null) {
 			return true;
 		}
-
-		
+		if (tileBoard[ startPos[0]-1 ][ startPos[1] ] != null) {
+			return true;
+		}
+		if (tileBoard[ startPos[0]+1 ][ startPos[1] ] != null) {
+			return true;
+		}
+		return false;
 	}
-		
-		return startValue;}
-		
  
 	
     /**
@@ -337,116 +312,6 @@ public class StudentBoardState {
     		}
     	}
     	return -1;
-
-		if (tileBoard[ startPos[0]-1 ][ startPos[1] ] != null) {
-			return true;
-		}
-		if (tileBoard[ startPos[0]+1 ][ startPos[1] ] != null) {
-			return true;
-		}
-
-		return false;
-		
-//		int startValue = 0;
-//		String tileIdx = tileBoard[ startPos[0]/3 ][ startPos[1]/3 ].getIdx();
-//		//System.out.println(intBoard[ startPos[0] ][ startPos[1] ]);
-//
-//		if (tileBoard[ startPos[0]/3 ][ startPos[1]/3 ].getIdx().equals("entrance")) {
-//			return 2;
-//		}
-//		else if (tileIdx.equals("8") || tileIdx.equals("hidden1") || tileIdx.equals("hidden2")) {
-//			System.out.println("inside the objectives");
-//			int[] nextPos = new int[2];
-//			//left
-//			try {
-//				nextPos[0] = startPos[0];
-//				nextPos[1] = startPos[1]-1;
-//				if (intBoard[ nextPos[0] ][ nextPos[1] ] == 1) {
-//					System.out.println("there is a left neighbour wit value 1: "+ intBoard[ nextPos[0] ][ nextPos[1]]);
-//					for (int[] onePrevPos : prevPos) {
-//						if (nextPos.equals(onePrevPos)) {
-//							throw new Exception();
-//						}
-//					}
-//					ArrayList<int[]> newPrevPos = new ArrayList<int[]>();
-//					for (int[] oldPrevPos : prevPos) {
-//						newPrevPos.add(oldPrevPos);
-//					}
-//					newPrevPos.add(startPos);
-//					int nextValue = pathStartToEntrance(nextPos, newPrevPos);
-//					if (nextValue == 2) {
-//						return 2;
-//					}
-//				}
-//			} catch (Exception e) {}
-//			//right
-//			try {
-//				nextPos[0] = startPos[0];
-//				nextPos[1] = startPos[1]+1;
-//				if (intBoard[ nextPos[0] ][ nextPos[1] ] == 1) {
-//					for (int[] onePrevPos : prevPos) {
-//						if (nextPos.equals(onePrevPos)) {
-//							throw new Exception();
-//						}
-//					}
-//					ArrayList<int[]> newPrevPos = new ArrayList<int[]>();
-//					for (int[] oldPrevPos : prevPos) {
-//						newPrevPos.add(oldPrevPos);
-//					}
-//					newPrevPos.add(startPos);
-//					int nextValue = pathStartToEntrance(nextPos, newPrevPos);
-//					if (nextValue == 2) {
-//						return 2;
-//					}
-//				}
-//			} catch (Exception e) {}
-//			//down
-//			try {
-//				nextPos[0] = startPos[0]-1;
-//				nextPos[1] = startPos[1];
-//				if (intBoard[ nextPos[0] ][ nextPos[1] ] == 1) {
-//					for (int[] onePrevPos : prevPos) {
-//						if (nextPos.equals(onePrevPos)) {
-//							throw new Exception();
-//						}
-//					}
-//					ArrayList<int[]> newPrevPos = new ArrayList<int[]>();
-//					for (int[] oldPrevPos : prevPos) {
-//						newPrevPos.add(oldPrevPos);
-//					}
-//					newPrevPos.add(startPos);
-//					int nextValue = pathStartToEntrance(nextPos, newPrevPos);
-//					if (nextValue == 2) {
-//						return 2;
-//					}
-//				}
-//			} catch (Exception e) {}
-//			//up
-//			try {
-//				nextPos[0] = startPos[0]+1;
-//				nextPos[1] = startPos[1];
-//				if (intBoard[ nextPos[0] ][ nextPos[1] ] == 1) {
-//					for (int[] onePrevPos : prevPos) {
-//						if (nextPos.equals(onePrevPos)) {
-//							throw new Exception();
-//						}
-//					}
-//					ArrayList<int[]> newPrevPos = new ArrayList<int[]>();
-//					for (int[] oldPrevPos : prevPos) {
-//						newPrevPos.add(oldPrevPos);
-//					}
-//					newPrevPos.add(startPos);
-//					int nextValue = pathStartToEntrance(nextPos, newPrevPos);
-//					if (nextValue == 2) {
-//						return 2;
-//					}
-//				}
-//			} catch (Exception e) {}
-//
-//		}
-//		
-//		return startValue;
-
     }
 	
 	/**
