@@ -20,15 +20,15 @@ public class MCTS {
     
     public SaboteurMove findNextMove(StudentBoardState board, int playerNo) {
         // define an end time which will act as a terminating condition
-    	System.out.println("We actually entered the findNextMove method");
     	opponent = Math.abs(1 - playerNo);
     	Tree tree = new Tree(board);
     	Node rootNode = tree.getRoot();
 
     	rootNode.getBoardState();//.setBoard(board);
         rootNode.getBoardState().setPlayerNumber(opponent);
- 
-        while (System.currentTimeMillis() <30000) {
+        
+        int start = (int) System.currentTimeMillis();
+        while ( start < 200) {
             Node promisingNode = selection(rootNode);
 
             if (promisingNode.getBoardState().getBoardStatus() == -1) {

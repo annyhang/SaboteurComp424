@@ -6,7 +6,6 @@ public class Tree {
 
     public Tree(StudentBoardState studentBS) {
         this.root = new Node(studentBS);
-        System.out.println("======making a tree========");
     }
 
     public Node getRoot() {
