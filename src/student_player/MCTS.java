@@ -38,7 +38,6 @@ public class MCTS {
         
         
         // define an end time which will act as a terminating condition
-    	System.out.println("We actually entered the findNextMove method");
     	opponent = Math.abs(1 - playerNo);
     	System.out.println("We set the opponent value" + opponent);
     	Tree tree = new Tree(board);
@@ -51,7 +50,6 @@ public class MCTS {
     	rootNode.getBoardState();//.setBoard(board);
         rootNode.getBoardState().setPlayerNumber(opponent);
         
-        System.out.println("we're about to enter the while loop");
         while (System.currentTimeMillis() <end) {
         	System.out.println("we entered the while loop");
             Node promisingNode = selection(rootNode);
