@@ -48,6 +48,7 @@ public class MCTS {
         
         while (System.currentTimeMillis() < end) {
             Node promisingNode = selection(rootNode);
+
         	System.out.println(promisingNode.getBoardState().getBoardStatus());
 
             if (promisingNode.getBoardState().getBoardStatus() == -1) {
@@ -91,6 +92,7 @@ public class MCTS {
      * 
      */
     public void expand(Node node) {
+    	System.out.println("we entered expand");
     	ArrayList<StudentBoardState> possibleStates = node.getBoardState().getAllPossibleStates();
     	System.out.println("these are all the possible states" + possibleStates);
     	for (StudentBoardState state : possibleStates) {
