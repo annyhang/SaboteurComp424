@@ -55,9 +55,11 @@ public class MCTS {
         while (System.currentTimeMillis() <end) {
         	System.out.println("we entered the while loop");
             Node promisingNode = selection(rootNode);
-
+            System.out.println("we selected our node");
+            boolean ifreturn = promisingNode.getBoardState().getBoardStatus() ==-1 ;
+            System.out.println("what does the if return" + ifreturn);
             if (promisingNode.getBoardState().getBoardStatus() == -1) {
-
+            System.out.println("we selected our node");
                 expand(promisingNode);
             }
             Node nodeToExplore = promisingNode;
@@ -96,6 +98,7 @@ public class MCTS {
      * 
      */
     public void expand(Node node) {
+    	System.out.println("we entered expand");
     	ArrayList<StudentBoardState> possibleStates = node.getBoardState().getAllPossibleStates();
     	System.out.println("these are all the possible states" + possibleStates);
     	for (StudentBoardState state : possibleStates) {
