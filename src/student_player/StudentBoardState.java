@@ -227,6 +227,10 @@ public class StudentBoardState {
 
 		//if we don't know where the nugget is, consider each objectives
 		if (rowNuggetPos == -1 && colNuggetPos == -1) {
+
+			System.out.println("We've entered the if loop in board status");
+			int[][] objPos = { {12, 3}, {12, 5}, {12, 7} };
+
 			for (int i=0; i<3; i++) {
 				int iPos = this.objPos[i][0]*3+1;
 				int yPos = this.objPos[i][1]*3+1;
@@ -267,9 +271,13 @@ public class StudentBoardState {
 			//left
 			try {
 				nextPos[0] = startPos[0];
+				System.out.println("nextPos[0] is "+ nextPos[0]);
 				nextPos[1] = startPos[1]-1;
+				System.out.println("nextPos[0] is "+ nextPos[1]);
 				if (intBoard[ nextPos[0] ][ nextPos[1] ] == 1) {
+					System.out.println("entered the if statement"+ intBoard[ nextPos[0] ][ nextPos[1]]);
 					for (int[] onePrevPos : prevPos) {
+						
 						if (nextPos.equals(onePrevPos)) {
 							throw new Exception();
 						}
@@ -286,7 +294,12 @@ public class StudentBoardState {
 				}
 			} catch (Exception e) {
 
+				
+				}
+
+
 			}
+
 			//right
 			try {
 				nextPos[0] = startPos[0];
