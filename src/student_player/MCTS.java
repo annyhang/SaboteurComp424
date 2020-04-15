@@ -56,21 +56,21 @@ public class MCTS {
             Node promisingNode = selection(rootNode);
 
 
-        	System.out.println("this is the board status wtf" + promisingNode.getBoardState().getBoardStatus());
+        	//System.out.println("this is the board status wtf" + promisingNode.getBoardState().getBoardStatus());
 
             System.out.println("before boardstatus");
         	//System.out.println(promisingNode.getBoardState().getBoardStatus());
-        	int boardStatus = promisingNode.getBoardState().getBoardStatus();
+        	
             //System.out.println(boardStatus);
             System.out.println("after boardstatus");
 
 
 
-            if (boardStatus == -1) {
+            //if (boardStatus == -1) {
                 System.out.println("printing the boardStatus:");
 
                 expand(promisingNode);
-            }
+            //}
             Node nodeToExplore = promisingNode;
             if (promisingNode.getChildren().size() > 0) {
                 nodeToExplore = promisingNode.getRandomChildNode();
@@ -98,7 +98,7 @@ public class MCTS {
         while (node.getChildren().size() != 0) {
             node = UCT.findBestNodeWithUCT(node);
         }
-        //System.out.println("this is the best node selected"+node);
+       System.out.println("this is the best node selected"+node);
         return node;
     }
     
@@ -109,14 +109,15 @@ public class MCTS {
      */
     public void expand(Node node) {
     	System.out.println("we entered expand");
-    	ArrayList<StudentBoardState> possibleStates = node.getBoardState().getAllPossibleStates();
-    	System.out.println("these are all the possible states" + possibleStates);
-    	for (StudentBoardState state : possibleStates) {
+    	ArrayList<SaboteurMove> possibleStates = node.getBoardState().getAllLegalTileMoves();
+    	
+    	for (SaboteurMove state : possibleStates) {
+    		System.out.println("we entered the for loop in expand");
     		//getting the move value of the given node from the possible states
-    		SaboteurMove move =  state.getMyMove();
+    		
     		//create a new node with the correct tile 
     		//TODO : verify if this returns the correct move
-    		Node newNode = new Node(state, move);
+    		Node newNode = new Node(node.getBoardState(),state);
     		newNode.setParent(node);
     		System.out.println("This is the node we picked" + newNode);
     		//TODO: I'm not sure why we're changing the player 
