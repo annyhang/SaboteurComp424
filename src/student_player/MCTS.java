@@ -52,7 +52,7 @@ public class MCTS {
  
         Node winnerNode = rootNode.getChildWithMaxScore();
         tree.setRoot(winnerNode);
-        return rootNode.getBoardState().getRandomMove();
+        return winnerNode.getBoardState().getRandomMove();
          
         
 
