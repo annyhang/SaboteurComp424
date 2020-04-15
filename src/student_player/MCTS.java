@@ -49,7 +49,7 @@ public class MCTS {
         while (System.currentTimeMillis() < end) {
             Node promisingNode = selection(rootNode);
 
-        	System.out.println(promisingNode.getBoardState().getBoardStatus());
+        	System.out.println("this is the board status wtf" + promisingNode.getBoardState().getBoardStatus());
 
             if (promisingNode.getBoardState().getBoardStatus() == -1) {
                 System.out.println("printing the boardStatus:");
