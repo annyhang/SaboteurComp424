@@ -383,50 +383,7 @@ public class StudentBoardState {
 //		}
 //		
 //		return startValue;
-	}
-	
-    /**
-     * Get the distance between the nugget/objectives and the closest path.
-     * Here, the closest path is assumed to be a feasible path.
-     */
-    public int distanceNuggetPath() {
-    	int shortestDistance = tileBoard.length*2;
-    	
-    	int[] nuggetPos = getNugget();
-    	int nuggPosy = nuggetPos[0];
-    	int nuggPosx = nuggetPos[1];
-    	//if we know where the nugget is, the distance should be between the closest path and the nugget
-    	if ((nuggPosx != -1 && nuggPosy != -1)) {
-    		for (int i=tileBoard.length-1; i<=0; i++) {
-    			for (int j=0; j<tileBoard.length; j++) {
-    				if (tileBoard[i][j] != null) {
-    					//if we encounter an objective, we need to check if can add a tile from that objective first
-    					if ( (i==objPos[0][0] && j==objPos[0][1]) || (i==objPos[1][0] && j==objPos[1][1]) || (i==objPos[2][0] && j==objPos[2][1]) ) {
-    						int[][] path12 = {{0,0,0},{0,1,1},{0,0,0}};
-    						int[] posDown = {i+1, j};
-    						if (boardState.verifyLegit(path12, posDown)) {
-    							int height = tileBoard.length - i;
-    							int length = nuggPosx - j;
-    							int distanceNuggPath = height + length;
-    							if (distanceNuggPath < shortestDistance) {
-    	    						shortestDistance = distanceNuggPath;
-    	    					}
-    						}
-    					}
-    				}
-    			}
-    		}
-    		return shortestDistance;
-    	}
-    	//if we don't know where the nugget is, the height of the closest path and the objectives is enough
-    	for (int i=tileBoard.length-3; i<=0; i++) {
-    		for (int j=0; j<tileBoard.length; j++) {
-    			if (tileBoard[i][j] != null) {
-    				return tileBoard.length;
-    			}
-    		}
-    	}
-    	return -1;
+
     }
 	
 	/**

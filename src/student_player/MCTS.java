@@ -55,11 +55,15 @@ public class MCTS {
 
             Node promisingNode = selection(rootNode);
 
+
+        	System.out.println("this is the board status wtf" + promisingNode.getBoardState().getBoardStatus());
+
             System.out.println("before boardstatus");
         	System.out.println(promisingNode.getBoardState().getBoardStatus());
         	int boardStatus = promisingNode.getBoardState().getBoardStatus();
             //System.out.println(boardStatus);
             //System.out.println("after boardstatus");
+
 
 
             if (boardStatus == -1) {
