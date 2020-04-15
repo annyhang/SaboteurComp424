@@ -92,27 +92,31 @@ public class StudentBoardState {
 		int nbMyMalus = this.boardState.getNbMalus(this.playerNumber);
 		int nbOppMalus = this.boardState.getNbMalus(oppNumber);
 		int distanceToNugg = distanceNuggetPath();
+
 		//if we don't know where the nugget is, prioritise the map card
     	if (nuggetPos[0] == -1 && nuggetPos[1] == -1) {
     		for (SaboteurMove move : allLegalMoves) {
     			if (move.getCardPlayed() instanceof SaboteurMap) {
     				this.myMove = new SaboteurMove(new SaboteurMap(), objPos[hiddenUnmappedCount][0], objPos[hiddenUnmappedCount][1], this.playerNumber);
+    				return this.myMove;
     			}
     		}
     	}
     	//if we got a malus card and we are close from the goal, prioritise a bonus card
-    	else if (nbMyMalus > 0 && distanceToNugg < intBoard.length/2) {
+    	if (nbMyMalus > 0 && distanceToNugg < intBoard.length/2) {
     		for (SaboteurMove move : allLegalMoves) {
     			if (move.getCardPlayed() instanceof SaboteurBonus) {
     				this.myMove = move;
+    				return this.myMove;
     			}
     		}
     	}
     	//if we are close from the goal and the opponent can still play, prioritise a malus card
-    	else if (nbOppMalus == 0 && distanceToNugg < intBoard.length/2) {
+    	if (nbOppMalus == 0 && distanceToNugg < intBoard.length/2) {
     		for (SaboteurMove move : allLegalMoves) {
     			if (move.getCardPlayed() instanceof SaboteurMalus) {
     				this.myMove = move;
+    				return this.myMove;
     			}
     		}
     	}
@@ -121,7 +125,7 @@ public class StudentBoardState {
 //    		
 //    	}
     	//if we got a malus and we only have tile cards, drop a block tile card
-    	else if(nbMyMalus > 0) {
+    	if(nbMyMalus > 0) {
     		ArrayList<SaboteurCard> hand = this.boardState.getCurrentPlayerCards();
     		for (SaboteurCard handCard : hand) {
     			if (handCard instanceof SaboteurMap) {
@@ -132,6 +136,7 @@ public class StudentBoardState {
     				for (String idxBlockTiles : blockTiles) {
     					if (handCardTile.getIdx().equals(idxBlockTiles)) {
     						this.myMove = new SaboteurMove(new SaboteurDrop(), hand.indexOf(handCard), 0, this.playerNumber);
+    						return this.myMove;
     					}
     				}
     			}
@@ -141,9 +146,7 @@ public class StudentBoardState {
     	/*
     	 * MCTS to get the best move between the tile cards or destroy cards
     	 */
-    	else {
-    		this.myMove = mcts.findNextMove(this,this.playerNumber);
-    	}
+		this.myMove = mcts.findNextMove(this,this.playerNumber);
     	return this.myMove;
 	}
 	
@@ -394,22 +397,22 @@ public class StudentBoardState {
 		int[] nuggetPos = {-1, -1};
 
 		for (int i=0; i<3; i++) {
-			String idx = this.tileBoard[ objPos[i][0] * 3 ][ objPos[i][1] * 3 ].getIdx();
+			String idx = this.tileBoard[ objPos[i][0] ][ objPos[i][1] ].getIdx();
 			if (idx.equals("nugget")) {
-				nuggetPos = objPos[0];
+				return objPos[0];
 			} 
 			else if (idx.equals("hidden2") || idx.equals("hidden2")) {
 				hiddenUnmapped[i] = true;
 				hiddenUnmappedCount++;
+
 			}
 		}
-
+		
 		//nugget hasn't been unmapped but we can deduce where it is
 		if (hiddenUnmappedCount == 2) {
 			for (int i=0; i<hiddenUnmapped.length; i++) {
 				if (hiddenUnmapped[i] == false) {
-					nuggetPos = objPos[i];
-					break;
+					return objPos[i];
 				}
 			}
 		}

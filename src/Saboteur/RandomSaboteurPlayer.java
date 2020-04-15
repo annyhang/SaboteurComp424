@@ -11,6 +11,8 @@ import boardgame.Move;
 public class RandomSaboteurPlayer extends SaboteurPlayer {	
 	
 	private int[][] myBoard;
+	int[][] objPos = { {12, 3}, {12, 5}, {12, 7} };
+
 	
     public RandomSaboteurPlayer() {
         super("RandomPlayer");
@@ -43,7 +45,7 @@ public class RandomSaboteurPlayer extends SaboteurPlayer {
         	}
         	System.out.println();
         }
-        
+    	
         return  boardState.getRandomMove();
     }
 }
