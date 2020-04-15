@@ -346,23 +346,6 @@ public class StudentBoardState {
 		}
 		return nuggetPos;
 	}
-	
-//    public ArrayList<SaboteurTile> getHandOfTiles(){
-//    	String[] tiles ={"0","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15"};
-//    	ArrayList<SaboteurCard> hand = this.boardState.getCurrentPlayerCards();
-//    	ArrayList<SaboteurTile> currentTiles= new ArrayList<SaboteurTile>();
-//    	for(int i=0; i<=hand.size(); i++) {
-//    		for(int j=0; j<=tiles.length; j++) {
-//    			if (hand.get(i) instanceof SaboteurTile) {
-//    				SaboteurTile currentCard = (SaboteurTile) hand.get(i);
-//    				if(currentCard.getIdx() == tiles[j]) {
-//    					currentTiles.add(currentCard);
-//    				}
-//    			}
-//    		}
-//    	}
-//    	return currentTiles;
-//    }
 
     public ArrayList<SaboteurMove> getAllLegalTileMoves() {
     	System.out.println("we entered  legalmoves");
