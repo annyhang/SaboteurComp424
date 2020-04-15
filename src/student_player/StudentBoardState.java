@@ -228,8 +228,8 @@ public class StudentBoardState {
 		//if we don't know where the nugget is, consider each objectives
 		if (rowNuggetPos == -1 && colNuggetPos == -1) {
 			for (int i=0; i<3; i++) {
-				int iPos = this.objPos[i][0]+1;
-				int yPos = this.objPos[i][1]+1;
+				int iPos = this.objPos[i][0]*3+1;
+				int yPos = this.objPos[i][1]*3+1;
 				int[] startPos = {iPos, yPos};
 				int isWinForThisObj = pathStartToEntrance(startPos, prevPos);
 				if (isWinForThisObj == 2) {
@@ -255,12 +255,14 @@ public class StudentBoardState {
 	 */
 	public int pathStartToEntrance(int[] startPos, ArrayList<int[]> prevPos) {
 		int startValue = 0;
-		System.out.println(intBoard[ startPos[0] ][ startPos[1] ]);
+		String tileIdx = tileBoard[ startPos[0]/3 ][ startPos[1]/3 ].getIdx();
+		//System.out.println(intBoard[ startPos[0] ][ startPos[1] ]);
 
-		if (tileBoard[ startPos[0]/3 ][ startPos[1]/3 ].getIdx().equals("Entrance")) {
+		if (tileBoard[ startPos[0]/3 ][ startPos[1]/3 ].getIdx().equals("entrance")) {
 			return 2;
 		}
-		else if (tileBoard[ startPos[0]/3 ][ startPos[1]/3 ].equals("8")) {
+		else if (tileIdx.equals("8") || tileIdx.equals("hidden1") || tileIdx.equals("hidden2")) {
+			System.out.println("inside the objectives");
 			int[] nextPos = new int[2];
 			//left
 			try {
