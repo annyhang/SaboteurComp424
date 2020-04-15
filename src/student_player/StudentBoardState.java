@@ -23,7 +23,7 @@ public class StudentBoardState {
 	public String[] blockTiles = {"1", "2", "2_flip", "3", "3_flip", "4", "4_flip", "11", "11_flip", "12", "12_flip", "13", "14", "14_flip", "15"};
 	
 	//Board part of this class
-	MCTS mcts;
+	MCTS mcts = new MCTS();
 	SaboteurBoardState boardState;
 	SaboteurTile[][] tileBoard;
 	int[][] intBoard;
@@ -92,6 +92,13 @@ public class StudentBoardState {
 		int nbMyMalus = this.boardState.getNbMalus(this.playerNumber);
 		int nbOppMalus = this.boardState.getNbMalus(oppNumber);
 		int distanceToNugg = distanceNuggetPath();
+		
+		
+//		ArrayList<SaboteurCard> ahand = this.boardState.getCurrentPlayerCards();
+//		for (SaboteurCard card : ahand) {
+//			System.out.println(card.getName());
+//		}
+		
 
 		//if we don't know where the nugget is, prioritise the map card
     	if (nuggetPos[0] == -1 && nuggetPos[1] == -1) {
@@ -419,22 +426,22 @@ public class StudentBoardState {
 		return nuggetPos;
 	}
 	
-    public ArrayList<SaboteurTile> getHandOfTiles(){
-    	String[] tiles ={"0","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15"};
-    	ArrayList<SaboteurCard> hand = this.boardState.getCurrentPlayerCards();
-    	ArrayList<SaboteurTile> currentTiles= new ArrayList<SaboteurTile>();
-    	for(int i=0; i<=hand.size(); i++) {
-    		for(int j=0; j<=tiles.length; j++) {
-    			if (hand.get(i) instanceof SaboteurTile) {
-    				SaboteurTile currentCard = (SaboteurTile) hand.get(i);
-    				if(currentCard.getIdx() == tiles[j]) {
-    					currentTiles.add(currentCard);
-    				}
-    			}
-    		}
-    	}
-    	return currentTiles;
-    }
+//    public ArrayList<SaboteurTile> getHandOfTiles(){
+//    	String[] tiles ={"0","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15"};
+//    	ArrayList<SaboteurCard> hand = this.boardState.getCurrentPlayerCards();
+//    	ArrayList<SaboteurTile> currentTiles= new ArrayList<SaboteurTile>();
+//    	for(int i=0; i<=hand.size(); i++) {
+//    		for(int j=0; j<=tiles.length; j++) {
+//    			if (hand.get(i) instanceof SaboteurTile) {
+//    				SaboteurTile currentCard = (SaboteurTile) hand.get(i);
+//    				if(currentCard.getIdx() == tiles[j]) {
+//    					currentTiles.add(currentCard);
+//    				}
+//    			}
+//    		}
+//    	}
+//    	return currentTiles;
+//    }
 
     public ArrayList<SaboteurMove> getAllLegalTileMoves() {
     	ArrayList<SaboteurMove> allLegalMoves = this.boardState.getAllLegalMoves();
