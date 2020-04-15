@@ -46,12 +46,27 @@ public class MCTS {
     	//rootNode.getBoardState();//.setBoard(board);
         rootNode.getBoardState().setPlayerNumber(opponent);
         
+        int count = 0;
+        
         while (System.currentTimeMillis() < end) {
+        	
+        	count++;
+            //System.out.println(count);
+
             Node promisingNode = selection(rootNode);
+
 
         	System.out.println("this is the board status wtf" + promisingNode.getBoardState().getBoardStatus());
 
-            if (promisingNode.getBoardState().getBoardStatus() == -1) {
+            System.out.println("before boardstatus");
+        	//System.out.println(promisingNode.getBoardState().getBoardStatus());
+        	int boardStatus = promisingNode.getBoardState().getBoardStatus();
+            //System.out.println(boardStatus);
+            System.out.println("after boardstatus");
+
+
+
+            if (boardStatus == -1) {
                 System.out.println("printing the boardStatus:");
 
                 expand(promisingNode);
@@ -64,6 +79,7 @@ public class MCTS {
             backPropogation(nodeToExplore, playoutResult);
         }
  
+        
         Node winnerNode = rootNode.getChildWithMaxScore();
         tree.setRoot(winnerNode);
         return winnerNode.getBoardState().getRandomMove();
