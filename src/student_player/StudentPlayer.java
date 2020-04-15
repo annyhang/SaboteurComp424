@@ -37,6 +37,8 @@ public class StudentPlayer extends SaboteurPlayer {
      * make decisions.
      */
     public Move chooseMove(SaboteurBoardState boardState) {
+        System.out.println("student player acting as player number: "+boardState.getTurnPlayer());
+
     	StudentBoardState studentBS = new StudentBoardState(boardState);
 
     	//initialise the empty boards if we are player 2
