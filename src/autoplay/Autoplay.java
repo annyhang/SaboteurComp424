@@ -24,11 +24,8 @@ public class Autoplay {
     public static void main(String args[]) {
         int n_games=50;
         try {
-<<<<<<< HEAD
             n_games = 1;//Integer.parseInt(args[0]);
-=======
             //n_games = Integer.parseInt(args[0]);
->>>>>>> 2c6272d6347046b10ffb50919bac0dcce005c5a2
             if (n_games < 1) {
                 throw new Exception();
             }
