@@ -227,6 +227,7 @@ public class StudentBoardState {
 
 		//if we don't know where the nugget is, consider each objectives
 		if (rowNuggetPos == -1 && colNuggetPos == -1) {
+			System.out.println("We've entered the if loop in board status");
 			int[][] objPos = { {12, 3}, {12, 5}, {12, 7} };
 			for (int i=0; i<3; i++) {
 				int isWinForThisObj = pathStartToEntrance(objPos[i], prevPos);
@@ -253,18 +254,26 @@ public class StudentBoardState {
 	 */
 	public int pathStartToEntrance(int[] startPos, ArrayList<int[]> prevPos) {
 		int startValue = 0;
+		System.out.println("entered the pathstart");
 		
 		if (tileBoard[ startPos[0]/3 ][ startPos[1]/3 ].getIdx().equals("Entrance")) {
+			System.out.println("we have an entrance");
+			
 			return 2;
 		}
 		else if (intBoard[ startPos[0] ][ startPos[1] ] == 1) {
+			System.out.println("entered the else if in pathstart");
 			int[] nextPos = new int[2];
 			//left
 			try {
 				nextPos[0] = startPos[0];
+				System.out.println("nextPos[0] is "+ nextPos[0]);
 				nextPos[1] = startPos[1]-1;
+				System.out.println("nextPos[0] is "+ nextPos[1]);
 				if (intBoard[ nextPos[0] ][ nextPos[1] ] == 1) {
+					System.out.println("entered the if statement"+ intBoard[ nextPos[0] ][ nextPos[1]]);
 					for (int[] onePrevPos : prevPos) {
+						
 						if (nextPos.equals(onePrevPos)) {
 							throw new Exception();
 						}
@@ -279,7 +288,9 @@ public class StudentBoardState {
 						return 2;
 					}
 				}
-			} catch (Exception e) {}
+			} catch (Exception e) {
+				
+				}
 			//right
 			try {
 				nextPos[0] = startPos[0];
