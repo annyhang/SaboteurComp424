@@ -16,19 +16,42 @@ public class MCTS {
 	static final int WIN_SCORE = 0;
     int level;
     int opponent;
+    public MCTS() {
+        this.level = 3;
+    }
 
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
+    private int getMillisForCurrentLevel() {
+        return 2 * (this.level - 1) + 1;
+    }
     
     public SaboteurMove findNextMove(StudentBoardState board, int playerNo) {
+    	long start = System.currentTimeMillis();
+        long end = start + 60 * getMillisForCurrentLevel();
+        
+        
         // define an end time which will act as a terminating condition
     	opponent = Math.abs(1 - playerNo);
+    	System.out.println("We set the opponent value" + opponent);
     	Tree tree = new Tree(board);
     	Node rootNode = tree.getRoot();
+    	
+    	
+    	
+    	System.out.println("What is the root" + rootNode.getBoardState());
 
     	rootNode.getBoardState();//.setBoard(board);
         rootNode.getBoardState().setPlayerNumber(opponent);
         
-        int start = (int) System.currentTimeMillis();
-        while ( start < 200) {
+        while (System.currentTimeMillis() <end) {
+        	System.out.println("we entered the while loop");
             Node promisingNode = selection(rootNode);
 
             if (promisingNode.getBoardState().getBoardStatus() == -1) {
