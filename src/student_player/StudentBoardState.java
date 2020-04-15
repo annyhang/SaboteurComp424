@@ -227,10 +227,15 @@ public class StudentBoardState {
 
 		//if we don't know where the nugget is, consider each objectives
 		if (rowNuggetPos == -1 && colNuggetPos == -1) {
+
 			System.out.println("We've entered the if loop in board status");
 			int[][] objPos = { {12, 3}, {12, 5}, {12, 7} };
+
 			for (int i=0; i<3; i++) {
-				int isWinForThisObj = pathStartToEntrance(objPos[i], prevPos);
+				int iPos = this.objPos[i][0]+1;
+				int yPos = this.objPos[i][1]+1;
+				int[] startPos = {iPos, yPos};
+				int isWinForThisObj = pathStartToEntrance(startPos, prevPos);
 				if (isWinForThisObj == 2) {
 					return this.playerNumber;
 				}
@@ -249,20 +254,28 @@ public class StudentBoardState {
 	/**
 	 * Find if there is a path from a given position (there should be a tile) to the entrance.
 	 * 
-	 * @param the position of the position we are interested in. Based on intBoard
+	 * @param the position of the of the intBoard we are interested in
 	 * @return 2 if there is a path to the entrance
 	 */
 	public int pathStartToEntrance(int[] startPos, ArrayList<int[]> prevPos) {
 		int startValue = 0;
+
 		System.out.println("entered the pathstart");
 		
+
+		System.out.println(intBoard[ startPos[0] ][ startPos[1] ]);
+
 		if (tileBoard[ startPos[0]/3 ][ startPos[1]/3 ].getIdx().equals("Entrance")) {
 			System.out.println("we have an entrance");
 			
 			return 2;
 		}
+
 		else if (intBoard[ startPos[0] ][ startPos[1] ] == 1) {
 			System.out.println("entered the else if in pathstart");
+
+		else if (tileBoard[ startPos[0]/3 ][ startPos[1]/3 ].equals("8")) {
+
 			int[] nextPos = new int[2];
 			//left
 			try {
@@ -289,8 +302,13 @@ public class StudentBoardState {
 					}
 				}
 			} catch (Exception e) {
+
 				
 				}
+
+
+			}
+
 			//right
 			try {
 				nextPos[0] = startPos[0];

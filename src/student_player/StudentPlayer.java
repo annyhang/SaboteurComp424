@@ -7,6 +7,7 @@ import Saboteur.SaboteurBoardState;
 import Saboteur.SaboteurMove;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 //added for updating myBoard
 import Saboteur.cardClasses.*;
@@ -58,6 +59,13 @@ public class StudentPlayer extends SaboteurPlayer {
     	//update attributes
     	roundNumber++;
     	this.previousBS = studentBS;
+    	
+//    	System.out.println(Arrays.toString(studentBS.getNugget()));
+//    	int[] posPlayed = myMove.getPosPlayed();
+//    	System.out.println("==" + myMove.getCardPlayed().getName() + " " + posPlayed[0] + " " + posPlayed[1]);
+//    	//
+//    	System.out.println("This is the board status: " + studentBS.getBoardStatus());
+
     	return myMove;
     }
 	

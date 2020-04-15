@@ -34,30 +34,26 @@ public class MCTS {
     
     public SaboteurMove findNextMove(StudentBoardState board, int playerNo) {
     	long start = System.currentTimeMillis();
-        long end = start + 60 * getMillisForCurrentLevel();
+        long end = start + 60 * getMillisForCurrentLevel() * 30000;
         
         
         // define an end time which will act as a terminating condition
     	opponent = Math.abs(1 - playerNo);
-    	System.out.println("We set the opponent value" + opponent);
     	Tree tree = new Tree(board);
     	Node rootNode = tree.getRoot();
     	
     	
-    	
-    	System.out.println("What is the root" + rootNode.getBoardState());
-
-    	rootNode.getBoardState();//.setBoard(board);
+    	//rootNode.getBoardState();//.setBoard(board);
         rootNode.getBoardState().setPlayerNumber(opponent);
         
-        while (System.currentTimeMillis() <end) {
-        	System.out.println("we entered the while loop");
+        while (System.currentTimeMillis() < end) {
             Node promisingNode = selection(rootNode);
-            System.out.println("we selected our node");
-            boolean ifreturn = promisingNode.getBoardState().getBoardStatus() ==-1 ;
-            System.out.println("what does the if return" + ifreturn);
+
+        	System.out.println(promisingNode.getBoardState().getBoardStatus());
+
             if (promisingNode.getBoardState().getBoardStatus() == -1) {
-            System.out.println("we selected our node");
+                System.out.println("printing the boardStatus:");
+
                 expand(promisingNode);
             }
             Node nodeToExplore = promisingNode;
@@ -82,11 +78,11 @@ public class MCTS {
      */
     public Node selection(Node root) {    	
         Node node = root;
-        System.out.println("this is the root" + root);
+        //System.out.println("this is the root" + root);
         while (node.getChildren().size() != 0) {
             node = UCT.findBestNodeWithUCT(node);
         }
-        System.out.println("this is the best node selected"+node);
+        //System.out.println("this is the best node selected"+node);
         return node;
     }
     
