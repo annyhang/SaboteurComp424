@@ -265,17 +265,15 @@ public class StudentBoardState {
 
 		System.out.println(intBoard[ startPos[0] ][ startPos[1] ]);
 
-		if (tileBoard[ startPos[0]/3 ][ startPos[1]/3 ].getIdx().equals("Entrance")) {
+		if (tileBoard[ startPos[0]/3 ][ startPos[1]/3 ].getIdx().equals("entrance")) {
 			System.out.println("we have an entrance");
 			
 			return 2;
 		}
-
-		else if (intBoard[ startPos[0] ][ startPos[1] ] == 1) {
-			System.out.println("entered the else if in pathstart");
-
-		else if (tileBoard[ startPos[0]/3 ][ startPos[1]/3 ].equals("8")) {
-
+		
+		if (tileBoard[ startPos[0]/3 ][ startPos[1]/3 ].equals("8")) {
+			
+			System.out.println("we entered the else if an entrance");
 			int[] nextPos = new int[2];
 			//left
 			try {
@@ -307,7 +305,7 @@ public class StudentBoardState {
 				}
 
 
-			}
+			
 
 			//right
 			try {
@@ -372,11 +370,12 @@ public class StudentBoardState {
 					}
 				}
 			} catch (Exception e) {}
-
+			
 		}
-		
 		return startValue;
 	}
+		
+ 
 	
     /**
      * Get the distance between the nugget/objectives and the closest path.
