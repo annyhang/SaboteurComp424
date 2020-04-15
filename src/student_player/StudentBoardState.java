@@ -103,7 +103,7 @@ public class StudentBoardState {
     		}
     	}
     	//if we got a malus card and we are close from the goal, prioritise a bonus card
-    	if (nbMyMalus > 0 && distanceToNugg < intBoard.length/2) {
+    	if (nbMyMalus > 0 && distanceToNugg < tileBoard.length/2) {
     		for (SaboteurMove move : allLegalMoves) {
     			if (move.getCardPlayed() instanceof SaboteurBonus) {
     				this.myMove = move;
@@ -112,7 +112,7 @@ public class StudentBoardState {
     		}
     	}
     	//if we are close from the goal and the opponent can still play, prioritise a malus card
-    	if (nbOppMalus == 0 && distanceToNugg < intBoard.length/2) {
+    	if (nbOppMalus == 0 && distanceToNugg < tileBoard.length/2) {
     		for (SaboteurMove move : allLegalMoves) {
     			if (move.getCardPlayed() instanceof SaboteurMalus) {
     				this.myMove = move;
@@ -146,6 +146,7 @@ public class StudentBoardState {
     	/*
     	 * MCTS to get the best move between the tile cards or destroy cards
     	 */
+    	System.out.println("======MCTS======");
 		this.myMove = mcts.findNextMove(this,this.playerNumber);
     	return this.myMove;
 	}
@@ -340,12 +341,6 @@ public class StudentBoardState {
 		
 		return startValue;
 	}
-
-	/**
-	 * Get the position of the nugget.
-	 * 
-	 * @return the position of the nugget. If it is unknown, it can either be deduced or return {-1, -1}
-	 */
 	
     /**
      * Get the distance between the nugget/objectives and the closest path.
@@ -391,7 +386,12 @@ public class StudentBoardState {
     	return -1;
     }
 	
-	public int[] getNugget() {
+	/**
+	 * Get the position of the nugget.
+	 * 
+	 * @return the position of the nugget. If it is unknown, it can either be deduced or return {-1, -1}
+	 */
+    public int[] getNugget() {
 		boolean[] hiddenUnmapped = {false, false, false};
 		this.hiddenUnmappedCount = 0;
 		int[] nuggetPos = {-1, -1};

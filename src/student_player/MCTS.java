@@ -12,31 +12,23 @@ import Saboteur.cardClasses.SaboteurTile;
 
 public class MCTS {
 	
+	
 	static final int WIN_SCORE = 0;
     int level;
     int opponent;
-    
-    
 
     
     public SaboteurMove findNextMove(StudentBoardState board, int playerNo) {
         // define an end time which will act as a terminating condition
- 
-    	opponent = 3 - playerNo;
+    	opponent = Math.abs(1 - playerNo);
     	Tree tree = new Tree(board);
     	Node rootNode = tree.getRoot();
 
     	rootNode.getBoardState();//.setBoard(board);
-    	
-    	
-
-
         rootNode.getBoardState().setPlayerNumber(opponent);
  
-        while (System.currentTimeMillis() <2000) {
+        while (System.currentTimeMillis() <30000) {
             Node promisingNode = selection(rootNode);
-
-           
 
             if (promisingNode.getBoardState().getBoardStatus() == -1) {
 
@@ -62,8 +54,6 @@ public class MCTS {
      * Select promising node
      * 
      */
-    
-    
     public Node selection(Node root) {    	
         Node node = root;
         while (node.getChildren().size() != 0) {
@@ -77,7 +67,6 @@ public class MCTS {
      * @return the tree with an added node at the branch selected
      * 
      */
-    
     public void expand(Node node) {
     	ArrayList<StudentBoardState> possibleStates = node.getBoardState().getAllPossibleStates();
     	for (StudentBoardState state : possibleStates) {
@@ -92,13 +81,13 @@ public class MCTS {
     		node.addChild(newNode);
     	}
     }
+    
     /**
      * Simulation
      * pick a random node and simulate a random play out from it. 
      * Also, we will have an update function to propagate score and visit count starting from leaf to root:
      * 
      */
-    
     private int simulateRandomPlayout(Node node) {
     	//make a temp node with the current node
     	Node tempNode = new Node(node);
@@ -116,12 +105,10 @@ public class MCTS {
     	return boardStatus;
     }
 
-    
     /**
      * Propagation
      * 
      */
-
     private void backPropogation(Node nodeToExplore, int playerNo) {
     	Node tempNode = nodeToExplore;
     	

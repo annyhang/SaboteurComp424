@@ -22,9 +22,8 @@ import java.lang.ProcessBuilder.Redirect;
 //
 public class Autoplay {
     public static void main(String args[]) {
-        int n_games=50;
+        int n_games=1;
         try {
-            n_games = 1;//Integer.parseInt(args[0]);
             //n_games = Integer.parseInt(args[0]);
             if (n_games < 1) {
                 throw new Exception();
