@@ -446,6 +446,18 @@ public class StudentBoardState {
     	}
     	return allLegalTileMoves;
     }
+    
+	public ArrayList<StudentBoardState> getAllPossibleStates() {
+		ArrayList<StudentBoardState> allPossibleStates = new ArrayList<StudentBoardState>();
+		ArrayList<SaboteurMove> allLegalTileMoves = getAllLegalTileMoves();
+		
+		//for everyone of the legal moves create a new state and add it to an array list of possible states
+		for (SaboteurMove move : allLegalTileMoves) {
+			StudentBoardState student = new StudentBoardState(this.intBoard, this.tileBoard, move);
+			allPossibleStates.add(student);
+		}
+		return allPossibleStates;
+	}
 	
 	public void addVisit() {
 		this.nodeVisit++;
@@ -487,21 +499,6 @@ public class StudentBoardState {
 	public double getWinScore() {
 		return this.winScore;
 	}
-
-	public ArrayList<StudentBoardState> getAllPossibleStates() {
-		ArrayList<StudentBoardState> allPossibleStates = new ArrayList<StudentBoardState>();
-		ArrayList<SaboteurMove> allLegalTileMoves = getAllLegalTileMoves();
-		
-		//for everyone of the legal moves create a new state and add it to an array list of possible states
-		for (SaboteurMove move : allLegalTileMoves) {
-			StudentBoardState student = new StudentBoardState(this.intBoard, this.tileBoard, move);
-			allPossibleStates.add(student);
-		}
-		return allPossibleStates;
-	}
-	
-	
-	
 	
 	public void switchPlayers() {
 		this.playerNumber = Math.abs(this.playerNumber - 1);
