@@ -59,6 +59,7 @@ public class StudentPlayer extends SaboteurPlayer {
     	//update attributes
     	roundNumber++;
     	this.previousBS = studentBS;
+
     	
 //    	System.out.println(Arrays.toString(studentBS.getNugget()));
 //    	int[] posPlayed = myMove.getPosPlayed();
