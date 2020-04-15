@@ -292,14 +292,7 @@ public class StudentBoardState {
 						return 2;
 					}
 				}
-			} catch (Exception e) {
-
-				
-				}
-
-
-			}
-
+			} catch (Exception e) {}
 			//right
 			try {
 				nextPos[0] = startPos[0];
