@@ -30,22 +30,21 @@ public class RandomSaboteurPlayer extends SaboteurPlayer {
     	SaboteurTile[][] hiddenBoard = boardState.getHiddenBoard();
     	this.myBoard = boardState.getHiddenIntBoard().clone();
     	
-        for (int i=0; i<myBoard.length; i++) {
-        	for (int j=0; j<myBoard.length; j++) {
-        		if (myBoard[i][j] < 0) {
-        			System.out.print(" ");
-        		} 
-        		else if(hiddenBoard[i/3][j/3].getIdx().contentEquals("entrance")) {
-        			System.out.print("o");
-        		}
-        		else {
-        			System.out.print(myBoard[i][j]);
-        		}
-        		
-        	}
-        	System.out.println();
-        }
-    	
+//        for (int i=0; i<myBoard.length; i++) {
+//        	for (int j=0; j<myBoard.length; j++) {
+//        		if (myBoard[i][j] < 0) {
+//        			System.out.print(" ");
+//        		} 
+//        		else if(hiddenBoard[i/3][j/3].getIdx().contentEquals("entrance")) {
+//        			System.out.print("o");
+//        		}
+//        		else {
+//        			System.out.print(myBoard[i][j]);
+//        		}
+//        		
+//        	}
+//        	System.out.println();
+//        }
         return  boardState.getRandomMove();
     }
 }
