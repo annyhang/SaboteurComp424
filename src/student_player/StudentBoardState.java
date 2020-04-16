@@ -348,11 +348,11 @@ public class StudentBoardState {
 	}
 
     public ArrayList<SaboteurMove> getAllLegalTileMoves() {
-    	System.out.println("we entered  legalmoves");
+    	
     	ArrayList<SaboteurMove> allLegalMoves = this.boardState.getAllLegalMoves();
     	ArrayList<SaboteurMove> allLegalTileMoves = new ArrayList<SaboteurMove>();
     	for (SaboteurMove move : allLegalMoves) {
-    		System.out.println("we entered the for loop in legalmoves");
+    		
     		if (move.getCardPlayed() instanceof SaboteurTile) {
     			allLegalTileMoves.add(move);
     		}

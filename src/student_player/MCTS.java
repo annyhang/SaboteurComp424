@@ -67,15 +67,17 @@ public class MCTS {
 
 
 
-            //if (boardStatus == -1) {
+            if (boardStatus == -1) {
                 System.out.println("printing the boardStatus:");
 
                 expand(promisingNode);
-            //}
+            }
+            
             Node nodeToExplore = promisingNode;
             if (promisingNode.getChildren().size() > 0) {
                 nodeToExplore = promisingNode.getRandomChildNode();
             }
+            System.out.println("about to simulate");
             int playoutResult = simulateRandomPlayout(nodeToExplore);
             backPropogation(nodeToExplore, playoutResult);
         }
@@ -109,18 +111,19 @@ public class MCTS {
      * 
      */
     public void expand(Node node) {
-    	System.out.println("we entered expand");
-    	ArrayList<SaboteurMove> possibleStates = node.getBoardState().getAllLegalTileMoves();
     	
-    	for (SaboteurMove state : possibleStates) {
-    		System.out.println("we entered the for loop in expand");
-    		//getting the move value of the given node from the possible states
+    	ArrayList<StudentBoardState> possibleStates = node.getBoardState().getAllPossibleStates();
+    	
+    	for (StudentBoardState state : possibleStates) {
     		
+    		
+    		//getting the move value of the given node from the possible states
+    		SaboteurMove move = state.getMyMove();
     		//create a new node with the correct tile 
     		//TODO : verify if this returns the correct move
-    		Node newNode = new Node(node.getBoardState(),state);
+    		Node newNode = new Node(state,move);
     		newNode.setParent(node);
-    		System.out.println("This is the node we picked" + newNode);
+    		
     		//TODO: I'm not sure why we're changing the player 
     		newNode.getBoardState().switchPlayers();
     		node.addChild(newNode);
@@ -138,17 +141,22 @@ public class MCTS {
     	System.out.println("Simulation starting"+ node);
     	Node tempNode = new Node(node);
     	StudentBoardState tempState = tempNode.getBoardState();
+    	
+    	
     	int boardStatus = tempState.getBoardStatus();
+    	System.out.println("This is simulation board status" + boardStatus);
     	if (boardStatus == opponent) {
     			tempNode.getParent().getBoardState().setWinScore(Integer.MIN_VALUE);
     		return boardStatus;
     	}
     	while (boardStatus == -1) {
+    		
     		tempState.switchPlayers();
     		tempState.getRandomMove();
     		boardStatus = tempState.getBoardStatus();
+    		System.out.println("board status in the loop" + boardStatus);
     	}
-    	System.out.println("board status" + boardStatus);
+    	
     	return boardStatus;
     
     }
