@@ -35,7 +35,7 @@ public class MCTS {
     public SaboteurMove findNextMove(StudentBoardState board, int playerNo) {
         // define an end time which will act as a terminating condition
     	long start = System.currentTimeMillis();
-        long end = start + 60 * getMillisForCurrentLevel() * 2000;
+        long end = start + 60 * getMillisForCurrentLevel();
         
     	opponent = Math.abs(1 - playerNo);
     	Tree tree = new Tree(board);
