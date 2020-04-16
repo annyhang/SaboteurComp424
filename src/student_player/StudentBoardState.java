@@ -32,8 +32,115 @@ public class StudentBoardState {
 		
 		//add the move to the tile board
 		this.tileBoard = tileBoard.clone();
+<<<<<<< Updated upstream
 		this.tileBoard[tilePos[0]][tilePos[1]] = tileAdded;		
+=======
+		this.playerNumber = playerNumber;
 	}
+
+	/**
+	 * Get a move to play
+	 * 
+	 * We start with the hardcoded section, which plays the non-tile cards.
+	 * Then we play the tile cards based on MCTS.
+	 */
+	public SaboteurMove chooseMove() {
+		int oppNumber = getOpponentNumber();
+		int[] nuggetPos = getNugget();
+		ArrayList<SaboteurMove> allLegalMoves = this.boardState.getAllLegalMoves();
+		int nbMyMalus = this.boardState.getNbMalus(this.playerNumber);
+		int nbOppMalus = this.boardState.getNbMalus(oppNumber);
+		int distanceToNugg = distanceNuggetPath();
+		
+		
+//		ArrayList<SaboteurCard> ahand = this.boardState.getCurrentPlayerCards();
+//		for (SaboteurCard card : ahand) {
+//			System.out.println(card.getName());
+//		}
+		
+
+		//if we don't know where the nugget is, prioritise the map card
+    	if (nuggetPos[0] == -1 && nuggetPos[1] == -1) {
+    		for (SaboteurMove move : allLegalMoves) {
+    			if (move.getCardPlayed() instanceof SaboteurMap) {
+    				this.myMove = new SaboteurMove(new SaboteurMap(), objPos[hiddenUnmappedCount][0], objPos[hiddenUnmappedCount][1], this.playerNumber);
+    				return this.myMove;
+    			}
+    		}
+    	}
+    	//if we got a malus card and we are close from the goal, prioritise a bonus card
+    	if (nbMyMalus > 0 && distanceToNugg < tileBoard.length/2) {
+    		for (SaboteurMove move : allLegalMoves) {
+    			if (move.getCardPlayed() instanceof SaboteurBonus) {
+    				this.myMove = move;
+    				return this.myMove;
+    			}
+    		}
+    	}
+    	//if we are close from the goal and the opponent can still play, prioritise a malus card
+    	if (nbOppMalus == 0 && distanceToNugg < tileBoard.length/2) {
+    		for (SaboteurMove move : allLegalMoves) {
+    			if (move.getCardPlayed() instanceof SaboteurMalus) {
+    				this.myMove = move;
+    				return this.myMove;
+    			}
+    		}
+    	}
+//    	//if there are two empty tiles to the nugget from a path, use destroy on that last tile
+//    	else if (distanceToNugg == 2) {
+//    		
+//    	}
+    	
+    	//if there are two empty tiles to the nugget from a path, use destroy on that last tile
+    	if (distanceToNugg == 2) {
+    		for (SaboteurMove move : allLegalMoves) {
+    			if (move.getCardPlayed() instanceof SaboteurTile) {
+    				SaboteurTile tile = (SaboteurTile) move.getCardPlayed();
+    				for (String blockIdx : this.blockTiles) {
+    					if (blockIdx.equals(tile.getIdx())) {
+    						this.myMove = move;
+    						return this.myMove;
+    					}
+    				}
+    			}
+    		}
+    	}
+    	//if we got a malus and we only have tile cards, drop a block tile card
+    	if(nbMyMalus > 0) {
+    		ArrayList<SaboteurCard> hand = this.boardState.getCurrentPlayerCards();
+    		for (SaboteurCard handCard : hand) {
+    			if (handCard instanceof SaboteurMap) {
+    				this.myMove = new SaboteurMove(new SaboteurDrop(), hand.indexOf(handCard), 0, this.playerNumber);
+    			}
+    			if (handCard instanceof SaboteurTile) {
+    				SaboteurTile handCardTile = (SaboteurTile) handCard;
+    				for (String idxBlockTiles : blockTiles) {
+    					if (handCardTile.getIdx().equals(idxBlockTiles)) {
+    						this.myMove = new SaboteurMove(new SaboteurDrop(), hand.indexOf(handCard), 0, this.playerNumber);
+    						return this.myMove;
+    					}
+    				}
+    			}
+    		}
+    	}
+    	
+    	
+    	
+    	/*
+    	 * MCTS to get the best move between the tile cards or destroy cards
+    	 */
+    	System.out.println("======MCTS======");
+    	long start = System.currentTimeMillis();
+    	while(start < start+ 2000) {
+		this.myMove = mcts.findNextMove(this,this.playerNumber);
+    	return this.myMove;
+>>>>>>> Stashed changes
+	}
+    	  
+    	SaboteurMove randomMove = getRandomMove();
+    	return randomMove;}
+	
+    	//return 
 	
 	
 	/**
