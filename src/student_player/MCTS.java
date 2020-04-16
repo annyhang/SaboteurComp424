@@ -33,60 +33,38 @@ public class MCTS {
     }
     
     public SaboteurMove findNextMove(StudentBoardState board, int playerNo) {
-    	long start = System.currentTimeMillis();
-        long end = start + 60 * getMillisForCurrentLevel() * 30000;
-        
-        
         // define an end time which will act as a terminating condition
+    	long start = System.currentTimeMillis();
+        long end = start + 60 * getMillisForCurrentLevel() * 2000;
+        
     	opponent = Math.abs(1 - playerNo);
     	Tree tree = new Tree(board);
     	Node rootNode = tree.getRoot();
     	
-    	
     	//rootNode.getBoardState();//.setBoard(board);
         rootNode.getBoardState().setPlayerNumber(opponent);
-        
-        int count = 0;
-        
+
         while (System.currentTimeMillis() < end) {
-        	
-        	count++;
-            //System.out.println(count);
-
             Node promisingNode = selection(rootNode);
-
-
-        	//System.out.println("this is the board status wtf" + promisingNode.getBoardState().getBoardStatus());
-
-            System.out.println("before boardstatus");
 
         	int boardStatus = promisingNode.getBoardState().getBoardStatus();
 
-            //System.out.println(boardStatus);
-            //System.out.println("after boardstatus");
-
-
-
-            //if (boardStatus == -1) {
-                System.out.println("printing the boardStatus:");
-
+        	if (boardStatus == -1) {
                 expand(promisingNode);
-            //}
+            }
+
             Node nodeToExplore = promisingNode;
             if (promisingNode.getChildren().size() > 0) {
                 nodeToExplore = promisingNode.getRandomChildNode();
+                System.out.println("gotrandomchild" + nodeToExplore);
             }
             int playoutResult = simulateRandomPlayout(nodeToExplore);
             backPropogation(nodeToExplore, playoutResult);
         }
  
-        
         Node winnerNode = rootNode.getChildWithMaxScore();
         tree.setRoot(winnerNode);
         return winnerNode.getBoardState().getRandomMove();
-         
-        
-
     }
     
     /**
@@ -95,36 +73,30 @@ public class MCTS {
      */
     public Node selection(Node root) {    	
         Node node = root;
-        //System.out.println("this is the root" + root);
         while (node.getChildren().size() != 0) {
             node = UCT.findBestNodeWithUCT(node);
         }
-       System.out.println("this is the best node selected"+node);
         return node;
     }
     
     /**
      * Expansion
-     * @return the tree with an added node at the branch selected
      * 
      */
     public void expand(Node node) {
-    	System.out.println("we entered expand");
     	ArrayList<SaboteurMove> possibleStates = node.getBoardState().getAllLegalTileMoves();
-    	
     	for (SaboteurMove state : possibleStates) {
-    		System.out.println("we entered the for loop in expand");
     		//getting the move value of the given node from the possible states
     		
     		//create a new node with the correct tile 
     		//TODO : verify if this returns the correct move
     		Node newNode = new Node(node.getBoardState(),state);
     		newNode.setParent(node);
-    		System.out.println("This is the node we picked" + newNode);
     		//TODO: I'm not sure why we're changing the player 
     		newNode.getBoardState().switchPlayers();
     		node.addChild(newNode);
     	}
+
     }
     
     /**
@@ -135,10 +107,10 @@ public class MCTS {
      */
     private int simulateRandomPlayout(Node node) {
     	//make a temp node with the current node
-    	System.out.println("Simulation starting"+ node);
     	Node tempNode = new Node(node);
     	StudentBoardState tempState = tempNode.getBoardState();
     	int boardStatus = tempState.getBoardStatus();
+    	
     	if (boardStatus == opponent) {
     			tempNode.getParent().getBoardState().setWinScore(Integer.MIN_VALUE);
     		return boardStatus;
@@ -148,7 +120,6 @@ public class MCTS {
     		tempState.getRandomMove();
     		boardStatus = tempState.getBoardStatus();
     	}
-    	System.out.println("board status" + boardStatus);
     	return boardStatus;
     
     }
@@ -160,7 +131,6 @@ public class MCTS {
     private void backPropogation(Node nodeToExplore, int playerNo) {
     	Node tempNode = nodeToExplore;
     	
-    	System.out.println("Node to explore"+ nodeToExplore);
     	while (tempNode != null) {
     		
     			tempNode.getBoardState().incrementVisit();

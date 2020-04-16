@@ -348,11 +348,9 @@ public class StudentBoardState {
 	}
 
     public ArrayList<SaboteurMove> getAllLegalTileMoves() {
-    	System.out.println("we entered  legalmoves");
     	ArrayList<SaboteurMove> allLegalMoves = this.boardState.getAllLegalMoves();
     	ArrayList<SaboteurMove> allLegalTileMoves = new ArrayList<SaboteurMove>();
     	for (SaboteurMove move : allLegalMoves) {
-    		System.out.println("we entered the for loop in legalmoves");
     		if (move.getCardPlayed() instanceof SaboteurTile) {
     			allLegalTileMoves.add(move);
     		}
@@ -370,6 +368,16 @@ public class StudentBoardState {
 			allPossibleStates.add(student);
 		}
 		return allPossibleStates;
+	}
+	
+	public ArrayList<SaboteurMove> getAllPossible8Moves() {
+		ArrayList<SaboteurMove> allPossible8Moves = new ArrayList<SaboteurMove>();
+		SaboteurTile eightTile = new SaboteurTile("8");
+		ArrayList<int[]> allPossiblePositions = this.boardState.possiblePositions(eightTile);
+		for (int[] position : allPossiblePositions) {
+			allPossible8Moves.add(new SaboteurMove(eightTile, position[0], position[1], this.playerNumber));
+		}
+		return allPossible8Moves;
 	}
 	
 	public void addVisit() {
@@ -449,7 +457,6 @@ public class StudentBoardState {
         	initTileBoard[objPos[i][0]][objPos[i][1]] = new SaboteurTile("8");
         }
         return initTileBoard;
-
 	}
 
 	public void incrementVisit() {
