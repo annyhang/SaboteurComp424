@@ -35,7 +35,7 @@ public class MCTS {
     public SaboteurMove findNextMove(StudentBoardState board, int playerNo) {
         // define an end time which will act as a terminating condition
     	long start = System.currentTimeMillis();
-        long end = start + 60 * getMillisForCurrentLevel();
+        long end = start + 2000;
         
     	opponent = Math.abs(1 - playerNo);
     	Tree tree = new Tree(board);
@@ -117,15 +117,9 @@ public class MCTS {
      * 
      */
     private int simulateRandomPlayout(Node node) {
-    	//make a temp node with the current node
     	Node tempNode = new Node(node);
     	StudentBoardState tempState = tempNode.getBoardState();
-    	
-    	
     	int boardStatus = tempState.getBoardStatus();
-
-    	System.out.println("This is simulation board status" + boardStatus);
-
     	if (boardStatus == opponent) {
     			tempNode.getParent().getBoardState().setWinScore(Integer.MIN_VALUE);
     		return boardStatus;
@@ -135,11 +129,8 @@ public class MCTS {
     		tempState.switchPlayers();
     		tempState.getRandomMove();
     		boardStatus = tempState.getBoardStatus();
-    		System.out.println("board status in the loop" + boardStatus);
     	}
-
     	return boardStatus;
-    
     }
 
     /**
